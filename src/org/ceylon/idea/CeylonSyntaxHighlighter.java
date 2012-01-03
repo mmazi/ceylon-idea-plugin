@@ -7,7 +7,7 @@ import com.intellij.openapi.editor.colors.TextAttributesKey;
 import com.intellij.openapi.fileTypes.SyntaxHighlighterBase;
 import com.intellij.psi.tree.IElementType;
 import org.ceylon.idea.lang.lexer.CeylonLexer;
-import org.ceylon.idea.lang.lexer.CeylonTokenType;
+import org.ceylon.idea.lang.lexer.CeylonToken;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
@@ -17,10 +17,10 @@ public class CeylonSyntaxHighlighter extends SyntaxHighlighterBase {
     private static final Map<IElementType, TextAttributesKey> attributes = new HashMap<IElementType, TextAttributesKey>();
 
     static {
-        attributes.put(CeylonTokenType.C_STYLE_COMMENT, SyntaxHighlighterColors.JAVA_BLOCK_COMMENT);
-        attributes.put(CeylonTokenType.STRING_LITERAL, SyntaxHighlighterColors.STRING);
-        attributes.put(CeylonTokenType.BAD_CHARACTER, HighlighterColors.BAD_CHARACTER);
-        fillMap(attributes, CeylonTokenType.KEYWORD_SET, SyntaxHighlighterColors.KEYWORD);
+        attributes.put(CeylonToken.MULTI_COMMENT, SyntaxHighlighterColors.JAVA_BLOCK_COMMENT);
+        attributes.put(CeylonToken.STRING_LITERAL, SyntaxHighlighterColors.STRING);
+        attributes.put(CeylonToken.BAD_CHARACTER, HighlighterColors.BAD_CHARACTER);
+        fillMap(attributes, CeylonToken.KEYWORD_SET, SyntaxHighlighterColors.KEYWORD);
     }
 
     @NotNull

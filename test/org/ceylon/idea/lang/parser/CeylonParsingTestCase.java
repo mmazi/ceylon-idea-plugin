@@ -8,4 +8,8 @@ public class CeylonParsingTestCase extends CeylonTestCase {
         doTest();
     }
 
+    public void testCompilerAnnotation() {
+        doTest();
+    }
+
 }

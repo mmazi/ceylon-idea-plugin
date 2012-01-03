@@ -3,6 +3,7 @@ package org.ceylon.idea.lang.parser;
 import com.intellij.lang.PsiBuilder;
 import com.intellij.psi.tree.IElementType;
 import com.intellij.psi.tree.TokenSet;
+import org.ceylon.idea.lang.lexer.CeylonToken;
 
 /**
  * Author: Toader Mihai Claudiu <mtoader@gmail.com>
@@ -94,9 +95,9 @@ public abstract class ParserUtils {
         PsiBuilder.Marker rb = builder.mark();
         builder.advanceLexer();
         int i = 1;
-        while (!builder.eof() && i < elems.length && (builder.getTokenType() == CeylonElementTypes.NLS || elems[i].equals(builder.getTokenType()))) {
+        while (!builder.eof() && i < elems.length && (builder.getTokenType() == CeylonToken.WS || elems[i].equals(builder.getTokenType()))) {
 
-            if (builder.getTokenType() != CeylonElementTypes.NLS) {
+            if (builder.getTokenType() != CeylonToken.WS) {
                 i++;
             }
 
@@ -187,36 +188,6 @@ public abstract class ParserUtils {
         marker.error(msg);
     }
 
-/*
-    public static void waitNextRCurly(PsiBuilder builder) {
-        int i = 0;
-        PsiBuilder.Marker em = builder.mark();
-        while (!builder.eof() && !CeylonElementTypes.pRCURLY.equals(builder.getTokenType())) {
-            builder.advanceLexer();
-            i++;
-        }
-        if (i > 0) {
-            em.error("rcurly.expected");
-        } else {
-            em.drop();
-        }
-    }
-
-    public static void waitNextSemi(PsiBuilder builder) {
-        int i = 0;
-        PsiBuilder.Marker em = builder.mark();
-        while (!builder.eof() && !CeylonElementTypes.oSEMI.equals(builder.getTokenType())) {
-            builder.advanceLexer();
-            i++;
-        }
-        if (i > 0) {
-            em.error("semicolon.expected");
-        } else {
-            em.drop();
-        }
-    }
-*/
-
     public static void waitNext(PsiBuilder builder, IElementType elem, String errorMessage) {
         int i = 0;
         PsiBuilder.Marker em = builder.mark();
@@ -278,17 +249,12 @@ public abstract class ParserUtils {
         advance(builder, 1);
     }
 
+    /**
+     * TODO: check if it really needed
+     */
     public static void skipNLS(PsiBuilder builder) {
-        while (builder.getTokenType() == CeylonElementTypes.NLS) {
+        while (builder.getTokenType() == CeylonToken.WS) {
             builder.advanceLexer();
         }
     }
-
-/*
-    public static void skipComments(PsiBuilder builder) {
-        while ( CeylonElementTypes.COMMENTS.contains(builder.getTokenType()) ) {
-            builder.advanceLexer();
-        }
-    }
-*/
 }

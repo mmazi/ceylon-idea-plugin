@@ -11,7 +11,7 @@ import com.intellij.psi.PsiFile;
 import com.intellij.psi.tree.IFileElementType;
 import com.intellij.psi.tree.TokenSet;
 import org.ceylon.idea.lang.lexer.CeylonLexer;
-import org.ceylon.idea.lang.lexer.CeylonTokenType;
+import org.ceylon.idea.lang.lexer.CeylonToken;
 import org.ceylon.idea.lang.psi.CeylonFile;
 import org.ceylon.idea.lang.psi.CeylonPsiCreator;
 import org.jetbrains.annotations.NotNull;
@@ -30,25 +30,25 @@ public class CeylonParserDefinition implements ParserDefinition {
 
     @Override
     public IFileElementType getFileNodeType() {
-        return CeylonElementTypes.FILE;
+        return CeylonAstNode.FILE;
     }
 
     @NotNull
     @Override
     public TokenSet getWhitespaceTokens() {
-        return CeylonTokenType.WHITE_SPACE_SET;
+        return CeylonToken.WHITE_SPACE_SET;
     }
 
     @NotNull
     @Override
     public TokenSet getCommentTokens() {
-        return CeylonTokenType.COMMENT_SET;
+        return CeylonToken.COMMENT_SET;
     }
 
     @NotNull
     @Override
     public TokenSet getStringLiteralElements() {
-        return CeylonTokenType.STRING_LITERAL_SET;
+        return CeylonToken.STRING_LITERAL_SET;
     }
 
     @NotNull
