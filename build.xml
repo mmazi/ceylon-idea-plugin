@@ -1,0 +1,31 @@
+<!--
+ This build file is used to create the lexer's Java source code.
+ Whenever you change ceylon.flex you have to run this build script.
+
+ We're using the patched jflex library provided by JetBrains.
+-->
+<project name="Ceylon IDEA plugin" default="jflex">
+
+    <property name="generated.src" value="gensrc/"/>
+    <property name="lexer.log" value="jflex.log"/>
+    <property name="lexer.source" value="src/org/ceylon/idea/lang/lexer/ceylon.flex"/>
+    <property name="lexer.skeleton" value="lib/idea-flex.skeleton"/>
+    <property name="jflex.jar" value="lib/JFlex.jar"/>
+
+    <target name="clean">
+        <delete dir="${generated.src}"/>
+        <delete file="${lexer.log}"/>
+    </target>
+
+    <target name="jflex" description="Generate lexer from ceylon.flex, using idea flex skeleton and patched JFlex">
+        <java jar="${jflex.jar}" output="${lexer.log}" fork="true">
+            <arg value="--charat"/>
+            <!-- <arg value="- -nomin"/>-->
+            <arg value="-skel"/>
+            <arg value="${lexer.skeleton}"/>
+            <arg value="-d"/>
+            <arg value="${generated.src}org/ceylon/idea/lang/lexer/"/>
+            <arg value="${lexer.source}"/>
+        </java>
+    </target>
+</project>
