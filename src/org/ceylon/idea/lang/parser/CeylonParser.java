@@ -10,6 +10,7 @@ import org.jetbrains.annotations.NotNull;
 import static org.ceylon.idea.lang.parser.ParserUtils.getToken;
 import static org.ceylon.idea.lang.parser.ParserUtils.lookAhead;
 
+@SuppressWarnings("unused")
 public class CeylonParser implements PsiParser {
     @NotNull
     @Override
@@ -846,13 +847,30 @@ public class CeylonParser implements PsiParser {
     }
 
     /**
-     * TODO: Implement
      * {@code
-     * importElement : compilerAnnotations (memberAlias? memberName (erasure)? | typeAlias? typeName (erasure)? (importElementList)?)
+     * importElement : compilerAnnotations (memberAlias? memberName erasure? | typeAlias? typeName erasure? (mportElementList?)
      * }
      */
     boolean parseImportElement(PsiBuilder builder) {
-        return getToken(builder, CeylonToken.UIDENTIFIER);
+        PsiBuilder.Marker marker = builder.mark();
+        parseCompilerAnnotations(builder);
+
+        if (lookAhead(builder, CeylonToken.LIDENTIFIER)) {
+            parseMemberAlias(builder);
+            parseMemberName(builder);
+            parseErasure(builder);
+        } else if (lookAhead(builder, CeylonToken.UIDENTIFIER)) {
+            parseTypeAlias(builder);
+            parseTypeName(builder);
+            parseErasure(builder);
+        } else {
+            marker.rollbackTo();
+            return false;
+        }
+
+
+        marker.done(CeylonAstNode.IMPORT_MEMBER_OR_TYPE);
+        return true;
     }
 
     /**
@@ -1096,6 +1114,7 @@ public class CeylonParser implements PsiParser {
      * }
      */
     void parseMemberName(PsiBuilder builder) {
+        getToken(builder, CeylonToken.LIDENTIFIER, "LIDENTIFIER expected");
     }
 
     /**
@@ -1105,7 +1124,8 @@ public class CeylonParser implements PsiParser {
      * }
      */
     void parseMemberNameDeclaration(PsiBuilder builder) {
-        getToken(builder, CeylonToken.LIDENTIFIER, "LIDENTIFIER expected");
+        parseMemberName(builder);
+        parseTypeName(builder);
     }
 
     /**
@@ -1491,7 +1511,7 @@ public class CeylonParser implements PsiParser {
 
         getToken(builder, CeylonToken.ASSIGN);
 
-        parseMemberNameDeclaration(builder);
+        parseMemberName(builder);
 
         if (!parseBlock(builder) && !getToken(builder, CeylonToken.SEMICOLON)) {
             builder.error("block or SEMICOLON expected");
@@ -1715,6 +1735,7 @@ public class CeylonParser implements PsiParser {
      * }
      */
     void parseTypeName(PsiBuilder builder) {
+        getToken(builder, CeylonToken.UIDENTIFIER, "UIDENTIFIER expected");
     }
 
     /**
