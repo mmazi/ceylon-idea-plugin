@@ -71,6 +71,11 @@ ESCAPE_SEQUENCE=\\[^\r\n]
 <YYINITIAL> "try" { return TRY_CLAUSE; }
 <YYINITIAL> "void" { return VOID_MODIFIER; }
 <YYINITIAL> "while" { return WHILE_CLAUSE; }
+
+<YYINITIAL> "[]." { return SPREAD_OP; }
+<YYINITIAL> "[]" { return ARRAY; }
+<YYINITIAL> "[" { return INDEX_OP; }
+<YYINITIAL> "]" { return RBRACKET; }
 <YYINITIAL> "..." { return ELLIPSIS; }
 <YYINITIAL> ".." { return RANGE_OP; }
 <YYINITIAL> "." { return MEMBER_OP; }
@@ -78,7 +83,6 @@ ESCAPE_SEQUENCE=\\[^\r\n]
 <YYINITIAL> ")" { return RPAREN; }
 <YYINITIAL> "{" { return LBRACE; }
 <YYINITIAL> "}" { return RBRACE; }
-<YYINITIAL> "]" { return RBRACKET; }
 <YYINITIAL> ";" { return SEMICOLON; }
 <YYINITIAL> "," { return COMMA; }
 <YYINITIAL> "=" { return SPECIFY; }

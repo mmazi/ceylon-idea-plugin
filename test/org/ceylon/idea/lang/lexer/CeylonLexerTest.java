@@ -28,6 +28,15 @@ public class CeylonLexerTest {
     }
 
     @Test
+    public void testBrackets() {
+        testTokenization("[", INDEX_OP);
+        testTokenization("]", RBRACKET);
+        testTokenization("[]", ARRAY);
+        testTokenization("[].", SPREAD_OP);
+        testTokenization("[\"str\"]", INDEX_OP, STRING_LITERAL, RBRACKET);
+    }
+
+    @Test
     public void testKeywords() {
         testTokenization("abstracts", ABSTRACTED_TYPE);
         testTokenization("adapts", ADAPTED_TYPES);

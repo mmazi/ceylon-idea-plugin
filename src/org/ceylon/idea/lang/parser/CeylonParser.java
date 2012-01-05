@@ -314,26 +314,29 @@ public class CeylonParser implements PsiParser {
     }
 
     /**
-     * TODO: Implement
      * {@code
      * compilerAnnotation : COMPILER_ANNOTATION annotationName (INDEX_OP stringLiteral RBRACKET)?
      * }
      */
     boolean parseCompilerAnnotation(PsiBuilder builder) {
-        PsiBuilder.Marker marker = builder.mark();
-        if (!ParserUtils.getToken(builder, CeylonToken.COMPILER_ANNOTATION)) {
-            marker.rollbackTo();
+        if (!ParserUtils.lookAhead(builder, CeylonToken.COMPILER_ANNOTATION)) {
             return false;
         }
-        ParserUtils.getToken(builder, CeylonToken.LIDENTIFIER, "LIDENTIFIER.expected");
-        ParserUtils.getToken(builder, CeylonToken.STRING_LITERAL);
+
+        PsiBuilder.Marker marker = builder.mark();
+        ParserUtils.getToken(builder, CeylonToken.COMPILER_ANNOTATION);
+        ParserUtils.getToken(builder, CeylonToken.LIDENTIFIER, "LIDENTIFIER expected");
+
+        if (ParserUtils.getToken(builder, CeylonToken.INDEX_OP)) {
+            ParserUtils.getToken(builder, CeylonToken.STRING_LITERAL, "STRING_LITERAL expected");
+            ParserUtils.getToken(builder, CeylonToken.RBRACKET, "RBRACKET expected");
+        }
 
         marker.done(CeylonAstNode.COMPILER_ANNOTATION);
         return true;
     }
 
     /**
-     * TODO: Implement
      * {@code
      * compilerAnnotations : (compilerAnnotation)*
      * }
@@ -345,7 +348,6 @@ public class CeylonParser implements PsiParser {
 
         while (parseCompilerAnnotation(builder)) {
             hasCompilerAnnotations = true;
-            ParserUtils.skipNLS(builder);
         }
 
         return hasCompilerAnnotations;

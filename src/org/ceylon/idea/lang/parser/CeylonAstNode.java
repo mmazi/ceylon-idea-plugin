@@ -7,7 +7,7 @@ import org.ceylon.idea.Ceylon;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 
-public class CeylonAstNode extends IElementType {
+public final class CeylonAstNode extends IElementType {
     public static final IFileElementType FILE = new ILightStubFileElementType(Ceylon.LANGUAGE);
 
     public static final CeylonAstNode ABSTRACTED_TYPE = new CeylonAstNode("AbstractedType");

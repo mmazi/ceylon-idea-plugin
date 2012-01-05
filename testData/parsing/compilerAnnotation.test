@@ -1,8 +1,0 @@
-@error
------
-FILE(0,6)
-  ASTWrapperPsiElement(CompilerAnnotation)(0,6)
-    PsiElement(COMPILER_ANNOTATION)('@')(0,1)
-    PsiElement(LIDENTIFIER)('error')(1,6)
-  PsiErrorElement:SEMICOLON expected(6,6)
-    <empty list>

@@ -1,0 +1,12 @@
+@annotation ["string"]
+-----
+FILE(0,22)
+  ASTWrapperPsiElement(CompilerAnnotation)(0,22)
+    PsiElement(COMPILER_ANNOTATION)('@')(0,1)
+    PsiElement(LIDENTIFIER)('annotation')(1,11)
+    PsiWhiteSpace(' ')(11,12)
+    PsiElement(INDEX_OP)('[')(12,13)
+    PsiElement(STRING_LITERAL)('"string"')(13,21)
+    PsiElement(RBRACKET)(']')(21,22)
+  PsiErrorElement:SEMICOLON expected(22,22)
+    <empty list>

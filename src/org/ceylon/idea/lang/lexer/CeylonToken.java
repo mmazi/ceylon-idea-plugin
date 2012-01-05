@@ -6,7 +6,7 @@ import org.ceylon.idea.Ceylon;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 
-public class CeylonToken extends IElementType {
+public final class CeylonToken extends IElementType {
     public static final CeylonToken BAD_CHARACTER = new CeylonToken("BAD_CHARACTER");
 
     public static final CeylonToken ABSTRACTED_TYPE = new CeylonToken("ABSTRACTED_TYPE");

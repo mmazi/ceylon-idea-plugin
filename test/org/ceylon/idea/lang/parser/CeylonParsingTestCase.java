@@ -16,11 +16,19 @@ public class CeylonParsingTestCase extends CeylonTestCase {
         doTest();
     }
 
-    public void testImport() {
+    public void testCompilerAnnotation$multiple() {
         doTest();
     }
 
-    public void testCompilerAnnotation() {
+    public void testCompilerAnnotation$stringInBrackets() {
+        doTest();
+    }
+
+    public void testCompilerAnnotation$stringWithoutBrackets() {
+        doTest();
+    }
+
+    public void testImport() {
         doTest();
     }
 
