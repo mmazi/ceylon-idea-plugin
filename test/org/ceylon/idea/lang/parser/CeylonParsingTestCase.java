@@ -24,6 +24,10 @@ public class CeylonParsingTestCase extends CeylonTestCase {
         doTest();
     }
 
+    public void testCompilationUnit$multipleDeclarations() {
+        doTest();
+    }
+
     public void testCompilerAnnotation$multiple() {
         doTest();
     }
