@@ -4,6 +4,18 @@ import org.ceylon.idea.CeylonTestCase;
 
 public class CeylonParsingTestCase extends CeylonTestCase {
 
+    public void testCompilationUnit$empty() {
+        doTest();
+    }
+
+    public void testCompilationUnit$importWithAnnotation() {
+        doTest();
+    }
+
+    public void testCompilationUnit$missingDeclaration() {
+        doTest();
+    }
+
     public void testImport() {
         doTest();
     }

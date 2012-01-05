@@ -1,0 +1,19 @@
+import xxx {...}
+@annotation
+-----
+FILE(0,28)
+  ASTWrapperPsiElement(ImportList)(0,16)
+    ASTWrapperPsiElement(Import)(0,16)
+      PsiElement(IMPORT)('import')(0,6)
+      PsiWhiteSpace(' ')(6,7)
+      PsiElement(LIDENTIFIER)('xxx')(7,10)
+      PsiWhiteSpace(' ')(10,11)
+      PsiElement(LBRACE)('{')(11,12)
+      PsiElement(ELLIPSIS)('...')(12,15)
+      PsiElement(RBRACE)('}')(15,16)
+  PsiWhiteSpace('\n')(16,17)
+  ASTWrapperPsiElement(CompilerAnnotation)(17,28)
+    PsiElement(COMPILER_ANNOTATION)('@')(17,18)
+    PsiElement(LIDENTIFIER)('annotation')(18,28)
+  PsiErrorElement:Declaration expected(28,28)
+    <empty list>

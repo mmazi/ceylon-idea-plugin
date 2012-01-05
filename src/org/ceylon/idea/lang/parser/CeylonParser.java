@@ -28,6 +28,7 @@ public class CeylonParser implements PsiParser {
     }
 
     /**
+     * TODO: Implement
      * {@code
      * abbreviatedType : qualifiedType (DEFAULT_OP | ARRAY)*
      * }
@@ -36,6 +37,7 @@ public class CeylonParser implements PsiParser {
     }
 
     /**
+     * TODO: Implement
      * {@code
      * abstractedType : ABSTRACTED_TYPE qualifiedType
      * }
@@ -44,6 +46,7 @@ public class CeylonParser implements PsiParser {
     }
 
     /**
+     * TODO: Implement
      * {@code
      * adaptedTypes : ADAPTED_TYPES qualifiedType (INTERSECTION_OP (qualifiedType ))*
      * }
@@ -52,6 +55,7 @@ public class CeylonParser implements PsiParser {
     }
 
     /**
+     * TODO: Implement
      * {@code
      * additiveExpression : multiplicativeExpression (additiveOperator multiplicativeExpression)*
      * }
@@ -60,6 +64,7 @@ public class CeylonParser implements PsiParser {
     }
 
     /**
+     * TODO: Implement
      * {@code
      * additiveOperator : SUM_OP | DIFFERENCE_OP | UNION_OP | XOR_OP | COMPLEMENT_OP
      * }
@@ -68,6 +73,7 @@ public class CeylonParser implements PsiParser {
     }
 
     /**
+     * TODO: Implement
      * {@code
      * annotatedDeclarationStart : annotation* declarationStart
      * }
@@ -76,6 +82,7 @@ public class CeylonParser implements PsiParser {
     }
 
     /**
+     * TODO: Implement
      * {@code
      * annotation : annotationName annotationArguments
      * }
@@ -84,6 +91,7 @@ public class CeylonParser implements PsiParser {
     }
 
     /**
+     * TODO: Implement
      * {@code
      * annotationArguments : arguments | literalArguments
      * }
@@ -92,6 +100,7 @@ public class CeylonParser implements PsiParser {
     }
 
     /**
+     * TODO: Implement
      * {@code
      * annotationName : LIDENTIFIER
      * }
@@ -100,6 +109,7 @@ public class CeylonParser implements PsiParser {
     }
 
     /**
+     * TODO: Implement
      * {@code
      * annotations : (annotation)*
      * }
@@ -108,6 +118,7 @@ public class CeylonParser implements PsiParser {
     }
 
     /**
+     * TODO: Implement
      * {@code
      * arguments : positionalArguments | namedArguments
      * }
@@ -116,6 +127,7 @@ public class CeylonParser implements PsiParser {
     }
 
     /**
+     * TODO: Implement
      * {@code
      * assignmentExpression : thenElseExpression (assignmentOperator assignmentExpression)?
      * }
@@ -124,6 +136,7 @@ public class CeylonParser implements PsiParser {
     }
 
     /**
+     * TODO: Implement
      * {@code
      * assignmentOperator : ASSIGN_OP | ADD_ASSIGN_OP | SUBTRACT_ASSIGN_OP | MULTIPLY_ASSIGN_OP | DIVIDE_ASSIGN_OP | REMAINDER_ASSIGN_OP | INTERSECT_ASSIGN_OP | UNION_ASSIGN_OP | XOR_ASSIGN_OP | COMPLEMENT_ASSIGN_OP | AND_ASSIGN_OP | OR_ASSIGN_OP
      * }
@@ -132,6 +145,7 @@ public class CeylonParser implements PsiParser {
     }
 
     /**
+     * TODO: Implement
      * {@code
      * attributeBody[StaticType type] : (namedArguments) => namedArguments | block
      * }
@@ -140,6 +154,7 @@ public class CeylonParser implements PsiParser {
     }
 
     /**
+     * TODO: Implement
      * {@code
      * base : nonstringLiteral | stringExpression | enumeration | selfReference | typeReference | memberReference | parExpression
      * }
@@ -148,6 +163,7 @@ public class CeylonParser implements PsiParser {
     }
 
     /**
+     * TODO: Implement
      * {@code
      * block : LBRACE (declarationOrStatement)* RBRACE
      * }
@@ -156,6 +172,7 @@ public class CeylonParser implements PsiParser {
     }
 
     /**
+     * TODO: Implement
      * {@code
      * booleanCondition : LPAREN (expression)? RPAREN
      * }
@@ -164,6 +181,7 @@ public class CeylonParser implements PsiParser {
     }
 
     /**
+     * TODO: Implement
      * {@code
      * breakDirective : BREAK
      * }
@@ -172,6 +190,7 @@ public class CeylonParser implements PsiParser {
     }
 
     /**
+     * TODO: Implement
      * {@code
      * caseBlock : CASE_CLAUSE LPAREN caseItem RPAREN block
      * }
@@ -180,6 +199,7 @@ public class CeylonParser implements PsiParser {
     }
 
     /**
+     * TODO: Implement
      * {@code
      * caseItem : (IS_OP)=>isCaseCondition | (SATISFIES)=>satisfiesCaseCondition | matchCaseCondition
      * }
@@ -188,6 +208,7 @@ public class CeylonParser implements PsiParser {
     }
 
     /**
+     * TODO: Implement
      * {@code
      * cases : (caseBlock)+ (defaultCaseBlock)?
      * }
@@ -196,6 +217,7 @@ public class CeylonParser implements PsiParser {
     }
 
     /**
+     * TODO: Implement
      * {@code
      * caseType : qualifiedType | memberName
      * }
@@ -204,6 +226,7 @@ public class CeylonParser implements PsiParser {
     }
 
     /**
+     * TODO: Implement
      * {@code
      * caseTypes : CASE_TYPES caseType (UNION_OP (caseType ))*
      * }
@@ -212,6 +235,7 @@ public class CeylonParser implements PsiParser {
     }
 
     /**
+     * TODO: Implement
      * {@code
      * catchBlock : CATCH_CLAUSE catchVariable block
      * }
@@ -220,6 +244,7 @@ public class CeylonParser implements PsiParser {
     }
 
     /**
+     * TODO: Implement
      * {@code
      * catchVariable : LPAREN (variable)? RPAREN
      * }
@@ -228,6 +253,7 @@ public class CeylonParser implements PsiParser {
     }
 
     /**
+     * TODO: Implement
      * {@code
      * classBody : LBRACE (declarationOrStatement)* RBRACE
      * }
@@ -236,6 +262,7 @@ public class CeylonParser implements PsiParser {
     }
 
     /**
+     * TODO: Implement
      * {@code
      * classDeclaration : CLASS_DEFINITION typeNameDeclaration (typeParameters)? (parameters)? (caseTypes)? (extendedType)? (satisfiedTypes)? (typeConstraints)? (classBody | (typeSpecifier)? SEMICOLON)
      * }
@@ -244,6 +271,7 @@ public class CeylonParser implements PsiParser {
     }
 
     /**
+     * TODO: Implement
      * {@code
      * comparisonExpression : existenceEmptinessExpression (comparisonOperator existenceEmptinessExpression | typeOperator qualifiedType)? | typeOperator qualifiedType existenceEmptinessExpression
      * }
@@ -252,6 +280,7 @@ public class CeylonParser implements PsiParser {
     }
 
     /**
+     * TODO: Implement
      * {@code
      * comparisonOperator : COMPARE_OP | SMALL_AS_OP | LARGE_AS_OP | LARGER_OP | SMALLER_OP | IN_OP
      * }
@@ -260,6 +289,7 @@ public class CeylonParser implements PsiParser {
     }
 
     /**
+     * TODO: Implement
      * {@code
      * compilationUnit : (compilerAnnotations SEMICOLON)? importList (compilerAnnotations declaration)* EOF
      * }
@@ -272,10 +302,19 @@ public class CeylonParser implements PsiParser {
 
         parseImportList(builder);
 
-        // TODO: declarations
+        boolean hasDeclaration;
+        do {
+            boolean hasCompilerAnnotations = parseCompilerAnnotations(builder);
+            hasDeclaration = parseDeclaration(builder);
+
+            if (hasCompilerAnnotations && !hasDeclaration) {
+                builder.error("Declaration expected");
+            }
+        } while (hasDeclaration);
     }
 
     /**
+     * TODO: Implement
      * {@code
      * compilerAnnotation : COMPILER_ANNOTATION annotationName (INDEX_OP stringLiteral RBRACKET)?
      * }
@@ -294,6 +333,7 @@ public class CeylonParser implements PsiParser {
     }
 
     /**
+     * TODO: Implement
      * {@code
      * compilerAnnotations : (compilerAnnotation)*
      * }
@@ -312,6 +352,7 @@ public class CeylonParser implements PsiParser {
     }
 
     /**
+     * TODO: Implement
      * {@code
      * comprehension : forComprehensionClause
      * }
@@ -320,6 +361,7 @@ public class CeylonParser implements PsiParser {
     }
 
     /**
+     * TODO: Implement
      * {@code
      * comprehensionClause : forComprehensionClause | ifComprehensionClause | expressionComprehensionClause
      * }
@@ -328,6 +370,7 @@ public class CeylonParser implements PsiParser {
     }
 
     /**
+     * TODO: Implement
      * {@code
      * condition : (LPAREN EXISTS)=>existsCondition | (LPAREN NONEMPTY)=>nonemptyCondition | (LPAREN IS_OP)=>isCondition | (LPAREN SATISFIES)=>satisfiesCondition | booleanCondition
      * }
@@ -336,6 +379,7 @@ public class CeylonParser implements PsiParser {
     }
 
     /**
+     * TODO: Implement
      * {@code
      * conjunctionExpression : logicalNegationExpression (conjunctionOperator logicalNegationExpression)*
      * }
@@ -344,6 +388,7 @@ public class CeylonParser implements PsiParser {
     }
 
     /**
+     * TODO: Implement
      * {@code
      * conjunctionOperator : AND_OP
      * }
@@ -352,6 +397,7 @@ public class CeylonParser implements PsiParser {
     }
 
     /**
+     * TODO: Implement
      * {@code
      * containment : IN_OP (expression)?
      * }
@@ -360,6 +406,7 @@ public class CeylonParser implements PsiParser {
     }
 
     /**
+     * TODO: Implement
      * {@code
      * continueDirective : CONTINUE
      * }
@@ -368,6 +415,7 @@ public class CeylonParser implements PsiParser {
     }
 
     /**
+     * TODO: Implement
      * {@code
      * controlBlock : ((LBRACE)=> block )
      * }
@@ -376,6 +424,7 @@ public class CeylonParser implements PsiParser {
     }
 
     /**
+     * TODO: Implement
      * {@code
      * controlStatement : ifElse | switchCaseElse | whileLoop | forElse | tryCatchFinally
      * }
@@ -384,14 +433,17 @@ public class CeylonParser implements PsiParser {
     }
 
     /**
+     * TODO: Implement
      * {@code
      * declaration : annotations (objectDeclaration | setterDeclaration | voidOrInferredMethodDeclaration | inferredAttributeDeclaration | typedMethodOrAttributeDeclaration | classDeclaration | interfaceDeclaration)
      * }
      */
-    void parseDeclaration(PsiBuilder builder) {
+    boolean parseDeclaration(PsiBuilder builder) {
+        return false;
     }
 
     /**
+     * TODO: Implement
      * {@code
      * declarationKeyword : VALUE_MODIFIER | FUNCTION_MODIFIER | ASSIGN | VOID_MODIFIER | INTERFACE_DEFINITION | CLASS_DEFINITION | OBJECT_DEFINITION
      * }
@@ -400,6 +452,7 @@ public class CeylonParser implements PsiParser {
     }
 
     /**
+     * TODO: Implement
      * {@code
      * declarationOrStatement : compilerAnnotations ((annotatedDeclarationStart) => declaration | statement)
      * }
@@ -408,6 +461,7 @@ public class CeylonParser implements PsiParser {
     }
 
     /**
+     * TODO: Implement
      * {@code
      * declarationStart : declarationKeyword | type (ELLIPSIS | LIDENTIFIER)
      * }
@@ -416,6 +470,7 @@ public class CeylonParser implements PsiParser {
     }
 
     /**
+     * TODO: Implement
      * {@code
      * defaultCaseBlock : ELSE_CLAUSE block
      * }
@@ -424,6 +479,7 @@ public class CeylonParser implements PsiParser {
     }
 
     /**
+     * TODO: Implement
      * {@code
      * defaultExpression : negationComplementExpression (defaultOperator negationComplementExpression)*
      * }
@@ -432,6 +488,7 @@ public class CeylonParser implements PsiParser {
     }
 
     /**
+     * TODO: Implement
      * {@code
      * defaultOperator : DEFAULT_OP
      * }
@@ -440,6 +497,7 @@ public class CeylonParser implements PsiParser {
     }
 
     /**
+     * TODO: Implement
      * {@code
      * directive : returnDirective | throwDirective | breakDirective | continueDirective
      * }
@@ -448,6 +506,7 @@ public class CeylonParser implements PsiParser {
     }
 
     /**
+     * TODO: Implement
      * {@code
      * directiveStatement : directive SEMICOLON
      * }
@@ -456,6 +515,7 @@ public class CeylonParser implements PsiParser {
     }
 
     /**
+     * TODO: Implement
      * {@code
      * disjunctionExpression : conjunctionExpression (disjunctionOperator conjunctionExpression)*
      * }
@@ -464,6 +524,7 @@ public class CeylonParser implements PsiParser {
     }
 
     /**
+     * TODO: Implement
      * {@code
      * disjunctionOperator : OR_OP
      * }
@@ -472,6 +533,7 @@ public class CeylonParser implements PsiParser {
     }
 
     /**
+     * TODO: Implement
      * {@code
      * elementSelectionOperator : SAFE_INDEX_OP | INDEX_OP
      * }
@@ -480,6 +542,7 @@ public class CeylonParser implements PsiParser {
     }
 
     /**
+     * TODO: Implement
      * {@code
      * elseBlock : ELSE_CLAUSE (elseIf | block)
      * }
@@ -488,6 +551,7 @@ public class CeylonParser implements PsiParser {
     }
 
     /**
+     * TODO: Implement
      * {@code
      * elseIf : ifElse
      * }
@@ -496,6 +560,7 @@ public class CeylonParser implements PsiParser {
     }
 
     /**
+     * TODO: Implement
      * {@code
      * entryType : abbreviatedType (ENTRY_OP (abbreviatedType ))?
      * }
@@ -504,6 +569,7 @@ public class CeylonParser implements PsiParser {
     }
 
     /**
+     * TODO: Implement
      * {@code
      * enumeration : LBRACE (expressions | comprehension)? RBRACE
      * }
@@ -512,6 +578,7 @@ public class CeylonParser implements PsiParser {
     }
 
     /**
+     * TODO: Implement
      * {@code
      * equalityExpression : comparisonExpression (equalityOperator comparisonExpression)?
      * }
@@ -520,6 +587,7 @@ public class CeylonParser implements PsiParser {
     }
 
     /**
+     * TODO: Implement
      * {@code
      * equalityOperator : EQUAL_OP | NOT_EQUAL_OP | IDENTICAL_OP
      * }
@@ -528,6 +596,7 @@ public class CeylonParser implements PsiParser {
     }
 
     /**
+     * TODO: Implement
      * {@code
      * erasure : LPAREN (typeName (COMMA typeName)*)? RPAREN
      * }
@@ -536,6 +605,7 @@ public class CeylonParser implements PsiParser {
     }
 
     /**
+     * TODO: Implement
      * {@code
      * existenceEmptinessExpression : rangeIntervalEntryExpression (existsNonemptyOperator)? | existsNonemptyOperator rangeIntervalEntryExpression
      * }
@@ -544,6 +614,7 @@ public class CeylonParser implements PsiParser {
     }
 
     /**
+     * TODO: Implement
      * {@code
      * existsCondition : (LPAREN EXISTS LIDENTIFIER RPAREN) => LPAREN EXISTS impliedVariable RPAREN | (LPAREN EXISTS compilerAnnotations (declarationStart|specificationStart)) => LPAREN EXISTS specifiedVariable RPAREN | LPAREN EXISTS (expression)? RPAREN
      * }
@@ -552,6 +623,7 @@ public class CeylonParser implements PsiParser {
     }
 
     /**
+     * TODO: Implement
      * {@code
      * existsNonemptyOperator : EXISTS | NONEMPTY
      * }
@@ -560,6 +632,7 @@ public class CeylonParser implements PsiParser {
     }
 
     /**
+     * TODO: Implement
      * {@code
      * exponentiationExpression : incrementDecrementExpression (exponentiationOperator exponentiationExpression)?
      * }
@@ -568,6 +641,7 @@ public class CeylonParser implements PsiParser {
     }
 
     /**
+     * TODO: Implement
      * {@code
      * exponentiationOperator : POWER_OP
      * }
@@ -576,6 +650,7 @@ public class CeylonParser implements PsiParser {
     }
 
     /**
+     * TODO: Implement
      * {@code
      * expression : assignmentExpression
      * }
@@ -584,6 +659,7 @@ public class CeylonParser implements PsiParser {
     }
 
     /**
+     * TODO: Implement
      * {@code
      * expressionComprehensionClause : expression |
      * }
@@ -592,6 +668,7 @@ public class CeylonParser implements PsiParser {
     }
 
     /**
+     * TODO: Implement
      * {@code
      * expressionOrSpecificationStatement : expression (specifier)? (SEMICOLON | COMMA)
      * }
@@ -600,6 +677,7 @@ public class CeylonParser implements PsiParser {
     }
 
     /**
+     * TODO: Implement
      * {@code
      * expressions : expression (COMMA (expression ))*
      * }
@@ -608,6 +686,7 @@ public class CeylonParser implements PsiParser {
     }
 
     /**
+     * TODO: Implement
      * {@code
      * extendedType : EXTENDS (qualifiedType | SUPER MEMBER_OP typeReference) (positionalArguments )
      * }
@@ -616,6 +695,7 @@ public class CeylonParser implements PsiParser {
     }
 
     /**
+     * TODO: Implement
      * {@code
      * failBlock : ELSE_CLAUSE block
      * }
@@ -624,6 +704,7 @@ public class CeylonParser implements PsiParser {
     }
 
     /**
+     * TODO: Implement
      * {@code
      * finallyBlock : FINALLY_CLAUSE block
      * }
@@ -632,6 +713,7 @@ public class CeylonParser implements PsiParser {
     }
 
     /**
+     * TODO: Implement
      * {@code
      * forBlock : FOR_CLAUSE forIterator controlBlock
      * }
@@ -640,6 +722,7 @@ public class CeylonParser implements PsiParser {
     }
 
     /**
+     * TODO: Implement
      * {@code
      * forComprehensionClause : FOR_CLAUSE forIterator comprehensionClause
      * }
@@ -648,6 +731,7 @@ public class CeylonParser implements PsiParser {
     }
 
     /**
+     * TODO: Implement
      * {@code
      * forElse : forBlock (failBlock)?
      * }
@@ -656,6 +740,7 @@ public class CeylonParser implements PsiParser {
     }
 
     /**
+     * TODO: Implement
      * {@code
      * forIterator : LPAREN compilerAnnotations (var (containment | ENTRY_OP var containment)?)? RPAREN
      * }
@@ -664,6 +749,7 @@ public class CeylonParser implements PsiParser {
     }
 
     /**
+     * TODO: Implement
      * {@code
      * ifBlock : IF_CLAUSE condition controlBlock
      * }
@@ -672,6 +758,7 @@ public class CeylonParser implements PsiParser {
     }
 
     /**
+     * TODO: Implement
      * {@code
      * ifComprehensionClause : IF_CLAUSE condition comprehensionClause
      * }
@@ -680,6 +767,7 @@ public class CeylonParser implements PsiParser {
     }
 
     /**
+     * TODO: Implement
      * {@code
      * ifElse : ifBlock (elseBlock)?
      * }
@@ -688,6 +776,7 @@ public class CeylonParser implements PsiParser {
     }
 
     /**
+     * TODO: Implement
      * {@code
      * impliedVariable : memberName
      * }
@@ -696,6 +785,7 @@ public class CeylonParser implements PsiParser {
     }
 
     /**
+     * TODO: Implement
      * {@code
      * importDeclaration : IMPORT (packageName (MEMBER_OP (packageName))*) importElementList
      * }
@@ -704,6 +794,7 @@ public class CeylonParser implements PsiParser {
     }
 
     /**
+     * TODO: Implement
      * {@code
      * importElement : compilerAnnotations (memberAlias? memberName (erasure)? | typeAlias? typeName (erasure)? (importElementList)?)
      * }
@@ -712,6 +803,7 @@ public class CeylonParser implements PsiParser {
     }
 
     /**
+     * TODO: Implement
      * {@code
      * importElementList : LBRACE (importElement (COMMA importElement)* (COMMA (importWildcard ))? | importWildcard)? RBRACE
      * }
@@ -720,6 +812,7 @@ public class CeylonParser implements PsiParser {
     }
 
     /**
+     * TODO: Implement
      * {@code
      * importList : (importDeclaration)*
      * }
@@ -740,6 +833,7 @@ public class CeylonParser implements PsiParser {
     }
 
     /**
+     * TODO: Implement
      * {@code
      * importWildcard : ELLIPSIS
      * }
@@ -748,6 +842,7 @@ public class CeylonParser implements PsiParser {
     }
 
     /**
+     * TODO: Implement
      * {@code
      * incrementDecrementExpression : prefixOperator incrementDecrementExpression | postfixIncrementDecrementExpression
      * }
@@ -756,6 +851,7 @@ public class CeylonParser implements PsiParser {
     }
 
     /**
+     * TODO: Implement
      * {@code
      * index : additiveExpression
      * }
@@ -764,6 +860,7 @@ public class CeylonParser implements PsiParser {
     }
 
     /**
+     * TODO: Implement
      * {@code
      * indexExpression : elementSelectionOperator indexOrIndexRange RBRACKET
      * }
@@ -772,6 +869,7 @@ public class CeylonParser implements PsiParser {
     }
 
     /**
+     * TODO: Implement
      * {@code
      * indexOrIndexRange : index (| '...' | '..' index)
      * }
@@ -780,6 +878,7 @@ public class CeylonParser implements PsiParser {
     }
 
     /**
+     * TODO: Implement
      * {@code
      * inferredAttributeDeclaration : VALUE_MODIFIER memberNameDeclaration ((specifier | initializer)? SEMICOLON | block)
      * }
@@ -788,6 +887,7 @@ public class CeylonParser implements PsiParser {
     }
 
     /**
+     * TODO: Implement
      * {@code
      * inferredGetterArgument : VALUE_MODIFIER memberNameDeclaration block
      * }
@@ -796,6 +896,7 @@ public class CeylonParser implements PsiParser {
     }
 
     /**
+     * TODO: Implement
      * {@code
      * initializer : ASSIGN_OP expression
      * }
@@ -804,6 +905,7 @@ public class CeylonParser implements PsiParser {
     }
 
     /**
+     * TODO: Implement
      * {@code
      * inlineFunctionalArgument : memberName ((parametersStart) => parameters)? (LPAREN expression RPAREN | block)
      * }
@@ -812,6 +914,7 @@ public class CeylonParser implements PsiParser {
     }
 
     /**
+     * TODO: Implement
      * {@code
      * interfaceBody : LBRACE (declarationOrStatement)* RBRACE
      * }
@@ -820,6 +923,7 @@ public class CeylonParser implements PsiParser {
     }
 
     /**
+     * TODO: Implement
      * {@code
      * interfaceDeclaration : INTERFACE_DEFINITION typeNameDeclaration (typeParameters)? (caseTypes)? (adaptedTypes)? (satisfiedTypes)? (typeConstraints)? (interfaceBody | (typeSpecifier)? SEMICOLON)
      * }
@@ -828,6 +932,7 @@ public class CeylonParser implements PsiParser {
     }
 
     /**
+     * TODO: Implement
      * {@code
      * interpolatedExpressionStart : LPAREN | LBRACE | LIDENTIFIER | UIDENTIFIER | selfReference | nonstringLiteral | prefixOperatorStart
      * }
@@ -836,6 +941,7 @@ public class CeylonParser implements PsiParser {
     }
 
     /**
+     * TODO: Implement
      * {@code
      * intersectionType : entryType ((INTERSECTION_OP (entryType ))+)?
      * }
@@ -844,6 +950,7 @@ public class CeylonParser implements PsiParser {
     }
 
     /**
+     * TODO: Implement
      * {@code
      * isCaseCondition : IS_OP type
      * }
@@ -852,6 +959,7 @@ public class CeylonParser implements PsiParser {
     }
 
     /**
+     * TODO: Implement
      * {@code
      * isCondition : (LPAREN IS_OP type LIDENTIFIER RPAREN) => LPAREN IS_OP type impliedVariable RPAREN | (LPAREN IS_OP type LIDENTIFIER SPECIFY) => LPAREN IS_OP (type memberName specifier)? RPAREN | LPAREN IS_OP abbreviatedType (expression)? RPAREN
      * }
@@ -860,6 +968,7 @@ public class CeylonParser implements PsiParser {
     }
 
     /**
+     * TODO: Implement
      * {@code
      * literalArgument : nonstringLiteral | stringLiteral
      * }
@@ -868,6 +977,7 @@ public class CeylonParser implements PsiParser {
     }
 
     /**
+     * TODO: Implement
      * {@code
      * literalArguments : (literalArgument)*
      * }
@@ -876,6 +986,7 @@ public class CeylonParser implements PsiParser {
     }
 
     /**
+     * TODO: Implement
      * {@code
      * logicalNegationExpression : notOperator logicalNegationExpression | equalityExpression
      * }
@@ -884,6 +995,7 @@ public class CeylonParser implements PsiParser {
     }
 
     /**
+     * TODO: Implement
      * {@code
      * matchCaseCondition : expressions
      * }
@@ -892,6 +1004,7 @@ public class CeylonParser implements PsiParser {
     }
 
     /**
+     * TODO: Implement
      * {@code
      * memberAlias : memberNameDeclaration SPECIFY
      * }
@@ -900,6 +1013,7 @@ public class CeylonParser implements PsiParser {
     }
 
     /**
+     * TODO: Implement
      * {@code
      * memberName : LIDENTIFIER
      * }
@@ -908,6 +1022,7 @@ public class CeylonParser implements PsiParser {
     }
 
     /**
+     * TODO: Implement
      * {@code
      * memberNameDeclaration : memberName | typeName
      * }
@@ -916,6 +1031,7 @@ public class CeylonParser implements PsiParser {
     }
 
     /**
+     * TODO: Implement
      * {@code
      * memberReference : memberName ((typeArgumentsStart) => typeArguments)?
      * }
@@ -924,6 +1040,7 @@ public class CeylonParser implements PsiParser {
     }
 
     /**
+     * TODO: Implement
      * {@code
      * memberSelectionOperator : MEMBER_OP | SAFE_MEMBER_OP | SPREAD_OP
      * }
@@ -932,6 +1049,7 @@ public class CeylonParser implements PsiParser {
     }
 
     /**
+     * TODO: Implement
      * {@code
      * methodBody[StaticType type] : (namedArguments) => namedArguments | block
      * }
@@ -940,6 +1058,7 @@ public class CeylonParser implements PsiParser {
     }
 
     /**
+     * TODO: Implement
      * {@code
      * multiplicativeExpression : defaultExpression (multiplicativeOperator defaultExpression)*
      * }
@@ -948,6 +1067,7 @@ public class CeylonParser implements PsiParser {
     }
 
     /**
+     * TODO: Implement
      * {@code
      * multiplicativeOperator : PRODUCT_OP | QUOTIENT_OP | REMAINDER_OP | INTERSECTION_OP
      * }
@@ -956,6 +1076,7 @@ public class CeylonParser implements PsiParser {
     }
 
     /**
+     * TODO: Implement
      * {@code
      * namedArgument : compilerAnnotations (namedSpecifiedArgument | namedArgumentDeclaration)
      * }
@@ -964,6 +1085,7 @@ public class CeylonParser implements PsiParser {
     }
 
     /**
+     * TODO: Implement
      * {@code
      * namedArgumentDeclaration : objectArgument | typedMethodOrGetterArgument | voidOrInferredMethodArgument | inferredGetterArgument
      * }
@@ -972,6 +1094,7 @@ public class CeylonParser implements PsiParser {
     }
 
     /**
+     * TODO: Implement
      * {@code
      * namedArguments : LBRACE ((namedArgumentStart) => namedArgument)* (sequencedArgument | comprehension)? RBRACE
      * }
@@ -980,6 +1103,7 @@ public class CeylonParser implements PsiParser {
     }
 
     /**
+     * TODO: Implement
      * {@code
      * namedArgumentStart : compilerAnnotation* (specificationStart | declarationStart)
      * }
@@ -988,6 +1112,7 @@ public class CeylonParser implements PsiParser {
     }
 
     /**
+     * TODO: Implement
      * {@code
      * namedSpecifiedArgument : memberNameDeclaration specifier SEMICOLON
      * }
@@ -996,6 +1121,7 @@ public class CeylonParser implements PsiParser {
     }
 
     /**
+     * TODO: Implement
      * {@code
      * negationComplementExpression : unaryMinusOrComplementOperator negationComplementExpression | exponentiationExpression
      * }
@@ -1004,6 +1130,7 @@ public class CeylonParser implements PsiParser {
     }
 
     /**
+     * TODO: Implement
      * {@code
      * nonemptyCondition : (LPAREN NONEMPTY LIDENTIFIER RPAREN) => LPAREN NONEMPTY impliedVariable RPAREN | (LPAREN NONEMPTY compilerAnnotations (declarationStart|specificationStart)) => LPAREN NONEMPTY (specifiedVariable)? RPAREN | LPAREN NONEMPTY (expression)? RPAREN
      * }
@@ -1012,6 +1139,7 @@ public class CeylonParser implements PsiParser {
     }
 
     /**
+     * TODO: Implement
      * {@code
      * nonstringLiteral : NATURAL_LITERAL | FLOAT_LITERAL | QUOTED_LITERAL | CHAR_LITERAL
      * }
@@ -1020,6 +1148,7 @@ public class CeylonParser implements PsiParser {
     }
 
     /**
+     * TODO: Implement
      * {@code
      * notOperator : NOT_OP
      * }
@@ -1028,6 +1157,7 @@ public class CeylonParser implements PsiParser {
     }
 
     /**
+     * TODO: Implement
      * {@code
      * objectArgument : OBJECT_DEFINITION memberNameDeclaration (extendedType)? (satisfiedTypes)? (classBody | SEMICOLON)
      * }
@@ -1036,6 +1166,7 @@ public class CeylonParser implements PsiParser {
     }
 
     /**
+     * TODO: Implement
      * {@code
      * objectDeclaration : OBJECT_DEFINITION memberNameDeclaration (extendedType)? (satisfiedTypes)? (classBody | SEMICOLON)
      * }
@@ -1044,6 +1175,7 @@ public class CeylonParser implements PsiParser {
     }
 
     /**
+     * TODO: Implement
      * {@code
      * packageName : LIDENTIFIER
      * }
@@ -1052,6 +1184,7 @@ public class CeylonParser implements PsiParser {
     }
 
     /**
+     * TODO: Implement
      * {@code
      * parameter : parameterType memberName ((valueParameter)? | (parameters)+) (specifier)?
      * }
@@ -1060,6 +1193,7 @@ public class CeylonParser implements PsiParser {
     }
 
     /**
+     * TODO: Implement
      * {@code
      * parameterDeclaration : compilerAnnotations annotations parameter
      * }
@@ -1068,6 +1202,7 @@ public class CeylonParser implements PsiParser {
     }
 
     /**
+     * TODO: Implement
      * {@code
      * parameters : LPAREN (parameterDeclaration (COMMA ((~(COMPILER_ANNOTATION | LIDENTIFIER | UIDENTIFIER)) => | parameterDeclaration))*)? RPAREN
      * }
@@ -1076,6 +1211,7 @@ public class CeylonParser implements PsiParser {
     }
 
     /**
+     * TODO: Implement
      * {@code
      * parametersStart : LPAREN (annotatedDeclarationStart | RPAREN)
      * }
@@ -1084,6 +1220,7 @@ public class CeylonParser implements PsiParser {
     }
 
     /**
+     * TODO: Implement
      * {@code
      * parameterType : type (ELLIPSIS)? | VOID_MODIFIER
      * }
@@ -1092,6 +1229,7 @@ public class CeylonParser implements PsiParser {
     }
 
     /**
+     * TODO: Implement
      * {@code
      * parExpression : LPAREN assignmentExpression RPAREN
      * }
@@ -1100,6 +1238,7 @@ public class CeylonParser implements PsiParser {
     }
 
     /**
+     * TODO: Implement
      * {@code
      * positionalArgument : (FUNCTION_MODIFIER|parametersStart)=> (FUNCTION_MODIFIER)? parameters ((parametersStart)=> parameters)* expression | VALUE_MODIFIER expression | expression
      * }
@@ -1108,6 +1247,7 @@ public class CeylonParser implements PsiParser {
     }
 
     /**
+     * TODO: Implement
      * {@code
      * positionalArguments : LPAREN (positionalArgument (COMMA (positionalArgument ))* (ELLIPSIS)?)? (comprehension)? RPAREN
      * }
@@ -1116,6 +1256,7 @@ public class CeylonParser implements PsiParser {
     }
 
     /**
+     * TODO: Implement
      * {@code
      * postfixIncrementDecrementExpression : primary (postfixOperator)*
      * }
@@ -1124,6 +1265,7 @@ public class CeylonParser implements PsiParser {
     }
 
     /**
+     * TODO: Implement
      * {@code
      * postfixOperator : DECREMENT_OP | INCREMENT_OP
      * }
@@ -1132,6 +1274,7 @@ public class CeylonParser implements PsiParser {
     }
 
     /**
+     * TODO: Implement
      * {@code
      * prefixOperator : DECREMENT_OP | INCREMENT_OP
      * }
@@ -1140,6 +1283,7 @@ public class CeylonParser implements PsiParser {
     }
 
     /**
+     * TODO: Implement
      * {@code
      * prefixOperatorStart : DIFFERENCE_OP | INCREMENT_OP | DECREMENT_OP | COMPLEMENT_OP
      * }
@@ -1148,6 +1292,7 @@ public class CeylonParser implements PsiParser {
     }
 
     /**
+     * TODO: Implement
      * {@code
      * primary : base (qualifiedReference | indexExpression | arguments)*
      * }
@@ -1156,6 +1301,7 @@ public class CeylonParser implements PsiParser {
     }
 
     /**
+     * TODO: Implement
      * {@code
      * qualifiedReference TypeArgumentList typeArgumentList, boolean isMember] : memberSelectionOperator (memberReference | typeReference | (~(LIDENTIFIER|UIDENTIFIER))=>)
      * }
@@ -1164,6 +1310,7 @@ public class CeylonParser implements PsiParser {
     }
 
     /**
+     * TODO: Implement
      * {@code
      * qualifiedType : typeNameWithArguments (MEMBER_OP typeNameWithArguments)*
      * }
@@ -1172,6 +1319,7 @@ public class CeylonParser implements PsiParser {
     }
 
     /**
+     * TODO: Implement
      * {@code
      * rangeIntervalEntryExpression : additiveExpression (rangeIntervalEntryOperator additiveExpression)?
      * }
@@ -1180,6 +1328,7 @@ public class CeylonParser implements PsiParser {
     }
 
     /**
+     * TODO: Implement
      * {@code
      * rangeIntervalEntryOperator : RANGE_OP | ENTRY_OP
      * }
@@ -1188,6 +1337,7 @@ public class CeylonParser implements PsiParser {
     }
 
     /**
+     * TODO: Implement
      * {@code
      * resource : LPAREN ((COMPILER_ANNOTATION|declarationStart|specificationStart) => specifiedVariable | expression) RPAREN
      * }
@@ -1196,6 +1346,7 @@ public class CeylonParser implements PsiParser {
     }
 
     /**
+     * TODO: Implement
      * {@code
      * returnDirective : RETURN (expression)?
      * }
@@ -1204,6 +1355,7 @@ public class CeylonParser implements PsiParser {
     }
 
     /**
+     * TODO: Implement
      * {@code
      * satisfiedTypes : SATISFIES qualifiedType (INTERSECTION_OP (qualifiedType ))*
      * }
@@ -1212,6 +1364,7 @@ public class CeylonParser implements PsiParser {
     }
 
     /**
+     * TODO: Implement
      * {@code
      * satisfiesCaseCondition : SATISFIES qualifiedType
      * }
@@ -1220,6 +1373,7 @@ public class CeylonParser implements PsiParser {
     }
 
     /**
+     * TODO: Implement
      * {@code
      * satisfiesCondition : LPAREN SATISFIES (qualifiedType qualifiedType)? RPAREN
      * }
@@ -1228,6 +1382,7 @@ public class CeylonParser implements PsiParser {
     }
 
     /**
+     * TODO: Implement
      * {@code
      * selfReference : THIS | SUPER | OUTER
      * }
@@ -1236,6 +1391,7 @@ public class CeylonParser implements PsiParser {
     }
 
     /**
+     * TODO: Implement
      * {@code
      * sequencedArgument : compilerAnnotations expressions
      * }
@@ -1244,6 +1400,7 @@ public class CeylonParser implements PsiParser {
     }
 
     /**
+     * TODO: Implement
      * {@code
      * setterDeclaration : ASSIGN memberNameDeclaration (block | SEMICOLON)
      * }
@@ -1252,6 +1409,7 @@ public class CeylonParser implements PsiParser {
     }
 
     /**
+     * TODO: Implement
      * {@code
      * specificationStart : LIDENTIFIER '='
      * }
@@ -1260,6 +1418,7 @@ public class CeylonParser implements PsiParser {
     }
 
     /**
+     * TODO: Implement
      * {@code
      * specifiedVariable : variable (specifier)?
      * }
@@ -1268,6 +1427,7 @@ public class CeylonParser implements PsiParser {
     }
 
     /**
+     * TODO: Implement
      * {@code
      * specifier : SPECIFY expression
      * }
@@ -1276,6 +1436,7 @@ public class CeylonParser implements PsiParser {
     }
 
     /**
+     * TODO: Implement
      * {@code
      * statement : directiveStatement | controlStatement | expressionOrSpecificationStatement
      * }
@@ -1284,6 +1445,7 @@ public class CeylonParser implements PsiParser {
     }
 
     /**
+     * TODO: Implement
      * {@code
      * stringExpression : (STRING_LITERAL interpolatedExpressionStart) => stringTemplate | stringLiteral
      * }
@@ -1292,6 +1454,7 @@ public class CeylonParser implements PsiParser {
     }
 
     /**
+     * TODO: Implement
      * {@code
      * stringLiteral : STRING_LITERAL
      * }
@@ -1300,6 +1463,7 @@ public class CeylonParser implements PsiParser {
     }
 
     /**
+     * TODO: Implement
      * {@code
      * stringTemplate : stringLiteral ((interpolatedExpressionStart) => expression stringLiteral)+
      * }
@@ -1308,6 +1472,7 @@ public class CeylonParser implements PsiParser {
     }
 
     /**
+     * TODO: Implement
      * {@code
      * switchCaseElse : switchHeader cases
      * }
@@ -1316,6 +1481,7 @@ public class CeylonParser implements PsiParser {
     }
 
     /**
+     * TODO: Implement
      * {@code
      * switchHeader : SWITCH_CLAUSE LPAREN expression RPAREN
      * }
@@ -1324,6 +1490,7 @@ public class CeylonParser implements PsiParser {
     }
 
     /**
+     * TODO: Implement
      * {@code
      * thenElseExpression : disjunctionExpression (thenElseOperator disjunctionExpression)*
      * }
@@ -1332,6 +1499,7 @@ public class CeylonParser implements PsiParser {
     }
 
     /**
+     * TODO: Implement
      * {@code
      * thenElseOperator : ELSE_CLAUSE | THEN_CLAUSE
      * }
@@ -1340,6 +1508,7 @@ public class CeylonParser implements PsiParser {
     }
 
     /**
+     * TODO: Implement
      * {@code
      * throwDirective : THROW (expression)?
      * }
@@ -1348,6 +1517,7 @@ public class CeylonParser implements PsiParser {
     }
 
     /**
+     * TODO: Implement
      * {@code
      * tryBlock : TRY_CLAUSE (resource controlBlock | block)
      * }
@@ -1356,6 +1526,7 @@ public class CeylonParser implements PsiParser {
     }
 
     /**
+     * TODO: Implement
      * {@code
      * tryCatchFinally : tryBlock (catchBlock)* (finallyBlock)?
      * }
@@ -1364,6 +1535,7 @@ public class CeylonParser implements PsiParser {
     }
 
     /**
+     * TODO: Implement
      * {@code
      * type : unionType
      * }
@@ -1372,6 +1544,7 @@ public class CeylonParser implements PsiParser {
     }
 
     /**
+     * TODO: Implement
      * {@code
      * typeAlias : typeNameDeclaration SPECIFY
      * }
@@ -1380,6 +1553,7 @@ public class CeylonParser implements PsiParser {
     }
 
     /**
+     * TODO: Implement
      * {@code
      * typeArgument : type (ELLIPSIS)?
      * }
@@ -1388,6 +1562,7 @@ public class CeylonParser implements PsiParser {
     }
 
     /**
+     * TODO: Implement
      * {@code
      * typeArguments : SMALLER_OP typeArgument (COMMA (typeArgument ))* LARGER_OP
      * }
@@ -1396,6 +1571,7 @@ public class CeylonParser implements PsiParser {
     }
 
     /**
+     * TODO: Implement
      * {@code
      * typeArgumentsStart : SMALLER_OP (UIDENTIFIER ('.' UIDENTIFIER)* (DEFAULT_OP|ARRAY)* ((INTERSECTION_OP|UNION_OP|ENTRY_OP) UIDENTIFIER ('.' UIDENTIFIER)* (DEFAULT_OP|ARRAY)*)* (LARGER_OP|SMALLER_OP|COMMA|ELLIPSIS) | LARGER_OP)
      * }
@@ -1404,6 +1580,7 @@ public class CeylonParser implements PsiParser {
     }
 
     /**
+     * TODO: Implement
      * {@code
      * typeConstraint : compilerAnnotations TYPE_CONSTRAINT typeNameDeclaration (parameters)? (caseTypes)? (satisfiedTypes)? (abstractedType)?
      * }
@@ -1412,6 +1589,7 @@ public class CeylonParser implements PsiParser {
     }
 
     /**
+     * TODO: Implement
      * {@code
      * typeConstraints : (typeConstraint)+
      * }
@@ -1420,6 +1598,7 @@ public class CeylonParser implements PsiParser {
     }
 
     /**
+     * TODO: Implement
      * {@code
      * typedMethodOrAttributeDeclaration : type memberNameDeclaration ((typeParameters)? (parameters)+ (typeConstraints)? (methodBody[$type.type] | (specifier)? SEMICOLON) | (specifier | initializer)? SEMICOLON | attributeBody[$type.type])
      * }
@@ -1428,6 +1607,7 @@ public class CeylonParser implements PsiParser {
     }
 
     /**
+     * TODO: Implement
      * {@code
      * typedMethodOrGetterArgument : type memberNameDeclaration ((parameters)+)? methodBody[$type.type]
      * }
@@ -1436,6 +1616,7 @@ public class CeylonParser implements PsiParser {
     }
 
     /**
+     * TODO: Implement
      * {@code
      * typeName : UIDENTIFIER
      * }
@@ -1444,6 +1625,7 @@ public class CeylonParser implements PsiParser {
     }
 
     /**
+     * TODO: Implement
      * {@code
      * typeNameDeclaration : typeName | memberName
      * }
@@ -1452,6 +1634,7 @@ public class CeylonParser implements PsiParser {
     }
 
     /**
+     * TODO: Implement
      * {@code
      * typeNameWithArguments : typeName (typeArguments)?
      * }
@@ -1460,6 +1643,7 @@ public class CeylonParser implements PsiParser {
     }
 
     /**
+     * TODO: Implement
      * {@code
      * typeOperator : IS_OP | EXTENDS | SATISFIES
      * }
@@ -1468,6 +1652,7 @@ public class CeylonParser implements PsiParser {
     }
 
     /**
+     * TODO: Implement
      * {@code
      * typeParameter : (variance)? typeNameDeclaration | typeNameDeclaration ELLIPSIS
      * }
@@ -1476,6 +1661,7 @@ public class CeylonParser implements PsiParser {
     }
 
     /**
+     * TODO: Implement
      * {@code
      * typeParameters : SMALLER_OP typeParameter (COMMA (typeParameter ))* LARGER_OP
      * }
@@ -1484,6 +1670,7 @@ public class CeylonParser implements PsiParser {
     }
 
     /**
+     * TODO: Implement
      * {@code
      * typeReference : typeName ((typeArgumentsStart) => typeArguments)?
      * }
@@ -1492,6 +1679,7 @@ public class CeylonParser implements PsiParser {
     }
 
     /**
+     * TODO: Implement
      * {@code
      * typeSpecifier : SPECIFY qualifiedType
      * }
@@ -1500,6 +1688,7 @@ public class CeylonParser implements PsiParser {
     }
 
     /**
+     * TODO: Implement
      * {@code
      * unaryMinusOrComplementOperator : DIFFERENCE_OP | SUM_OP | COMPLEMENT_OP
      * }
@@ -1508,6 +1697,7 @@ public class CeylonParser implements PsiParser {
     }
 
     /**
+     * TODO: Implement
      * {@code
      * unionType : intersectionType ((UNION_OP (intersectionType ))+)?
      * }
@@ -1516,6 +1706,7 @@ public class CeylonParser implements PsiParser {
     }
 
     /**
+     * TODO: Implement
      * {@code
      * valueParameter : ENTRY_OP type memberName
      * }
@@ -1524,6 +1715,7 @@ public class CeylonParser implements PsiParser {
     }
 
     /**
+     * TODO: Implement
      * {@code
      * var : (type memberName (parameters)* | memberName | memberName (parameters)+)
      * }
@@ -1532,6 +1724,7 @@ public class CeylonParser implements PsiParser {
     }
 
     /**
+     * TODO: Implement
      * {@code
      * variable : compilerAnnotations var
      * }
@@ -1540,6 +1733,7 @@ public class CeylonParser implements PsiParser {
     }
 
     /**
+     * TODO: Implement
      * {@code
      * variance : IN_OP | OUT
      * }
@@ -1548,6 +1742,7 @@ public class CeylonParser implements PsiParser {
     }
 
     /**
+     * TODO: Implement
      * {@code
      * voidOrInferredMethodArgument : (VOID_MODIFIER | FUNCTION_MODIFIER) memberNameDeclaration (parameters)* block
      * }
@@ -1556,6 +1751,7 @@ public class CeylonParser implements PsiParser {
     }
 
     /**
+     * TODO: Implement
      * {@code
      * voidOrInferredMethodDeclaration : (VOID_MODIFIER | FUNCTION_MODIFIER) memberNameDeclaration (typeParameters)? (parameters)* (typeConstraints)? (block | (specifier)? SEMICOLON)
      * }
@@ -1564,6 +1760,7 @@ public class CeylonParser implements PsiParser {
     }
 
     /**
+     * TODO: Implement
      * {@code
      * whileBlock : WHILE_CLAUSE condition controlBlock
      * }
@@ -1573,6 +1770,7 @@ public class CeylonParser implements PsiParser {
 
 
     /**
+     * TODO: Implement
      * {@code
      * whileLoop : whileBlock
      * }
