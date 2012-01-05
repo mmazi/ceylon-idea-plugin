@@ -1,0 +1,15 @@
+import com.example {}
+-----
+FILE(0,21)
+  ASTWrapperPsiElement(ImportList)(0,21)
+    ASTWrapperPsiElement(Import)(0,21)
+      PsiElement(IMPORT)('import')(0,6)
+      PsiWhiteSpace(' ')(6,7)
+      ASTWrapperPsiElement(ImportPath)(7,18)
+        PsiElement(LIDENTIFIER)('com')(7,10)
+        PsiElement(MEMBER_OP)('.')(10,11)
+        PsiElement(LIDENTIFIER)('example')(11,18)
+      PsiWhiteSpace(' ')(18,19)
+      ASTWrapperPsiElement(ImportMemberOrTypeList)(19,21)
+        PsiElement(LBRACE)('{')(19,20)
+        PsiElement(RBRACE)('}')(20,21)

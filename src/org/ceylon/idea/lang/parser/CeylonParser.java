@@ -5,10 +5,10 @@ import com.intellij.lang.PsiBuilder;
 import com.intellij.lang.PsiParser;
 import com.intellij.psi.tree.IElementType;
 import org.ceylon.idea.lang.lexer.CeylonToken;
-import org.ceylon.idea.lang.parser.parsing.old.ImportStatementParser;
 import org.jetbrains.annotations.NotNull;
 
 import static org.ceylon.idea.lang.parser.ParserUtils.getToken;
+import static org.ceylon.idea.lang.parser.ParserUtils.lookAhead;
 
 public class CeylonParser implements PsiParser {
     @NotNull
@@ -307,7 +307,6 @@ public class CeylonParser implements PsiParser {
     }
 
     /**
-     * TODO: Implement
      * {@code
      * compilationUnit : (compilerAnnotations SEMICOLON)? importList (compilerAnnotations declaration)* EOF
      * }
@@ -808,12 +807,42 @@ public class CeylonParser implements PsiParser {
     }
 
     /**
-     * TODO: Implement
      * {@code
-     * importDeclaration : IMPORT (packageName (MEMBER_OP (packageName))*) importElementList
+     * importDeclaration : IMPORT fullPackageName importElementList
      * }
      */
-    void parseImportDeclaration(PsiBuilder builder) {
+    boolean parseImportDeclaration(PsiBuilder builder) {
+        if (!lookAhead(builder, CeylonToken.IMPORT)) {
+            return false;
+        }
+
+        PsiBuilder.Marker marker = builder.mark();
+
+        getToken(builder, CeylonToken.IMPORT);
+
+        parseFullPackageName(builder);
+
+        parseImportElementList(builder);
+
+        marker.done(CeylonAstNode.IMPORT);
+        return true;
+    }
+
+    /**
+     * {@code
+     * fullPackageName : packageName (MEMBER_OP packageName)*
+     * }
+     */
+    void parseFullPackageName(PsiBuilder builder) {
+        PsiBuilder.Marker marker = builder.mark();
+
+        parsePackageName(builder);
+
+        while (getToken(builder, CeylonToken.MEMBER_OP)) {
+            parsePackageName(builder);
+        }
+
+        marker.done(CeylonAstNode.IMPORT_PATH);
     }
 
     /**
@@ -822,46 +851,71 @@ public class CeylonParser implements PsiParser {
      * importElement : compilerAnnotations (memberAlias? memberName (erasure)? | typeAlias? typeName (erasure)? (importElementList)?)
      * }
      */
-    void parseImportElement(PsiBuilder builder) {
+    boolean parseImportElement(PsiBuilder builder) {
+        return getToken(builder, CeylonToken.UIDENTIFIER);
     }
 
     /**
-     * TODO: Implement
      * {@code
-     * importElementList : LBRACE (importElement (COMMA importElement)* (COMMA (importWildcard ))? | importWildcard)? RBRACE
+     * importElementList : LBRACE ((importElement (COMMA importElement)* (COMMA importWildcard)?) | importWildcard)? RBRACE
      * }
      */
     void parseImportElementList(PsiBuilder builder) {
+        PsiBuilder.Marker marker = builder.mark();
+
+        getToken(builder, CeylonToken.LBRACE, "LBRACE expected");
+
+        if (!parseImportWildcard(builder)) {
+            if (parseImportElement(builder)) {
+                while (getToken(builder, CeylonToken.COMMA)) {
+                    if (parseImportWildcard(builder)) {
+                        break;
+                    } else {
+                        parseImportElement(builder);
+                    }
+                }
+            }
+        }
+
+        getToken(builder, CeylonToken.RBRACE, "RBRACE expected");
+
+        marker.done(CeylonAstNode.IMPORT_MEMBER_OR_TYPE_LIST);
     }
 
     /**
-     * TODO: Implement
      * {@code
      * importList : (importDeclaration)*
      * }
      */
     void parseImportList(PsiBuilder builder) {
-        PsiBuilder.Marker marker = builder.mark();
-
         if (!ParserUtils.lookAhead(builder, CeylonToken.IMPORT)) {
-            marker.rollbackTo(); // TODO: do we really need to mark and rollback here?
             return;
         }
 
-        while (ImportStatementParser.parse(builder)) {
-            ParserUtils.skipNLS(builder);
+        PsiBuilder.Marker marker = builder.mark();
+
+        while (parseImportDeclaration(builder)) {
         }
 
         marker.done(CeylonAstNode.IMPORT_LIST);
     }
 
     /**
-     * TODO: Implement
      * {@code
      * importWildcard : ELLIPSIS
      * }
      */
-    void parseImportWildcard(PsiBuilder builder) {
+    boolean parseImportWildcard(PsiBuilder builder) {
+        if (!ParserUtils.lookAhead(builder, CeylonToken.ELLIPSIS)) {
+            return false;
+        }
+
+        PsiBuilder.Marker marker = builder.mark();
+
+        ParserUtils.getToken(builder, CeylonToken.ELLIPSIS);
+
+        marker.done(CeylonAstNode.IMPORT_WILDCARD);
+        return true;
     }
 
     /**
@@ -1199,12 +1253,12 @@ public class CeylonParser implements PsiParser {
     }
 
     /**
-     * TODO: Implement
      * {@code
      * packageName : LIDENTIFIER
      * }
      */
     void parsePackageName(PsiBuilder builder) {
+        getToken(builder, CeylonToken.LIDENTIFIER, "packageName expected");
     }
 
     /**

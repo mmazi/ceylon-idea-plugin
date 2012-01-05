@@ -1,18 +1,19 @@
 @annotation;
-import xxx {...}
+import xxx {}
 -----
-FILE(0,29)
+FILE(0,26)
   ASTWrapperPsiElement(CompilerAnnotation)(0,11)
     PsiElement(COMPILER_ANNOTATION)('@')(0,1)
     PsiElement(LIDENTIFIER)('annotation')(1,11)
   PsiElement(SEMICOLON)(';')(11,12)
   PsiWhiteSpace('\n')(12,13)
-  ASTWrapperPsiElement(ImportList)(13,29)
-    ASTWrapperPsiElement(Import)(13,29)
+  ASTWrapperPsiElement(ImportList)(13,26)
+    ASTWrapperPsiElement(Import)(13,26)
       PsiElement(IMPORT)('import')(13,19)
       PsiWhiteSpace(' ')(19,20)
-      PsiElement(LIDENTIFIER)('xxx')(20,23)
+      ASTWrapperPsiElement(ImportPath)(20,23)
+        PsiElement(LIDENTIFIER)('xxx')(20,23)
       PsiWhiteSpace(' ')(23,24)
-      PsiElement(LBRACE)('{')(24,25)
-      PsiElement(ELLIPSIS)('...')(25,28)
-      PsiElement(RBRACE)('}')(28,29)
+      ASTWrapperPsiElement(ImportMemberOrTypeList)(24,26)
+        PsiElement(LBRACE)('{')(24,25)
+        PsiElement(RBRACE)('}')(25,26)

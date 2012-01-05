@@ -40,7 +40,23 @@ public class CeylonParsingTestCase extends CeylonTestCase {
         doTest();
     }
 
-    public void testImport() {
+    public void testImport$list() {
+        doTest();
+    }
+
+    public void testImport$multiple() {
+        doTest();
+    }
+
+    public void testImport$multipleAndWildcard() {
+        doTest();
+    }
+
+    public void testImport$nothing() {
+        doTest();
+    }
+
+    public void testImport$wildcard() {
         doTest();
     }
 
