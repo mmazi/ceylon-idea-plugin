@@ -1099,12 +1099,18 @@ public class CeylonParser implements PsiParser {
     }
 
     /**
-     * TODO: Implement
      * {@code
-     * memberAlias : memberNameDeclaration SPECIFY
+     * memberAlias : memberName SPECIFY
      * }
      */
     void parseMemberAlias(PsiBuilder builder) {
+        PsiBuilder.Marker marker = builder.mark();
+        parseMemberName(builder);
+        if (getToken(builder, CeylonToken.SPECIFY)) {
+            marker.done(CeylonAstNode.ALIAS);
+        } else {
+            marker.rollbackTo();
+        }
     }
 
     /**
@@ -1657,12 +1663,18 @@ public class CeylonParser implements PsiParser {
     }
 
     /**
-     * TODO: Implement
      * {@code
-     * typeAlias : typeNameDeclaration SPECIFY
+     * typeAlias : typeName SPECIFY
      * }
      */
     void parseTypeAlias(PsiBuilder builder) {
+        PsiBuilder.Marker marker = builder.mark();
+        parseTypeName(builder);
+        if (getToken(builder, CeylonToken.SPECIFY)) {
+            marker.done(CeylonAstNode.ALIAS);
+        } else {
+            marker.rollbackTo();
+        }
     }
 
     /**

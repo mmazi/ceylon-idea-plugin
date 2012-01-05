@@ -1,5 +1,6 @@
 import package1 {Type1, Type2, ...}
 -----
+FILE(0,35)
   ASTWrapperPsiElement(ImportList)(0,35)
     ASTWrapperPsiElement(Import)(0,35)
       PsiElement(IMPORT)('import')(0,6)

@@ -44,6 +44,10 @@ public class CeylonParsingTestCase extends CeylonTestCase {
         doTest();
     }
 
+    public void testImport$alias() {
+        doTest();
+    }
+
     public void testImport$multiple() {
         doTest();
     }
