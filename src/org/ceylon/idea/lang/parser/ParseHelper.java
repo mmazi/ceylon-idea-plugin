@@ -8,194 +8,195 @@ import static org.ceylon.idea.lang.lexer.CeylonToken.*;
 /*
 <pre>
 
-ToplevelDeclaration: TypeDeclaration | Method | SimpleAttribute | AttributeGetter
-TypeDeclaration: Class | Object | Interface
-Declaration: Method | Attribute | TypeDeclaration
-Import: "import" FullPackageName "{" ImportElements? "}"
-FullPackageName: PackageName ("." PackageName)*
-ImportElements: ImportElement ("," ImportElement)* ("," ImportWildcard)? | ImportWildcard
-ImportElement: ImportTypeElement | ImportMethodAttributeElement
-ImportTypeElement: TypeAlias? TypeName
-ImportMethodAttributeElement: MethodAttributeAlias? MemberName
-TypeAlias: TypeName "="
-MethodAttributeAlias: MemberName "="
-ImportWildcard: "..."
-Introduction: "adapt" Type SatisfiedTypes TypeConstraints? ";"
-Interface: Annotation* InterfaceHeader (InterfaceBody | TypeSpecifier ";")
-InterfaceHeader: "interface" TypeName TypeParams? InterfaceInheritance TypeConstraints?
-InterfaceInheritance: CaseTypes? Metatypes? AdaptedTypes? SatisfiedTypes?
-InterfaceBody: "{" Declaration* "}"
-TypeSpecifier: "=" Type
+AbbreviatedType: Type Abbreviation*
+Abbreviation: "?" | "[]"
+AbstractedType: "abstracts" Type
+AdaptedTypes: "adapts" Type ("&" Type)*
+Annotation: MemberName ( Arguments | Literal+ )?
+Arguments: PositionalArguments FunctionalArguments? | NamedArguments
+Assignment: ":=" | ".=" | "+=" | "-=" | "*=" | "/=" | "%=" | "&=" | "|=" | "^="| "~=" | "&&=" | "||=" ;
+Atom: Literal | StringTemplate | SelfReference | ParExpression
+Attribute: Annotation* (SimpleAttribute | AttributeGetter | AttributeSetter)
+AttributeGetter: AttributeHeader Block
+AttributeHeader: (UnionType | "value") MemberName
+AttributeMeta: Type "." MemberName
+AttributeSetter: "assign" MemberName Block
+Block: "{" (Declaration | Statement)* "}"
+BooleanCondition: Expression
+Break: "break"
+CallableParam: (UnionType | "void") MemberName Params+
+CallableReference: MethodReference | InitializerReference
+CallableVariable: (UnionType | "void")? MemberName Params+
+Case: Expression ("," Expression)* | "is" UnionType | "satisfies" Type
+CaseItem: "case" "(" Case ")" Block
+Cases: CaseItem+ DefaultCaseItem?
+CaseType: MemberName | Type
+CaseTypes: "of" CaseType ("|" CaseType)*
+Catch: "catch" "(" Variable ")" Block
+CharacterLiteral: "`" Character "`"
+Character: ~("`" | "\" | Tab | Formfeed | Newline | Return | Backspace) | EscapeSequence
 Class: Annotation* ClassHeader (ClassBody | TypeSpecifier ";")
+ClassBody: "{" (Declaration | Statement)* "}"
 ClassHeader: "class" TypeName TypeParams? Params ClassInheritance TypeConstraints?
 ClassInheritance: CaseTypes? Metatypes? ExtendedType? SatisfiedTypes?
-ClassBody: "{" (Declaration | Statement)* "}"
+ConcreteType: "this" "is"
+ConditionalTypes: SatisfiedTypes Conditions
+Condition: BooleanCondition | IsCondition | ExistsOrNonemptyCondition | SatisfiesCondition
+Conditions: "if" "(" Condition ("&&" Condition)* ")"
+Continue: "continue"
+ControlStructure: IfElse | SwitchCaseElse | While | ForFail | TryCatchFinally
+DateLiteral:  "'"  Digit{1,2} "/" Digit{1,2} "/" Digit{4}  "'"
+Declaration: Method | Attribute | TypeDeclaration
+DefaultCaseItem: "else" Block
+DefaultParam: Param Specifier
+Digit: "0".."9"
+Digits: Digit+ | Digit{1..3} ("_" Digit{3})+
+DimensionAtom: DimensionConstant | DimensionVariable | ParenDimension
+DimensionConstant: "#" IntegerLiteral
+Dimension: DimensionTerm ("+" DimensionTerm)*
+DimensionTerm: (DimensionConstant "*")* DimensionAtom
+DimensionVariable: TypeName | "#" MemberName
+Directive: Return | Throw | Break | Continue
+DirectiveStatement: Directive ";"
+Else: "else" (Block | IfElse)
+EntryParamPair: SimpleParam "->" SimpleParam
+EntryType: AbbreviatedType ("->" AbbreviatedType)?
+EntryVariablePair: Variable "->" Variable
+EscapeSequence: "\" ("b" | "t" | "n" | "f" | "r" | "\" | "\"" | "'" | "`" )
+ExistsOrNonemptyCondition: ("exists" | "nonempty") (Variable Specifier | MemberName)
+Exponent: ("E"|"e") ("+"|"-")? Digits
+Expression: Primary | OperatorExpression
+ExpressionStatement: ( Assignment | IncrementOrDecrement | Invocation ) ";"
+ExtendedType: "extends" ("super" ".")? Type PositionalArguments
+Fail: "else" Block
+Finally: "finally" Block
+FloatLiteral: Digits ("." FractionalDigits (Exponent | Magnitude | FractionalMagnitude)? | FractionalMagnitude)
+ForFail: For Fail?
+For: "for" "(" ForIterator ")" Block
+ForIterator: IteratorVariable "in" Expression
+FractionalDigits: Digit+ | (Digit{3} "_")+ Digit{1..3}
+FractionalMagnitude: "m" | "u" | "n" | "p" | "f"
+FullPackageName: PackageName ("." PackageName)*
+FunctionalArguments: (MemberName FunctionalBody)+
+FunctionalBody: Params? ( Block | "(" Expression ")" )
+FunctionalNamedArgument: (UnionType | "function" | "void") MemberName Params+ (Block | NamedArguments)
+FunctionMeta: MemberName TypeArguments?
+IdentifierChar: LowercaseChar | UppercaseChar | Digit
+IfElse: If Else?
+If: "if" "(" Condition ")" Block
+ImportElement: ImportTypeElement | ImportMethodAttributeElement
+ImportElements: ImportElement ("," ImportElement)* ("," ImportWildcard)? | ImportWildcard
+Import: "import" FullPackageName "{" ImportElements? "}"
+ImportMethodAttributeElement: MethodAttributeAlias? MemberName
+ImportTypeElement: TypeAlias? TypeName
+ImportWildcard: "..."
+IncrementOrDecrement: "--" | "++" ;
+Initializer: ":=" Expression
+InitializerReference: (Receiver ".")? TypeName TypeArguments?
+IntegerLiteral: Digits Magnitude?
+Interface: Annotation* InterfaceHeader (InterfaceBody | TypeSpecifier ";")
+InterfaceBody: "{" Declaration* "}"
+InterfaceHeader: "interface" TypeName TypeParams? InterfaceInheritance TypeConstraints?
+InterfaceInheritance: CaseTypes? Metatypes? AdaptedTypes? SatisfiedTypes?
+IntersectionType: EntryType ("&" EntryType)*
+Introduction: "adapt" Type SatisfiedTypes TypeConstraints? ";"
+Invocation: Primary Arguments | SequenceInstantiation
+IsCondition: "is" (TypedVariable Specifier | UnionType MemberName)
+IteratorVariable: Variable | CallableVariable | EntryVariablePair
+LIdentifier: LowercaseChar IdentifierChar*
+LineComment: ("//"|"#!") ~(Newline|Return)* (Return Newline | Return | Newline)?
+Literal: IntegerLiteral | FloatLiteral | CharacterLiteral | StringLiteral | QuotedLiteral
+LocalNamedArgument: (UnionType | "value") MemberName (Block | NamedArguments)
+LoopCondition: "while" "(" Condition ")"
+LowercaseChar: "a".."z" | "_" ;
+Magnitude: "k" | "M" | "G" | "T" | "P"
+MemberName: LIdentifier
+MemberReference: CallableReference | ValueReference
+Meta: TypeMeta | MethodMeta | AttributeMeta | FunctionMeta | ValueMeta
+Metatypes: "is" Type ("&" Type)*
+Method: Annotation* MethodHeader (Block | NamedArguments | Specifier? ";")
+MethodAttributeAlias: MemberName "="
+MethodHeader: (UnionType | "function" | "void") MemberName TypeParams? Params+ Metatypes? TypeConstraints?
+MethodMeta: Type "." MemberName TypeArguments?
+MethodReference: (Receiver ".")? MemberName TypeArguments?
+MultilineComment: "/" "*" ( MultilineCommmentCharacter | MultilineComment )* "*" "/"
+MultilineCommmentCharacter: ~("/"|"*") | ("/" ~"*") => "/" | ("*" ~"/") => "*"
+NamedArguments: "{" NamedArgument* Sequence? "}"
+NamedArgument: SpecifiedNamedArgument | LocalNamedArgument | FunctionalNamedArgument | Object
 Object: Annotation* ObjectHeader ClassBody
 ObjectHeader: "object" MemberName ObjectInheritance
 ObjectInheritance: ExtendedType? SatisfiedTypes?
-Method: Annotation* MethodHeader (Block | NamedArguments | Specifier? ";")
-MethodHeader: (UnionType | "function" | "void") MemberName TypeParams? Params+ Metatypes? TypeConstraints?
-Attribute: Annotation* (SimpleAttribute | AttributeGetter | AttributeSetter)
-AttributeHeader: (UnionType | "value") MemberName
-SimpleAttribute: AttributeHeader ( (Specifier | Initializer)? ";" | NamedArguments )
-Initializer: ":=" Expression
-AttributeGetter: AttributeHeader Block
-AttributeSetter: "assign" MemberName Block
-Literal: IntegerLiteral | FloatLiteral | CharacterLiteral | StringLiteral | QuotedLiteral
-DateLiteral:  "'"  Digit{1,2} "/" Digit{1,2} "/" Digit{4}  "'"
-TimeLiteral:  "'"  Digit{1,2} ":" Digit{2} ( ":" Digit{2} ( ":" Digit{3} )? )?  (" " "AM"|"PM")?  (" " Character{3,4})?  "'"
-TypedQuotedLiteral: TypeName QuotedLiteral
-StringTemplate: StringLiteral (Expression StringLiteral)+
-SelfReference: "this" | "super" | "outer"
-Atom: Literal | StringTemplate | SelfReference | ParExpression
-Primary: Atom | Meta | MemberReference | Invocation
-MemberReference: CallableReference | ValueReference
-Expression: Primary | OperatorExpression
-ParExpression: "(" Expression ")"
-Receiver: Primary
 OuterReference: (Receiver ".")? "outer"
-ValueReference: (Receiver ".")? MemberName
-CallableReference: MethodReference | InitializerReference
-MethodReference: (Receiver ".")? MemberName TypeArguments?
-InitializerReference: (Receiver ".")? TypeName TypeArguments?
-Invocation: Primary Arguments | SequenceInstantiation
-Arguments: PositionalArguments FunctionalArguments? | NamedArguments
-PositionalArguments: "(" Expression ("," Expression)* ("," Sequence)? | Sequence? ")"
-NamedArguments: "{" NamedArgument* Sequence? "}"
-NamedArgument: SpecifiedNamedArgument | LocalNamedArgument | FunctionalNamedArgument | Object
-SpecifiedNamedArgument: MemberName Specifier ";"
-LocalNamedArgument: (UnionType | "value") MemberName (Block | NamedArguments)
-FunctionalNamedArgument: (UnionType | "function" | "void") MemberName Params+ (Block | NamedArguments)
-SequenceInstantiation: "{" Sequence? "}" ;
-Sequence: Expression ("," Expression)* | Expression "..."
-FunctionalArguments: (MemberName FunctionalBody)+
-FunctionalBody: Params? ( Block | "(" Expression ")" )
-Meta: TypeMeta | MethodMeta | AttributeMeta | FunctionMeta | ValueMeta
-TypeMeta: Type
-FunctionMeta: MemberName TypeArguments?
-MethodMeta: Type "." MemberName TypeArguments?
-ValueMeta: MemberName TypeArguments?
-AttributeMeta: Type "." MemberName
-Whitespace: " " | Tab | Formfeed | Newline | Return
-LineComment: ("//"|"#!") ~(Newline|Return)* (Return Newline | Return | Newline)?
-MultilineComment: "/" "*" ( MultilineCommmentCharacter | MultilineComment )* "*" "/"
-MultilineCommmentCharacter: ~("/"|"*") | ("/" ~"*") => "/" | ("*" ~"/") => "*"
-IdentifierChar: LowercaseChar | UppercaseChar | Digit
-Digit: "0".."9"
-LowercaseChar: "a".."z" | "_" ;
-UppercaseChar: "A".."Z" ;
-LIdentifier: LowercaseChar IdentifierChar*
-UIdentifier: UppercaseChar IdentifierChar*
+PackageName: PIdentifier
+Param: Annotation* (SimpleParam | CallableParam | EntryParamPair)
+Params:  "(" Param ("," Param)* ("," DefaultParam)* ("," SequencedParam)? |  DefaultParam ("," DefaultParam)* ("," SequencedParam)? |  SequencedParam? ")"
+ParenDimension: "(" Dimension ")"
+ParExpression: "(" Expression ")"
 PIdentifier: LowercaseChar+
-IntegerLiteral: Digits Magnitude?
-FloatLiteral: Digits ("." FractionalDigits (Exponent | Magnitude | FractionalMagnitude)? | FractionalMagnitude)
-Digits: Digit+ | Digit{1..3} ("_" Digit{3})+
-FractionalDigits: Digit+ | (Digit{3} "_")+ Digit{1..3}
-Exponent: ("E"|"e") ("+"|"-")? Digits
-Magnitude: "k" | "M" | "G" | "T" | "P"
-FractionalMagnitude: "m" | "u" | "n" | "p" | "f"
-CharacterLiteral: "`" Character "`"
-Character: ~("`" | "\" | Tab | Formfeed | Newline | Return | Backspace) | EscapeSequence
-EscapeSequence: "\" ("b" | "t" | "n" | "f" | "r" | "\" | "\"" | "'" | "`" )
-StringLiteral: "\"" StringCharacter* "\""
-StringCharacter: ~( "\" | "\"" ) | EscapeSequence
-QuotedLiteral: "'" QuotedLiteralCharacter* "'"
+PositionalArguments: "(" Expression ("," Expression)* ("," Sequence)? | Sequence? ")"
+Primary: Atom | Meta | MemberReference | Invocation
 QuotedLiteralCharacter: ~("'")
-Block: "{" (Declaration | Statement)* "}"
-Statement: ExpressionStatement | Specification | DirectiveStatement | ControlStructure
-ExpressionStatement: ( Assignment | IncrementOrDecrement | Invocation ) ";"
-Assignment: ":=" | ".=" | "+=" | "-=" | "*=" | "/=" | "%=" | "&=" | "|=" | "^="| "~=" | "&&=" | "||=" ;
-IncrementOrDecrement: "--" | "++" ;
-DirectiveStatement: Directive ";"
-Directive: Return | Throw | Break | Continue
-Return: "return" Expression?
-Break: "break"
-Continue: "continue"
-Throw: "throw" Expression?
+QuotedLiteral: "'" QuotedLiteralCharacter* "'"
+Receiver: Primary
+Resource: MemberName | InitializerReference Arguments | Variable Specifier
 Retry: "retry"
-Specification: MemberName Specifier ";"
-ControlStructure: IfElse | SwitchCaseElse | While | ForFail | TryCatchFinally
-TypedVariable: UnionType MemberName
-Variable: UnionType? MemberName
-IteratorVariable: Variable | CallableVariable | EntryVariablePair
-CallableVariable: (UnionType | "void")? MemberName Params+
-EntryVariablePair: Variable "->" Variable
-Condition: BooleanCondition | IsCondition | ExistsOrNonemptyCondition | SatisfiesCondition
-BooleanCondition: Expression
-IsCondition: "is" (TypedVariable Specifier | UnionType MemberName)
-ExistsOrNonemptyCondition: ("exists" | "nonempty") (Variable Specifier | MemberName)
+Return: "return" Expression?
+SatisfiedTypes: "satisfies" Type ("&" Type)*
 SatisfiesCondition: "satisfies" Type Type
-IfElse: If Else?
-If: "if" "(" Condition ")" Block
-Else: "else" (Block | IfElse)
+SelfReference: "this" | "super" | "outer"
+SequencedParam: Annotation* UnionType "..." MemberName
+SequencedTypeParam: TypeName "..."
+SequencedType: TypeName "..."
+Sequence: Expression ("," Expression)* | Expression "..."
+SequenceInstantiation: "{" Sequence? "}" ;
+SimpleAttribute: AttributeHeader ( (Specifier | Initializer)? ";" | NamedArguments )
+SimpleParam: UnionType MemberName
+Specification: MemberName Specifier ";"
+SpecifiedNamedArgument: MemberName Specifier ";"
+Specifier: "=" Expression
+Statement: ExpressionStatement | Specification | DirectiveStatement | ControlStructure
+StringCharacter: ~( "\" | "\"" ) | EscapeSequence
+StringLiteral: "\"" StringCharacter* "\""
+StringTemplate: StringLiteral (Expression StringLiteral)+
+Subtype: "subtype" | MemberName "." "subtype"
 SwitchCaseElse: Switch ( Cases | "{" Cases "}" )
 Switch: "switch" "(" Expression ")"
-Cases: CaseItem+ DefaultCaseItem?
-CaseItem: "case" "(" Case ")" Block
-DefaultCaseItem: "else" Block
-Case: Expression ("," Expression)* | "is" UnionType | "satisfies" Type
-ForFail: For Fail?
-For: "for" "(" ForIterator ")" Block
-Fail: "else" Block
-ForIterator: IteratorVariable "in" Expression
-While: LoopCondition Block
-LoopCondition: "while" "(" Condition ")"
+Throw: "throw" Expression?
+TimeLiteral:  "'"  Digit{1,2} ":" Digit{2} ( ":" Digit{2} ( ":" Digit{3} )? )?  (" " "AM"|"PM")?  (" " Character{3,4})?  "'"
+ToplevelDeclaration: TypeDeclaration | Method | SimpleAttribute | AttributeGetter
 TryCatchFinally: Try Catch* Finally?
 Try: "try" ("(" Resource ")")? Block
-Catch: "catch" "(" Variable ")" Block
-Finally: "finally" Block
-Resource: MemberName | InitializerReference Arguments | Variable Specifier
-PackageName: PIdentifier
-TypeName: UIdentifier
-MemberName: LIdentifier
-UnionType: IntersectionType ("|" IntersectionType)*
-IntersectionType: EntryType ("&" EntryType)*
-TypeNameWithArguments: TypeName TypeArguments?
-Type: TypeNameWithArguments ("." TypeNameWithArguments)*
-AbbreviatedType: Type Abbreviation*
-Abbreviation: "?" | "[]"
-EntryType: AbbreviatedType ("->" AbbreviatedType)?
-ExtendedType: "extends" ("super" ".")? Type PositionalArguments
-SatisfiedTypes: "satisfies" Type ("&" Type)*
-ConditionalTypes: SatisfiedTypes Conditions
-Conditions: "if" "(" Condition ("&&" Condition)* ")"
-CaseTypes: "of" CaseType ("|" CaseType)*
-CaseType: MemberName | Type
-AdaptedTypes: "adapts" Type ("&" Type)*
-Metatypes: "is" Type ("&" Type)*
-TypeParams: "<" (TypeParam ",")* (TypeParam | SequencedTypeParam) ">"
-TypeParam: Variance? TypeName
-Variance: "out" | "in"
-SequencedTypeParam: TypeName "..."
-Subtype: "subtype" | MemberName "." "subtype"
-TypeConstraints: TypeConstraint+
+TypeAlias: TypeName "="
+TypeArguments: "<" (UnionType ",")* (UnionType | SequencedType) ">"
+TypeArgument: UnionType | Dimension
 TypeConstraint: "given" TypeName TypeParams? Params? TypeConstraintInheritance
 TypeConstraintInheritance: CaseTypes? Metatypes? SatisfiedTypes? AbstractedType?
-AbstractedType: "abstracts" Type
-ConcreteType: "this" "is"
-TypeArguments: "<" (UnionType ",")* (UnionType | SequencedType) ">"
-SequencedType: TypeName "..."
-TypeArgument: UnionType | Dimension
-Dimension: DimensionTerm ("+" DimensionTerm)*
-DimensionTerm: (DimensionConstant "*")* DimensionAtom
-DimensionAtom: DimensionConstant | DimensionVariable | ParenDimension
-ParenDimension: "(" Dimension ")"
-DimensionConstant: "#" IntegerLiteral
-DimensionVariable: TypeName | "#" MemberName
-Params:  "(" Param ("," Param)* ("," DefaultParam)* ("," SequencedParam)? |  DefaultParam ("," DefaultParam)* ("," SequencedParam)? |  SequencedParam? ")"
-Param: Annotation* (SimpleParam | CallableParam | EntryParamPair)
-SimpleParam: UnionType MemberName
-CallableParam: (UnionType | "void") MemberName Params+
-DefaultParam: Param Specifier
-Specifier: "=" Expression
-SequencedParam: Annotation* UnionType "..." MemberName
-EntryParamPair: SimpleParam "->" SimpleParam
-Annotation: MemberName ( Arguments | Literal+ )?
+TypeConstraints: TypeConstraint+
+TypeDeclaration: Class | Object | Interface
+TypedQuotedLiteral: TypeName QuotedLiteral
+TypedVariable: UnionType MemberName
+TypeMeta: Type
+TypeName: UIdentifier
+TypeNameWithArguments: TypeName TypeArguments?
+TypeParams: "<" (TypeParam ",")* (TypeParam | SequencedTypeParam) ">"
+TypeParam: Variance? TypeName
+TypeSpecifier: "=" Type
+Type: TypeNameWithArguments ("." TypeNameWithArguments)*
+UIdentifier: UppercaseChar IdentifierChar*
+UnionType: IntersectionType ("|" IntersectionType)*
+UppercaseChar: "A".."Z" ;
+ValueMeta: MemberName TypeArguments?
+ValueReference: (Receiver ".")? MemberName
+Variable: UnionType? MemberName
+Variance: "out" | "in"
+While: LoopCondition Block
+Whitespace: " " | Tab | Formfeed | Newline | Return
+
 
 </pre>
  */
 
-public class ParseHelper {
+class ParseHelper {
     private final PsiBuilder builder;
 
     public ParseHelper(PsiBuilder builder) {
@@ -338,24 +339,21 @@ public class ParseHelper {
     }
 
     /**
-     * TODO: Implement
-     * {@code
-     * block : LBRACE (declarationOrStatement)* RBRACE
-     * }
+     * {@code Block: "{" (Declaration | Statement)* "}" }
      */
     boolean parseBlock() {
-        if (!ParserUtils.lookAhead(builder, LBRACE)) {
+        if (!lookAhead(LBRACE)) {
             return false;
         }
 
         PsiBuilder.Marker marker = builder.mark();
 
-        getToken(LBRACE);
+        parseRequiredToken(LBRACE);
 
         while (parseDeclarationOrStatement()) {
         }
 
-        getToken(RBRACE, "RBRACE expected");
+        parseRequiredToken(RBRACE);
 
         marker.done(CeylonAstNode.BLOCK);
 
@@ -487,7 +485,7 @@ public class ParseHelper {
     void parseCompilationUnit() {
 
         if (parseCompilerAnnotations()) {
-            getToken(SEMICOLON, "SEMICOLON expected");
+            parseRequiredToken(SEMICOLON);
         }
 
         parseImportList();
@@ -515,12 +513,12 @@ public class ParseHelper {
 
         PsiBuilder.Marker marker = builder.mark();
 
-        getToken(COMPILER_ANNOTATION);
-        getToken(LIDENTIFIER, "LIDENTIFIER expected");
+        parseRequiredToken(COMPILER_ANNOTATION);
+        parseRequiredToken(LIDENTIFIER);
 
-        if (getToken(INDEX_OP)) {
-            getToken(STRING_LITERAL, "STRING_LITERAL expected");
-            getToken(RBRACKET, "RBRACKET expected");
+        if (parseOptionalToken(INDEX_OP)) {
+            parseRequiredToken(STRING_LITERAL);
+            parseRequiredToken(RBRACKET);
         }
 
         marker.done(CeylonAstNode.COMPILER_ANNOTATION);
@@ -980,38 +978,35 @@ public class ParseHelper {
     }
 
     /**
-     * {@code
-     * importDeclaration : IMPORT fullPackageName importElementList
-     * }
+     * {@code Import: "import" FullPackageName "{" ImportElements? "}" }
      */
-    boolean parseImportDeclaration() {
+    boolean parseImport() {
         if (!lookAhead(IMPORT)) {
             return false;
         }
 
         PsiBuilder.Marker marker = builder.mark();
 
-        getToken(IMPORT);
-
+        parseRequiredToken(IMPORT);
         parseFullPackageName();
-
-        parseImportElementList();
+        parseRequiredToken(LBRACE);
+        parseImportElements();
+        parseRequiredToken(RBRACE);
 
         marker.done(CeylonAstNode.IMPORT);
         return true;
     }
 
     /**
-     * {@code
+     * {@code FullPackageName: PackageName ("." PackageName)* }
      * fullPackageName : packageName (MEMBER_OP packageName)*
-     * }
      */
     void parseFullPackageName() {
         PsiBuilder.Marker marker = builder.mark();
 
         parsePackageName();
 
-        while (getToken(MEMBER_OP)) {
+        while (parseOptionalToken(MEMBER_OP)) {
             parsePackageName();
         }
 
@@ -1050,14 +1045,12 @@ public class ParseHelper {
      * importElementList : LBRACE ((importElement (COMMA importElement)* (COMMA importWildcard)?) | importWildcard)? RBRACE
      * }
      */
-    void parseImportElementList() {
+    void parseImportElements() {
         PsiBuilder.Marker marker = builder.mark();
-
-        getToken(LBRACE, "LBRACE expected");
 
         if (!parseImportWildcard()) {
             if (parseImportElement()) {
-                while (getToken(COMMA)) {
+                while (parseOptionalToken(COMMA)) {
                     if (parseImportWildcard()) {
                         break;
                     } else {
@@ -1067,15 +1060,11 @@ public class ParseHelper {
             }
         }
 
-        getToken(RBRACE, "RBRACE expected");
-
         marker.done(CeylonAstNode.IMPORT_MEMBER_OR_TYPE_LIST);
     }
 
     /**
-     * {@code
-     * importList : (importDeclaration)*
-     * }
+     * {@code ImportList: Import* }
      */
     void parseImportList() {
         if (!ParserUtils.lookAhead(builder, IMPORT)) {
@@ -1084,7 +1073,7 @@ public class ParseHelper {
 
         PsiBuilder.Marker marker = builder.mark();
 
-        while (parseImportDeclaration()) {
+        while (parseImport()) {
         }
 
         marker.done(CeylonAstNode.IMPORT_LIST);
@@ -1102,7 +1091,7 @@ public class ParseHelper {
 
         PsiBuilder.Marker marker = builder.mark();
 
-        getToken(ELLIPSIS);
+        parseRequiredToken(ELLIPSIS);
 
         marker.done(CeylonAstNode.IMPORT_WILDCARD);
         return true;
@@ -1278,7 +1267,7 @@ public class ParseHelper {
     void parseMemberAlias() {
         PsiBuilder.Marker marker = builder.mark();
         parseMemberName();
-        if (getToken(SPECIFY)) {
+        if (parseOptionalToken(SPECIFY)) {
             marker.done(CeylonAstNode.ALIAS);
         } else {
             marker.rollbackTo();
@@ -1292,7 +1281,7 @@ public class ParseHelper {
      * }
      */
     void parseMemberName() {
-        getToken(LIDENTIFIER, "LIDENTIFIER expected");
+        parseRequiredToken(LIDENTIFIER);
     }
 
     /**
@@ -1456,7 +1445,7 @@ public class ParseHelper {
      * }
      */
     void parsePackageName() {
-        getToken(LIDENTIFIER, "packageName expected");
+        parseRequiredToken(LIDENTIFIER);
     }
 
     /**
@@ -1687,11 +1676,11 @@ public class ParseHelper {
 
         PsiBuilder.Marker marker = builder.mark();
 
-        getToken(ASSIGN);
+        parseRequiredToken(ASSIGN);
         parseMemberName();
 
-        if (!parseBlock() && !getToken(SEMICOLON)) {
-            builder.error("block or SEMICOLON expected");
+        if (!parseBlock()) {
+            parseRequiredToken(SEMICOLON, "block or SEMICOLON expected");
         }
 
         marker.done(CeylonAstNode.ATTRIBUTE_SETTER_DEFINITION);
@@ -1841,7 +1830,7 @@ public class ParseHelper {
     void parseTypeAlias() {
         PsiBuilder.Marker marker = builder.mark();
         parseTypeName();
-        if (getToken(SPECIFY)) {
+        if (parseOptionalToken(SPECIFY)) {
             marker.done(CeylonAstNode.ALIAS);
         } else {
             marker.rollbackTo();
@@ -1918,7 +1907,7 @@ public class ParseHelper {
      * }
      */
     void parseTypeName() {
-        getToken(UIDENTIFIER, "UIDENTIFIER expected");
+        parseRequiredToken(UIDENTIFIER);
     }
 
     /**
@@ -2075,13 +2064,18 @@ public class ParseHelper {
     void parseWhileLoop() {
     }
 
-    private boolean getToken(IElementType elem) {
+    private boolean parseOptionalToken(IElementType elem) {
         return ParserUtils.getToken(builder, elem);
     }
 
-    private boolean getToken(IElementType elem, String errorMsg) {
+    private boolean parseRequiredToken(IElementType elem) {
+        return parseRequiredToken(elem, elem + " expected");
+    }
+
+    private boolean parseRequiredToken(IElementType elem, String errorMsg) {
         return ParserUtils.getToken(builder, elem, errorMsg);
     }
+
 
     private boolean lookAhead(IElementType... elems) {
         return ParserUtils.lookAhead(builder, elems);

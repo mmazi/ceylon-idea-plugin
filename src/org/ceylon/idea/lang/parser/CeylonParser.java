@@ -7,7 +7,6 @@ import com.intellij.psi.tree.IElementType;
 import org.jetbrains.annotations.NotNull;
 
 
-@SuppressWarnings("unused")
 public class CeylonParser implements PsiParser {
     @NotNull
     @Override
