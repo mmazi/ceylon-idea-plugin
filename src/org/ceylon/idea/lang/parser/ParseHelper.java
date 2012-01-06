@@ -2,7 +2,8 @@ package org.ceylon.idea.lang.parser;
 
 import com.intellij.lang.PsiBuilder;
 import com.intellij.psi.tree.IElementType;
-import org.ceylon.idea.lang.lexer.CeylonToken;
+
+import static org.ceylon.idea.lang.lexer.CeylonToken.*;
 
 /*
 <pre>
@@ -343,18 +344,18 @@ public class ParseHelper {
      * }
      */
     boolean parseBlock() {
-        if (!ParserUtils.lookAhead(builder, CeylonToken.LBRACE)) {
+        if (!ParserUtils.lookAhead(builder, LBRACE)) {
             return false;
         }
 
         PsiBuilder.Marker marker = builder.mark();
 
-        getToken(CeylonToken.LBRACE);
+        getToken(LBRACE);
 
         while (parseDeclarationOrStatement()) {
         }
 
-        getToken(CeylonToken.RBRACE, "RBRACE expected");
+        getToken(RBRACE, "RBRACE expected");
 
         marker.done(CeylonAstNode.BLOCK);
 
@@ -486,7 +487,7 @@ public class ParseHelper {
     void parseCompilationUnit() {
 
         if (parseCompilerAnnotations()) {
-            getToken(CeylonToken.SEMICOLON, "SEMICOLON expected");
+            getToken(SEMICOLON, "SEMICOLON expected");
         }
 
         parseImportList();
@@ -508,18 +509,18 @@ public class ParseHelper {
      * }
      */
     boolean parseCompilerAnnotation() {
-        if (!ParserUtils.lookAhead(builder, CeylonToken.COMPILER_ANNOTATION)) {
+        if (!ParserUtils.lookAhead(builder, COMPILER_ANNOTATION)) {
             return false;
         }
 
         PsiBuilder.Marker marker = builder.mark();
 
-        getToken(CeylonToken.COMPILER_ANNOTATION);
-        getToken(CeylonToken.LIDENTIFIER, "LIDENTIFIER expected");
+        getToken(COMPILER_ANNOTATION);
+        getToken(LIDENTIFIER, "LIDENTIFIER expected");
 
-        if (getToken(CeylonToken.INDEX_OP)) {
-            getToken(CeylonToken.STRING_LITERAL, "STRING_LITERAL expected");
-            getToken(CeylonToken.RBRACKET, "RBRACKET expected");
+        if (getToken(INDEX_OP)) {
+            getToken(STRING_LITERAL, "STRING_LITERAL expected");
+            getToken(RBRACKET, "RBRACKET expected");
         }
 
         marker.done(CeylonAstNode.COMPILER_ANNOTATION);
@@ -984,13 +985,13 @@ public class ParseHelper {
      * }
      */
     boolean parseImportDeclaration() {
-        if (!lookAhead(CeylonToken.IMPORT)) {
+        if (!lookAhead(IMPORT)) {
             return false;
         }
 
         PsiBuilder.Marker marker = builder.mark();
 
-        getToken(CeylonToken.IMPORT);
+        getToken(IMPORT);
 
         parseFullPackageName();
 
@@ -1010,7 +1011,7 @@ public class ParseHelper {
 
         parsePackageName();
 
-        while (getToken(CeylonToken.MEMBER_OP)) {
+        while (getToken(MEMBER_OP)) {
             parsePackageName();
         }
 
@@ -1026,11 +1027,11 @@ public class ParseHelper {
         PsiBuilder.Marker marker = builder.mark();
         parseCompilerAnnotations();
 
-        if (lookAhead(CeylonToken.LIDENTIFIER)) {
+        if (lookAhead(LIDENTIFIER)) {
             parseMemberAlias();
             parseMemberName();
             parseErasure();
-        } else if (lookAhead(CeylonToken.UIDENTIFIER)) {
+        } else if (lookAhead(UIDENTIFIER)) {
             parseTypeAlias();
             parseTypeName();
             parseErasure();
@@ -1052,11 +1053,11 @@ public class ParseHelper {
     void parseImportElementList() {
         PsiBuilder.Marker marker = builder.mark();
 
-        getToken(CeylonToken.LBRACE, "LBRACE expected");
+        getToken(LBRACE, "LBRACE expected");
 
         if (!parseImportWildcard()) {
             if (parseImportElement()) {
-                while (getToken(CeylonToken.COMMA)) {
+                while (getToken(COMMA)) {
                     if (parseImportWildcard()) {
                         break;
                     } else {
@@ -1066,7 +1067,7 @@ public class ParseHelper {
             }
         }
 
-        getToken(CeylonToken.RBRACE, "RBRACE expected");
+        getToken(RBRACE, "RBRACE expected");
 
         marker.done(CeylonAstNode.IMPORT_MEMBER_OR_TYPE_LIST);
     }
@@ -1077,7 +1078,7 @@ public class ParseHelper {
      * }
      */
     void parseImportList() {
-        if (!ParserUtils.lookAhead(builder, CeylonToken.IMPORT)) {
+        if (!ParserUtils.lookAhead(builder, IMPORT)) {
             return;
         }
 
@@ -1095,13 +1096,13 @@ public class ParseHelper {
      * }
      */
     boolean parseImportWildcard() {
-        if (!ParserUtils.lookAhead(builder, CeylonToken.ELLIPSIS)) {
+        if (!ParserUtils.lookAhead(builder, ELLIPSIS)) {
             return false;
         }
 
         PsiBuilder.Marker marker = builder.mark();
 
-        getToken(CeylonToken.ELLIPSIS);
+        getToken(ELLIPSIS);
 
         marker.done(CeylonAstNode.IMPORT_WILDCARD);
         return true;
@@ -1277,7 +1278,7 @@ public class ParseHelper {
     void parseMemberAlias() {
         PsiBuilder.Marker marker = builder.mark();
         parseMemberName();
-        if (getToken(CeylonToken.SPECIFY)) {
+        if (getToken(SPECIFY)) {
             marker.done(CeylonAstNode.ALIAS);
         } else {
             marker.rollbackTo();
@@ -1291,7 +1292,7 @@ public class ParseHelper {
      * }
      */
     void parseMemberName() {
-        getToken(CeylonToken.LIDENTIFIER, "LIDENTIFIER expected");
+        getToken(LIDENTIFIER, "LIDENTIFIER expected");
     }
 
     /**
@@ -1455,7 +1456,7 @@ public class ParseHelper {
      * }
      */
     void parsePackageName() {
-        getToken(CeylonToken.LIDENTIFIER, "packageName expected");
+        getToken(LIDENTIFIER, "packageName expected");
     }
 
     /**
@@ -1680,17 +1681,16 @@ public class ParseHelper {
      * }
      */
     boolean parseSetterDeclaration() {
-        if (!ParserUtils.lookAhead(builder, CeylonToken.ASSIGN)) {
+        if (!lookAhead(ASSIGN)) {
             return false;
         }
 
         PsiBuilder.Marker marker = builder.mark();
 
-        getToken(CeylonToken.ASSIGN);
-
+        getToken(ASSIGN);
         parseMemberName();
 
-        if (!parseBlock() && !getToken(CeylonToken.SEMICOLON)) {
+        if (!parseBlock() && !getToken(SEMICOLON)) {
             builder.error("block or SEMICOLON expected");
         }
 
@@ -1841,7 +1841,7 @@ public class ParseHelper {
     void parseTypeAlias() {
         PsiBuilder.Marker marker = builder.mark();
         parseTypeName();
-        if (getToken(CeylonToken.SPECIFY)) {
+        if (getToken(SPECIFY)) {
             marker.done(CeylonAstNode.ALIAS);
         } else {
             marker.rollbackTo();
@@ -1918,7 +1918,7 @@ public class ParseHelper {
      * }
      */
     void parseTypeName() {
-        getToken(CeylonToken.UIDENTIFIER, "UIDENTIFIER expected");
+        getToken(UIDENTIFIER, "UIDENTIFIER expected");
     }
 
     /**
