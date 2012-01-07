@@ -1,12 +1,14 @@
-@first @second
+@first @second;
 -----
-FILE(0,14)
-  ASTWrapperPsiElement(CompilerAnnotation)(0,6)
-    PsiElement(COMPILER_ANNOTATION)('@')(0,1)
-    PsiElement(LIDENTIFIER)('first')(1,6)
-  PsiWhiteSpace(' ')(6,7)
-  ASTWrapperPsiElement(CompilerAnnotation)(7,14)
-    PsiElement(COMPILER_ANNOTATION)('@')(7,8)
-    PsiElement(LIDENTIFIER)('second')(8,14)
-  PsiErrorElement:SEMICOLON expected(14,14)
-    <empty list>
+FILE(0,15)
+  ASTWrapperPsiElement(CompilationUnit)(0,15)
+    ASTWrapperPsiElement(CompilerAnnotation)(0,6)
+      PsiElement(COMPILER_ANNOTATION)('@')(0,1)
+      ASTWrapperPsiElement(AnnotationName)(1,6)
+        PsiElement(LIDENTIFIER)('first')(1,6)
+    PsiWhiteSpace(' ')(6,7)
+    ASTWrapperPsiElement(CompilerAnnotation)(7,14)
+      PsiElement(COMPILER_ANNOTATION)('@')(7,8)
+      ASTWrapperPsiElement(AnnotationName)(8,14)
+        PsiElement(LIDENTIFIER)('second')(8,14)
+    PsiElement(SEMICOLON)(';')(14,15)
