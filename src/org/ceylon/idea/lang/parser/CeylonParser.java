@@ -4,6 +4,7 @@ import com.intellij.lang.ASTNode;
 import com.intellij.lang.PsiBuilder;
 import com.intellij.lang.PsiParser;
 import com.intellij.psi.tree.IElementType;
+import org.ceylon.idea.lang.parser.rule.Rule;
 import org.jetbrains.annotations.NotNull;
 
 
@@ -15,7 +16,8 @@ public class CeylonParser implements PsiParser {
 
         PsiBuilder.Marker rootMarker = builder.mark();
 
-        new ParseHelper(builder).parseCompilationUnit();
+//        new ParseHelper(builder).parseCompilationUnit();
+        Rule.CompilationUnit.parseRequired(builder);
 
         while (!builder.eof()) {
             builder.advanceLexer();

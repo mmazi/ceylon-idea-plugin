@@ -1,12 +1,15 @@
 package org.ceylon.idea.lang.lexer;
 
+import com.intellij.lang.PsiBuilder;
 import com.intellij.psi.tree.IElementType;
 import com.intellij.psi.tree.TokenSet;
 import org.ceylon.idea.Ceylon;
+import org.ceylon.idea.lang.parser.ParserUtils;
+import org.ceylon.idea.lang.parser.rule.Rule;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 
-public final class CeylonToken extends IElementType {
+public class CeylonToken extends IElementType implements Rule {
     public static final CeylonToken BAD_CHARACTER = new CeylonToken("BAD_CHARACTER");
 
     public static final CeylonToken ABSTRACTED_TYPE = new CeylonToken("ABSTRACTED_TYPE");
@@ -133,6 +136,16 @@ public final class CeylonToken extends IElementType {
 
     private CeylonToken(@NotNull @NonNls String debugName) {
         super(debugName, Ceylon.LANGUAGE);
+    }
+
+    @Override
+    public boolean parseRequired(PsiBuilder builder) {
+        return ParserUtils.getToken(builder, this, this + " expected");
+    }
+
+    @Override
+    public boolean parseOptional(PsiBuilder builder) {
+        return ParserUtils.getToken(builder, this);
     }
 
 }

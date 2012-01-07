@@ -204,7 +204,7 @@ public final class CeylonAstNode extends IElementType {
     public static final CeylonAstNode XOR_ASSIGN_OP = new CeylonAstNode("XorAssignOp");
     public static final CeylonAstNode XOR_OP = new CeylonAstNode("XorOp");
 
-    private CeylonAstNode(@NotNull @NonNls String debugName) {
+    public CeylonAstNode(@NotNull @NonNls String debugName) {
         super(debugName, Ceylon.LANGUAGE);
     }
 
