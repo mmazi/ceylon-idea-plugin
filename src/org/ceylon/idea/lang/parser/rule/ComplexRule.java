@@ -15,7 +15,7 @@ class ComplexRule implements Rule {
         return new ComplexRule(name);
     }
 
-    public ComplexRule(String name) {
+    ComplexRule(String name) {
         this.name = name;
     }
 
@@ -94,6 +94,11 @@ class ComplexRule implements Rule {
         rules.add(first);
         rules.add(second);
         rules.addAll(Arrays.asList(rest));
+        return this;
+    }
+
+    public ComplexRule zeroOrAny(Rule first, Rule... rest) {
+        rules.add(new ZeroOrAnyRule(first, rest));
         return this;
     }
 

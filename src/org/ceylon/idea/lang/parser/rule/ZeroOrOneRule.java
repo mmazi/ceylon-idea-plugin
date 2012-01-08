@@ -11,16 +11,16 @@ class ZeroOrOneRule implements Rule {
         return new ZeroOrOneRule(rule);
     }
 
-    public ZeroOrOneRule(Rule first, Rule second, Rule[] rest) {
-        this(sequence(first, second, rest));
-    }
-
     public static Rule zeroOrOne(Rule first, Rule second, Rule... rules) {
         return zeroOrOne(sequence(first, second, rules));
     }
 
     ZeroOrOneRule(Rule rule) {
         this.rule = rule;
+    }
+
+    ZeroOrOneRule(Rule first, Rule second, Rule[] rest) {
+        this(sequence(first, second, rest));
     }
 
     @Override

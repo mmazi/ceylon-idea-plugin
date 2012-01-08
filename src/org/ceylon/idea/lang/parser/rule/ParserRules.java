@@ -930,8 +930,7 @@ public class ParserRules {
     public static final Rule Whitespace = new NotImplementedRule();
 
     static {
-        // TODO: zeroOrAny()
-        Block.one(LBRACE).zeroOrMore(any(Declaration, Statement)).one(RBRACE);
+        Block.one(LBRACE).zeroOrAny(Declaration, Statement).one(RBRACE);
     }
 
 }

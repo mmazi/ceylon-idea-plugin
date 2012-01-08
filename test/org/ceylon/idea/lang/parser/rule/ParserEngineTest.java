@@ -128,6 +128,22 @@ public class ParserEngineTest {
         invalid(rule, SEMICOLON, COMMA);
     }
 
+    @Test
+    public void testZeroOrAny() {
+        Rule rule = ZeroOrAnyRule.zeroOrAny(COMMA, SEMICOLON);
+
+        valid(rule);
+
+        valid(rule, COMMA);
+        assertTrue(builder.eof());
+
+        valid(rule, SEMICOLON);
+        assertTrue(builder.eof());
+
+        valid(rule, IMPORT);
+        assertFalse(builder.eof());
+    }
+
     private void valid(Rule rule, CeylonToken... tokens) {
         builder.setTokens(tokens);
         assertTrue(rule.parseRequired(builder));

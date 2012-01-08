@@ -7,15 +7,14 @@ import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
-public class AnyRule implements Rule {
-
+class ZeroOrAnyRule implements Rule {
     private final List<Rule> rules = new LinkedList<Rule>();
 
-    public static Rule any(Rule first, Rule... rest) {
-        return new AnyRule(first, rest);
+    public static Rule zeroOrAny(Rule first, Rule... rest) {
+        return new ZeroOrAnyRule(first, rest);
     }
 
-    AnyRule(Rule first, Rule... rest) {
+    ZeroOrAnyRule(Rule first, Rule... rest) {
         rules.add(first);
         rules.addAll(Arrays.asList(rest));
     }
@@ -35,11 +34,11 @@ public class AnyRule implements Rule {
             }
         }
 
-        return false;
+        return true;
     }
 
     @Override
     public String toString() {
-        return "(" + StringUtils.join(rules, " | ") + ")";
+        return "(" + StringUtils.join(rules, " | ") + ")?";
     }
 }

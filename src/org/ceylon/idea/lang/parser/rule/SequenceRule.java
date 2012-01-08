@@ -14,7 +14,7 @@ class SequenceRule implements Rule {
         return new SequenceRule(first, second, rest);
     }
 
-    public SequenceRule(Rule first, Rule second, Rule... rest) {
+    SequenceRule(Rule first, Rule second, Rule... rest) {
         rules.add(first);
         rules.add(second);
         rules.addAll(Arrays.asList(rest));
