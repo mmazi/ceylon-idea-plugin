@@ -50,7 +50,7 @@ public interface Rule {
     /**
      * {@code TypeAlias:  TypeName "=" }
      */
-    Rule TypeAlias = rule("TypeAlias").sequence(TypeName, EQUAL_OP);
+    Rule TypeAlias = rule("TypeAlias").sequence(TypeName, SPECIFY);
 
     /**
      * {@code ImportTypeElement:  TypeAlias? TypeName }
@@ -65,7 +65,7 @@ public interface Rule {
     /**
      * {@code MethodAttributeAlias:  MemberName "="	 }
      */
-    Rule MethodAttributeAlias = rule("MethodAttributeAlias").sequence(MemberName, EQUAL_OP);
+    Rule MethodAttributeAlias = rule("MethodAttributeAlias").sequence(MemberName, SPECIFY);
 
     /**
      * {@code ImportMethodAttributeElement:  MethodAttributeAlias? MemberName }

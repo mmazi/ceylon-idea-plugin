@@ -8,23 +8,11 @@ public class CeylonParsingTestCase extends CeylonTestCase {
         doTest();
     }
 
-    public void testAttributeSetterDefinition$semicolon() {
-        doTest();
-    }
-
     public void testCompilationUnit$empty() {
         doTest();
     }
 
     public void testCompilationUnit$importWithAnnotation() {
-        doTest();
-    }
-
-    public void testCompilationUnit$missingDeclaration() {
-        doTest();
-    }
-
-    public void testCompilationUnit$multipleDeclarations() {
         doTest();
     }
 
