@@ -4,6 +4,14 @@ import org.ceylon.idea.CeylonTestCase;
 
 public class CeylonParsingTestCase extends CeylonTestCase {
 
+    public void testAnnotation$literal() {
+        doTest();
+    }
+
+    public void testAnnotation$namedArguments() {
+        doTest();
+    }
+
     public void testAttribute$setter() {
         doTest();
     }

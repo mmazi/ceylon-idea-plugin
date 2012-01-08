@@ -81,6 +81,17 @@ public class RuleTest {
     }
 
     @Test
+    public void testAnnotation() {
+        // MemberName ( Arguments | Literal+ )?
+        Rule rule = ParserRules.Annotation;
+
+        valid(rule, LIDENTIFIER);
+        valid(rule, LIDENTIFIER, STRING_LITERAL);
+        valid(rule, LIDENTIFIER, STRING_LITERAL, STRING_LITERAL);
+        valid(rule, LIDENTIFIER, LBRACE, RBRACE);
+    }
+
+    @Test
     public void testCompilationUnit() {
         // CompilationUnit : (CompilerAnnotation+ ";")? import* (CompilerAnnotations Declaration)*
         Rule rule = ParserRules.CompilationUnit;

@@ -96,9 +96,84 @@ public class ParserRules {
     public static final Rule Import = rule("Import").sequence(IMPORT, FullPackageName).one(LBRACE).zeroOrOne(ImportElements).one(RBRACE);
 
     /**
+     * {@code PositionalArguments:  "(" Expression ("," Expression)* ("," Sequence)? | Sequence? ")" }
+     */
+    public static final Rule PositionalArguments = new DummyRule("PositionalArguments");
+
+    /**
+     * {@code FunctionalArguments:  (MemberName FunctionalBody)+	 }
+     */
+    public static final Rule FunctionalArguments = new DummyRule("FunctionalArguments");
+
+    /**
+     * {@code SpecifiedNamedArgument:  MemberName Specifier ";"	 }
+     */
+    public static final Rule SpecifiedNamedArgument = new DummyRule("SpecifiedNamedArgument");
+
+    /**
+     * {@code LocalNamedArgument:  (UnionType | "value") MemberName (Block | NamedArguments)	 }
+     */
+    public static final Rule LocalNamedArgument = new DummyRule("LocalNamedArgument");
+
+    /**
+     * {@code FunctionalNamedArgument:  (UnionType | "function" | "void") MemberName Params+ (Block | NamedArguments)	 }
+     */
+    public static final Rule FunctionalNamedArgument = new DummyRule("FunctionalNamedArgument");
+
+    /**
+     * {@code Object:  Annotation* ObjectHeader ClassBody	 }
+     */
+    public static final Rule Object = new DummyRule("Object");
+
+    /**
+     * {@code NamedArgument:  SpecifiedNamedArgument | LocalNamedArgument | FunctionalNamedArgument | Object	 }
+     */
+    public static final Rule NamedArgument = any(SpecifiedNamedArgument, LocalNamedArgument, FunctionalNamedArgument, Object);
+
+    /**
+     * {@code Sequence:  Expression ("," Expression)* | Expression "..."	 }
+     */
+    public static final Rule Sequence = new DummyRule("Sequence");
+
+    /**
+     * {@code NamedArguments:  "{" NamedArgument* Sequence? "}"	 }
+     */
+    public static final Rule NamedArguments = rule("NamedArguments").one(LBRACE).zeroOrMore(NamedArgument).zeroOrOne(Sequence).one(RBRACE);
+
+    /**
+     * {@code Arguments:  PositionalArguments FunctionalArguments? | NamedArguments }
+     */
+    public static final Rule Arguments = rule("Arguments").any(sequence(PositionalArguments, zeroOrOne(FunctionalArguments)), NamedArguments);
+
+    /**
+     * {@code IntegerLiteral:  Digits Magnitude?	 }
+     */
+    public static final Rule IntegerLiteral = new DummyRule("IntegerLiteral");
+
+    /**
+     * {@code FloatLiteral:  Digits ("." FractionalDigits (Exponent | Magnitude | FractionalMagnitude)? | FractionalMagnitude)	 }
+     */
+    public static final Rule FloatLiteral = new DummyRule("FloatLiteral");
+
+    /**
+     * {@code CharacterLiteral:  "`" Character "`"	 }
+     */
+    public static final Rule CharacterLiteral = new DummyRule("CharacterLiteral");
+
+    /**
+     * {@code QuotedLiteral:  "'" QuotedLiteralCharacter* "'"	 }
+     */
+    public static final Rule QuotedLiteral = new DummyRule("QuotedLiteral");
+
+    /**
+     * {@code Literal:  IntegerLiteral | FloatLiteral | CharacterLiteral | StringLiteral | QuotedLiteral	 }
+     */
+    public static final Rule Literal = any(IntegerLiteral, FloatLiteral, CharacterLiteral, STRING_LITERAL, QuotedLiteral);
+
+    /**
      * {@code Annotation:  MemberName ( Arguments | Literal+ )?	 }
      */
-    public static final Rule Annotation = new DummyRule("Annotation");
+    public static final Rule Annotation = rule("Annotation").one(MemberName).zeroOrAny(Arguments, oneOrMore(Literal));
 
     /**
      * {@code Method:  Annotation* MethodHeader (Block | NamedArguments | Specifier? ";")	 }
@@ -196,11 +271,6 @@ public class ParserRules {
     public static final Rule AdaptedTypes = new NotImplementedRule();
 
     /**
-     * {@code Arguments:  PositionalArguments FunctionalArguments? | NamedArguments	 }
-     */
-    public static final Rule Arguments = new NotImplementedRule();
-
-    /**
      * {@code Assignment:  ":=" | ".=" | "+=" | "-=" | "*=" | "/=" | "%=" | "&=" | "|=" | "^="| "~=" | "&&=" | "||=" ;	 }
      */
     public static final Rule Assignment = new NotImplementedRule();
@@ -216,12 +286,12 @@ public class ParserRules {
     public static final Rule AttributeMeta = new NotImplementedRule();
 
     /**
-     * {@code BooleanCondition:  Expression	 }
+     * {@code BooleanCondition:  Expression }
      */
     public static final Rule BooleanCondition = new NotImplementedRule();
 
     /**
-     * {@code Break:  "break"	 }
+     * {@code Break:  "break" }
      */
     public static final Rule Break = new NotImplementedRule();
 
@@ -269,11 +339,6 @@ public class ParserRules {
      * {@code Catch:  "catch" "(" Variable ")" Block	 }
      */
     public static final Rule Catch = new NotImplementedRule();
-
-    /**
-     * {@code CharacterLiteral:  "`" Character "`"	 }
-     */
-    public static final Rule CharacterLiteral = new NotImplementedRule();
 
     /**
      * {@code Character:  ~("`" | "\" | Tab | Formfeed | Newline | Return | Backspace) | EscapeSequence	 }
@@ -446,11 +511,6 @@ public class ParserRules {
     public static final Rule Finally = new NotImplementedRule();
 
     /**
-     * {@code FloatLiteral:  Digits ("." FractionalDigits (Exponent | Magnitude | FractionalMagnitude)? | FractionalMagnitude)	 }
-     */
-    public static final Rule FloatLiteral = new NotImplementedRule();
-
-    /**
      * {@code ForFail:  For Fail?	 }
      */
     public static final Rule ForFail = new NotImplementedRule();
@@ -476,19 +536,9 @@ public class ParserRules {
     public static final Rule FractionalMagnitude = new NotImplementedRule();
 
     /**
-     * {@code FunctionalArguments:  (MemberName FunctionalBody)+	 }
-     */
-    public static final Rule FunctionalArguments = new NotImplementedRule();
-
-    /**
      * {@code FunctionalBody:  Params? ( Block | "(" Expression ")" )	 }
      */
     public static final Rule FunctionalBody = new NotImplementedRule();
-
-    /**
-     * {@code FunctionalNamedArgument:  (UnionType | "function" | "void") MemberName Params+ (Block | NamedArguments)	 }
-     */
-    public static final Rule FunctionalNamedArgument = new NotImplementedRule();
 
     /**
      * {@code FunctionMeta:  MemberName TypeArguments?	 }
@@ -524,11 +574,6 @@ public class ParserRules {
      * {@code InitializerReference:  (Receiver ".")? TypeName TypeArguments?	 }
      */
     public static final Rule InitializerReference = new NotImplementedRule();
-
-    /**
-     * {@code IntegerLiteral:  Digits Magnitude?	 }
-     */
-    public static final Rule IntegerLiteral = new NotImplementedRule();
 
     /**
      * {@code Interface:  Annotation* InterfaceHeader (InterfaceBody | TypeSpecifier ";")	 }
@@ -574,16 +619,6 @@ public class ParserRules {
      * {@code LineComment:  ("//"|"#!") ~(Newline|Return)* (Return Newline | Return | Newline)?	 }
      */
     public static final Rule LineComment = new NotImplementedRule();
-
-    /**
-     * {@code Literal:  IntegerLiteral | FloatLiteral | CharacterLiteral | StringLiteral | QuotedLiteral	 }
-     */
-    public static final Rule Literal = new NotImplementedRule();
-
-    /**
-     * {@code LocalNamedArgument:  (UnionType | "value") MemberName (Block | NamedArguments)	 }
-     */
-    public static final Rule LocalNamedArgument = new NotImplementedRule();
 
     /**
      * {@code LoopCondition:  "while" "(" Condition ")"	 }
@@ -641,21 +676,6 @@ public class ParserRules {
     public static final Rule MultilineCommmentCharacter = new NotImplementedRule();
 
     /**
-     * {@code NamedArguments:  "{" NamedArgument* Sequence? "}"	 }
-     */
-    public static final Rule NamedArguments = new NotImplementedRule();
-
-    /**
-     * {@code NamedArgument:  SpecifiedNamedArgument | LocalNamedArgument | FunctionalNamedArgument | Object	 }
-     */
-    public static final Rule NamedArgument = new NotImplementedRule();
-
-    /**
-     * {@code Object:  Annotation* ObjectHeader ClassBody	 }
-     */
-    public static final Rule Object = new NotImplementedRule();
-
-    /**
      * {@code ObjectHeader:  "object" MemberName ObjectInheritance	 }
      */
     public static final Rule ObjectHeader = new NotImplementedRule();
@@ -691,11 +711,6 @@ public class ParserRules {
     public static final Rule ParExpression = new NotImplementedRule();
 
     /**
-     * {@code PositionalArguments:  "(" Expression ("," Expression)* ("," Sequence)? | Sequence? ")" }
-     */
-    public static final Rule PositionalArguments = new NotImplementedRule();
-
-    /**
      * {@code Primary:  Atom | Meta | MemberReference | Invocation	 }
      */
     public static final Rule Primary = new NotImplementedRule();
@@ -704,11 +719,6 @@ public class ParserRules {
      * {@code QuotedLiteralCharacter:  ~("'")	 }
      */
     public static final Rule QuotedLiteralCharacter = new NotImplementedRule();
-
-    /**
-     * {@code QuotedLiteral:  "'" QuotedLiteralCharacter* "'"	 }
-     */
-    public static final Rule QuotedLiteral = new NotImplementedRule();
 
     /**
      * {@code Receiver:  Primary	 }
@@ -761,11 +771,6 @@ public class ParserRules {
     public static final Rule SequencedType = new NotImplementedRule();
 
     /**
-     * {@code Sequence:  Expression ("," Expression)* | Expression "..."	 }
-     */
-    public static final Rule Sequence = new NotImplementedRule();
-
-    /**
      * {@code SequenceInstantiation:  "{" Sequence? "}" ;	 }
      */
     public static final Rule SequenceInstantiation = new NotImplementedRule();
@@ -781,11 +786,6 @@ public class ParserRules {
     public static final Rule Specification = new NotImplementedRule();
 
     /**
-     * {@code SpecifiedNamedArgument:  MemberName Specifier ";"	 }
-     */
-    public static final Rule SpecifiedNamedArgument = new NotImplementedRule();
-
-    /**
      * {@code Specifier:  "=" Expression	 }
      */
     public static final Rule Specifier = new NotImplementedRule();
@@ -799,11 +799,6 @@ public class ParserRules {
      * {@code StringCharacter:  ~( "\" | "\"" ) | EscapeSequence	 }
      */
     public static final Rule StringCharacter = new NotImplementedRule();
-
-    /**
-     * {@code StringLiteral:  "\"" StringCharacter* "\""	 }
-     */
-    public static final Rule StringLiteral = new NotImplementedRule();
 
     /**
      * {@code StringTemplate:  StringLiteral (Expression StringLiteral)+	 }

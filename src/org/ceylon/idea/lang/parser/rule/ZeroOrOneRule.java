@@ -25,6 +25,7 @@ class ZeroOrOneRule implements Rule {
         return true;
     }
 
+    // TODO: get rid of this copy&pase
     @Override
     public boolean parseOptional(PsiBuilder builder) {
         if (lookAhead(builder)) {

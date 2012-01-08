@@ -22,6 +22,7 @@ class OneOrMoreRule implements Rule {
         return true;
     }
 
+    // TODO: get rid of this copy&pase
     @Override
     public boolean parseOptional(PsiBuilder builder) {
         boolean parsed = rule.parseOptional(builder);

@@ -1,5 +1,6 @@
 package org.ceylon.idea.lang.parser.rule;
 
+import com.google.common.base.Preconditions;
 import com.intellij.lang.PsiBuilder;
 import org.ceylon.idea.lang.parser.CeylonAstNode;
 
@@ -16,9 +17,7 @@ public class ComplexRule implements Rule {
     }
 
     public boolean parseRequired(PsiBuilder builder) {
-        if (rules.isEmpty()) {
-            throw new IllegalStateException("No rules defined for " + name);
-        }
+        Preconditions.checkState(!rules.isEmpty(), "No rules defined for " + name);
 
         PsiBuilder.Marker marker = builder.mark();
 
@@ -35,9 +34,7 @@ public class ComplexRule implements Rule {
 
     @Override
     public boolean parseOptional(PsiBuilder builder) {
-        if (rules.isEmpty()) {
-            throw new IllegalStateException("No rules defined for " + name);
-        }
+        Preconditions.checkState(!rules.isEmpty(), "No rules defined for " + name);
 
         PsiBuilder.Marker marker = builder.mark();
         for (Rule rule : rules) {
