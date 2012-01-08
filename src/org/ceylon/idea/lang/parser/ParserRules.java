@@ -22,6 +22,57 @@ public class ParserRules {
      */
     public static final ComplexRule Expression = rule("Expression");
 
+    /**
+     * {@code NamedArguments:  "{" NamedArgument* Sequence? "}"	 }
+     */
+    public static final ComplexRule NamedArguments = rule("NamedArguments");
+
+
+    /**
+     * {@code TypeName:  UIdentifier }
+     */
+    public static final Rule TypeName = rule("TypeName").one(UIDENTIFIER);
+
+    /**
+     * {@code TypeArguments:  "<" (UnionType ",")* (UnionType | SequencedType) ">" }
+     */
+    public static final Rule TypeArguments = new DummyRule("TypeArguments");
+
+    /**
+     * {@code TypeNameWithArguments:  TypeName TypeArguments?	 }
+     */
+    public static final Rule TypeNameWithArguments = rule("TypeNameWithArguments").one(TypeName).zeroOrOne(TypeArguments);
+
+    /**
+     * {@code Type:  TypeNameWithArguments ("." TypeNameWithArguments)*	 }
+     */
+    public static final Rule Type = rule("Type").one(TypeNameWithArguments).zeroOrMore(MEMBER_OP, TypeNameWithArguments);
+
+    /**
+     * {@code Abbreviation:  "?" | "[]"	 }
+     */
+    public static final Rule Abbreviation = any(QMARK, ARRAY);
+
+    /**
+     * {@code AbbreviatedType:  Type Abbreviation* }
+     */
+    public static final Rule AbbreviatedType = rule("AbbreviatedType").one(Type).zeroOrMore(Abbreviation);
+
+    /**
+     * {@code EntryType:  AbbreviatedType ("->" AbbreviatedType)? }
+     */
+    public static final Rule EntryType = rule("EntryType").one(AbbreviatedType).zeroOrOne(ENTRY_OP, AbbreviatedType);
+
+    /**
+     * {@code IntersectionType:  EntryType ("&" EntryType)*	 }
+     */
+    public static final Rule IntersectionType = rule("IntersectionType").one(EntryType).zeroOrMore(INTERSECTION_OP, EntryType);
+
+    /**
+     * {@code UnionType:  IntersectionType ("|" IntersectionType)* }
+     */
+    public static final Rule UnionType = rule("UnionType").one(IntersectionType).zeroOrMore(UNION_OP, IntersectionType);
+
 
     /**
      * {@code AnnotationName:  LIdentifier }
@@ -52,11 +103,6 @@ public class ParserRules {
      * {@code ImportWildcard:  "..." }
      */
     public static final Rule ImportWildcard = rule("ImportWildcard").one(ELLIPSIS);
-
-    /**
-     * {@code TypeName:  UIdentifier }
-     */
-    public static final Rule TypeName = rule("TypeName").one(UIDENTIFIER);
 
     /**
      * {@code TypeAlias:  TypeName "=" }
@@ -194,12 +240,53 @@ public class ParserRules {
     /**
      * {@code LocalNamedArgument:  (UnionType | "value") MemberName (Block | NamedArguments)	 }
      */
-    public static final Rule LocalNamedArgument = new DummyRule("LocalNamedArgument");
+    public static final Rule LocalNamedArgument = rule("LocalNamedArgument").any(UnionType, VALUE_MODIFIER).one(MemberName).any(Block, NamedArguments);
+
+    /**
+     * {@code SimpleParam:  UnionType MemberName	 }
+     */
+    public static final Rule SimpleParam = new NotImplementedRule();
+
+    /**
+     * {@code CallableParam:  (UnionType | "void") MemberName Params+	 }
+     */
+    public static final Rule CallableParam = new NotImplementedRule();
+
+    /**
+     * {@code EntryParamPair:  SimpleParam "->" SimpleParam	 }
+     */
+    public static final Rule EntryParamPair = new NotImplementedRule();
+
+    /**
+     * {@code DefaultParam:  Param Specifier	 }
+     */
+    public static final Rule DefaultParam = new NotImplementedRule();
+
+    /**
+     * {@code SequencedParam:  Annotation* UnionType "..." MemberName	 }
+     */
+    public static final Rule SequencedParam = new NotImplementedRule();
+
+    /**
+     * {@code Param:  Annotation* (SimpleParam | CallableParam | EntryParamPair) }
+     */
+    public static final ComplexRule Param = rule("Param");
+
+    /**
+     * {@code Params:   "(" Param ("," Param)* ("," DefaultParam)* ("," SequencedParam)? |  DefaultParam ("," DefaultParam)* ("," SequencedParam)? |  SequencedParam? ")"	 }
+     */
+    public static final Rule Params = rule("Params")
+            .one(LPAREN)
+            .any(
+                    sequence(Param, zeroOrMore(COMMA, Param), zeroOrMore(COMMA, DefaultParam), zeroOrOne(COMMA, SequencedParam)),
+                    sequence(DefaultParam, zeroOrMore(COMMA, DefaultParam), zeroOrOne(COMMA, SequencedParam)),
+                    zeroOrOne(SequencedParam))
+            .one(RPAREN);
 
     /**
      * {@code FunctionalNamedArgument:  (UnionType | "function" | "void") MemberName Params+ (Block | NamedArguments)	 }
      */
-    public static final Rule FunctionalNamedArgument = new DummyRule("FunctionalNamedArgument");
+    public static final Rule FunctionalNamedArgument = rule("FunctionalNamedArgument").any(UnionType, FUNCTION_MODIFIER, VOID_MODIFIER).one(MemberName).oneOrMore(Params).any(Block, NamedArguments);
 
     /**
      * {@code Object:  Annotation* ObjectHeader ClassBody	 }
@@ -217,11 +304,6 @@ public class ParserRules {
     public static final Rule Sequence = new DummyRule("Sequence");
 
     /**
-     * {@code NamedArguments:  "{" NamedArgument* Sequence? "}"	 }
-     */
-    public static final Rule NamedArguments = rule("NamedArguments").one(LBRACE).zeroOrMore(NamedArgument).zeroOrOne(Sequence).one(RBRACE);
-
-    /**
      * {@code Arguments:  PositionalArguments FunctionalArguments? | NamedArguments }
      */
     public static final Rule Arguments = rule("Arguments").any(sequence(PositionalArguments, zeroOrOne(FunctionalArguments)), NamedArguments);
@@ -235,46 +317,6 @@ public class ParserRules {
      * {@code Method:  Annotation* MethodHeader (Block | NamedArguments | Specifier? ";")	 }
      */
     public static final Rule Method = new DummyRule("Method");
-
-    /**
-     * {@code TypeArguments:  "<" (UnionType ",")* (UnionType | SequencedType) ">" }
-     */
-    public static final Rule TypeArguments = new DummyRule("TypeArguments");
-
-    /**
-     * {@code TypeNameWithArguments:  TypeName TypeArguments?	 }
-     */
-    public static final Rule TypeNameWithArguments = rule("TypeNameWithArguments").one(TypeName).zeroOrOne(TypeArguments);
-
-    /**
-     * {@code Type:  TypeNameWithArguments ("." TypeNameWithArguments)*	 }
-     */
-    public static final Rule Type = rule("Type").one(TypeNameWithArguments).zeroOrMore(MEMBER_OP, TypeNameWithArguments);
-
-    /**
-     * {@code Abbreviation:  "?" | "[]"	 }
-     */
-    public static final Rule Abbreviation = any(QMARK, ARRAY);
-
-    /**
-     * {@code AbbreviatedType:  Type Abbreviation* }
-     */
-    public static final Rule AbbreviatedType = rule("AbbreviatedType").one(Type).zeroOrMore(Abbreviation);
-
-    /**
-     * {@code EntryType:  AbbreviatedType ("->" AbbreviatedType)? }
-     */
-    public static final Rule EntryType = rule("EntryType").one(AbbreviatedType).zeroOrOne(ENTRY_OP, AbbreviatedType);
-
-    /**
-     * {@code IntersectionType:  EntryType ("&" EntryType)*	 }
-     */
-    public static final Rule IntersectionType = rule("IntersectionType").one(EntryType).zeroOrMore(INTERSECTION_OP, EntryType);
-
-    /**
-     * {@code UnionType:  IntersectionType ("|" IntersectionType)* }
-     */
-    public static final Rule UnionType = rule("UnionType").one(IntersectionType).zeroOrMore(UNION_OP, IntersectionType);
 
     /**
      * {@code AttributeHeader:  (UnionType | "value") MemberName	 }
@@ -345,11 +387,6 @@ public class ParserRules {
      * {@code Break:  "break" }
      */
     public static final Rule Break = new NotImplementedRule();
-
-    /**
-     * {@code CallableParam:  (UnionType | "void") MemberName Params+	 }
-     */
-    public static final Rule CallableParam = new NotImplementedRule();
 
     /**
      * {@code CallableReference:  MethodReference | InitializerReference	 }
@@ -457,11 +494,6 @@ public class ParserRules {
     public static final Rule DefaultCaseItem = new NotImplementedRule();
 
     /**
-     * {@code DefaultParam:  Param Specifier	 }
-     */
-    public static final Rule DefaultParam = new NotImplementedRule();
-
-    /**
      * {@code Digit:  "0".."9"	 }
      */
     public static final Rule Digit = new NotImplementedRule();
@@ -510,11 +542,6 @@ public class ParserRules {
      * {@code Else:  "else" (Block | IfElse)	 }
      */
     public static final Rule Else = new NotImplementedRule();
-
-    /**
-     * {@code EntryParamPair:  SimpleParam "->" SimpleParam	 }
-     */
-    public static final Rule EntryParamPair = new NotImplementedRule();
 
     /**
      * {@code EntryVariablePair:  Variable "->" Variable	 }
@@ -722,16 +749,6 @@ public class ParserRules {
     public static final Rule OuterReference = new NotImplementedRule();
 
     /**
-     * {@code Param:  Annotation* (SimpleParam | CallableParam | EntryParamPair) }
-     */
-    public static final Rule Param = new NotImplementedRule();
-
-    /**
-     * {@code Params:   "(" Param ("," Param)* ("," DefaultParam)* ("," SequencedParam)? |  DefaultParam ("," DefaultParam)* ("," SequencedParam)? |  SequencedParam? ")"	 }
-     */
-    public static final Rule Params = new NotImplementedRule();
-
-    /**
      * {@code ParenDimension:  "(" Dimension ")"	 }
      */
     public static final Rule ParenDimension = new NotImplementedRule();
@@ -772,11 +789,6 @@ public class ParserRules {
     public static final Rule SatisfiesCondition = new NotImplementedRule();
 
     /**
-     * {@code SequencedParam:  Annotation* UnionType "..." MemberName	 }
-     */
-    public static final Rule SequencedParam = new NotImplementedRule();
-
-    /**
      * {@code SequencedTypeParam:  TypeName "..."	 }
      */
     public static final Rule SequencedTypeParam = new NotImplementedRule();
@@ -790,11 +802,6 @@ public class ParserRules {
      * {@code SequenceInstantiation:  "{" Sequence? "}" ;	 }
      */
     public static final Rule SequenceInstantiation = new NotImplementedRule();
-
-    /**
-     * {@code SimpleParam:  UnionType MemberName	 }
-     */
-    public static final Rule SimpleParam = new NotImplementedRule();
 
     /**
      * {@code Specification:  MemberName Specifier ";"	 }
@@ -934,6 +941,9 @@ public class ParserRules {
     static {
         Block.one(LBRACE).zeroOrAny(Declaration, Statement).one(RBRACE);
         Expression.any(Primary, OperatorExpression);
+        NamedArguments.one(LBRACE).zeroOrMore(NamedArgument).zeroOrOne(Sequence).one(RBRACE);
+        Param.zeroOrMore(Annotation).any(SimpleParam, CallableParam, EntryParamPair);
+
     }
 
 }
