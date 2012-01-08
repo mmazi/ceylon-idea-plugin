@@ -9,7 +9,7 @@ import static org.ceylon.idea.lang.lexer.CeylonToken.*;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
-public class RuleTest {
+public class ParserRulesTest {
     private final MockPsiBuilder builder = new MockPsiBuilder();
 
     @Test
@@ -89,6 +89,7 @@ public class RuleTest {
         valid(rule, LIDENTIFIER, STRING_LITERAL);
         valid(rule, LIDENTIFIER, STRING_LITERAL, STRING_LITERAL);
         valid(rule, LIDENTIFIER, LBRACE, RBRACE);
+        valid(rule, LIDENTIFIER, LBRACE, LIDENTIFIER, SPECIFY, THIS, SEMICOLON, RBRACE);
     }
 
     @Test

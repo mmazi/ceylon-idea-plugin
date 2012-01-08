@@ -18,6 +18,12 @@ public class ParserRules {
     public static final ComplexRule Block = rule("Block");
 
     /**
+     * {@code Expression:  Primary | OperatorExpression	 }
+     */
+    public static final ComplexRule Expression = rule("Expression");
+
+
+    /**
      * {@code AnnotationName:  LIdentifier }
      */
     public static final Rule AnnotationName = rule("AnnotationName").one(LIDENTIFIER);
@@ -101,14 +107,89 @@ public class ParserRules {
     public static final Rule PositionalArguments = new DummyRule("PositionalArguments");
 
     /**
+     * {@code OperatorExpression:  ????? } // TODO: Check out language spec
+     */
+    public static final Rule OperatorExpression = new DummyRule("OperatorExpression");
+
+    /**
      * {@code FunctionalArguments:  (MemberName FunctionalBody)+	 }
      */
     public static final Rule FunctionalArguments = new DummyRule("FunctionalArguments");
 
     /**
+     * {@code IntegerLiteral:  Digits Magnitude?	 }
+     */
+    public static final Rule IntegerLiteral = new DummyRule("IntegerLiteral");
+
+    /**
+     * {@code FloatLiteral:  Digits ("." FractionalDigits (Exponent | Magnitude | FractionalMagnitude)? | FractionalMagnitude)	 }
+     */
+    public static final Rule FloatLiteral = new DummyRule("FloatLiteral");
+
+    /**
+     * {@code CharacterLiteral:  "`" Character "`"	 }
+     */
+    public static final Rule CharacterLiteral = new DummyRule("CharacterLiteral");
+
+    /**
+     * {@code QuotedLiteral:  "'" QuotedLiteralCharacter* "'"	 }
+     */
+    public static final Rule QuotedLiteral = new DummyRule("QuotedLiteral");
+
+    /**
+     * {@code Literal:  IntegerLiteral | FloatLiteral | CharacterLiteral | StringLiteral | QuotedLiteral	 }
+     */
+    public static final Rule Literal = any(IntegerLiteral, FloatLiteral, CharacterLiteral, STRING_LITERAL, QuotedLiteral);
+
+    /**
+     * {@code StringTemplate:  StringLiteral (Expression StringLiteral)+	 }
+     */
+    public static final Rule StringTemplate = new DummyRule("StringTemplate");
+
+    /**
+     * {@code SelfReference:  "this" | "super" | "outer"	 }
+     */
+    public static final Rule SelfReference = any(THIS, SUPER, OUTER);
+
+    /**
+     * {@code ParExpression:  "(" Expression ")"	 }
+     */
+    public static final Rule ParExpression = sequence(LPAREN, Expression, RPAREN);
+
+    /**
+     * {@code Atom:  Literal | StringTemplate | SelfReference | ParExpression	 }
+     */
+    public static final Rule Atom = any(Literal, StringTemplate, SelfReference, ParExpression);
+
+    /**
+     * {@code Meta:  TypeMeta | MethodMeta | AttributeMeta | FunctionMeta | ValueMeta	 }
+     */
+    public static final Rule Meta = new DummyRule("Meta");
+
+    /**
+     * {@code MemberReference:  CallableReference | ValueReference	 }
+     */
+    public static final Rule MemberReference = new DummyRule("MemberReference");
+
+    /**
+     * {@code Invocation:  Primary Arguments | SequenceInstantiation	 }
+     */
+    public static final Rule Invocation = new DummyRule("Invocation");
+
+    /**
+     * {@code Primary:  Atom | Meta | MemberReference | Invocation	 }
+     */
+    public static final Rule Primary = any(Atom, Meta, MemberReference, Invocation);
+
+    /**
+     * {@code Specifier:  "=" Expression	 }
+     */
+    public static final Rule Specifier = sequence(SPECIFY, Expression);
+
+    /**
      * {@code SpecifiedNamedArgument:  MemberName Specifier ";"	 }
      */
-    public static final Rule SpecifiedNamedArgument = new DummyRule("SpecifiedNamedArgument");
+    public static final Rule SpecifiedNamedArgument = rule("SpecifiedNamedArgument").sequence(MemberName, Specifier, SEMICOLON);
 
     /**
      * {@code LocalNamedArgument:  (UnionType | "value") MemberName (Block | NamedArguments)	 }
@@ -144,31 +225,6 @@ public class ParserRules {
      * {@code Arguments:  PositionalArguments FunctionalArguments? | NamedArguments }
      */
     public static final Rule Arguments = rule("Arguments").any(sequence(PositionalArguments, zeroOrOne(FunctionalArguments)), NamedArguments);
-
-    /**
-     * {@code IntegerLiteral:  Digits Magnitude?	 }
-     */
-    public static final Rule IntegerLiteral = new DummyRule("IntegerLiteral");
-
-    /**
-     * {@code FloatLiteral:  Digits ("." FractionalDigits (Exponent | Magnitude | FractionalMagnitude)? | FractionalMagnitude)	 }
-     */
-    public static final Rule FloatLiteral = new DummyRule("FloatLiteral");
-
-    /**
-     * {@code CharacterLiteral:  "`" Character "`"	 }
-     */
-    public static final Rule CharacterLiteral = new DummyRule("CharacterLiteral");
-
-    /**
-     * {@code QuotedLiteral:  "'" QuotedLiteralCharacter* "'"	 }
-     */
-    public static final Rule QuotedLiteral = new DummyRule("QuotedLiteral");
-
-    /**
-     * {@code Literal:  IntegerLiteral | FloatLiteral | CharacterLiteral | StringLiteral | QuotedLiteral	 }
-     */
-    public static final Rule Literal = any(IntegerLiteral, FloatLiteral, CharacterLiteral, STRING_LITERAL, QuotedLiteral);
 
     /**
      * {@code Annotation:  MemberName ( Arguments | Literal+ )?	 }
@@ -274,11 +330,6 @@ public class ParserRules {
      * {@code Assignment:  ":=" | ".=" | "+=" | "-=" | "*=" | "/=" | "%=" | "&=" | "|=" | "^="| "~=" | "&&=" | "||=" ;	 }
      */
     public static final Rule Assignment = new NotImplementedRule();
-
-    /**
-     * {@code Atom:  Literal | StringTemplate | SelfReference | ParExpression	 }
-     */
-    public static final Rule Atom = new NotImplementedRule();
 
     /**
      * {@code AttributeMeta:  Type "." MemberName	 }
@@ -486,11 +537,6 @@ public class ParserRules {
     public static final Rule Exponent = new NotImplementedRule();
 
     /**
-     * {@code Expression:  Primary | OperatorExpression	 }
-     */
-    public static final Rule Expression = new NotImplementedRule();
-
-    /**
      * {@code ExpressionStatement:  ( Assignment | IncrementOrDecrement | Invocation ) ";"	 }
      */
     public static final Rule ExpressionStatement = new NotImplementedRule();
@@ -601,11 +647,6 @@ public class ParserRules {
     public static final Rule Introduction = new NotImplementedRule();
 
     /**
-     * {@code Invocation:  Primary Arguments | SequenceInstantiation	 }
-     */
-    public static final Rule Invocation = new NotImplementedRule();
-
-    /**
      * {@code IsCondition:  "is" (TypedVariable Specifier | UnionType MemberName)	 }
      */
     public static final Rule IsCondition = new NotImplementedRule();
@@ -634,16 +675,6 @@ public class ParserRules {
      * {@code Magnitude:  "k" | "M" | "G" | "T" | "P"	 }
      */
     public static final Rule Magnitude = new NotImplementedRule();
-
-    /**
-     * {@code MemberReference:  CallableReference | ValueReference	 }
-     */
-    public static final Rule MemberReference = new NotImplementedRule();
-
-    /**
-     * {@code Meta:  TypeMeta | MethodMeta | AttributeMeta | FunctionMeta | ValueMeta	 }
-     */
-    public static final Rule Meta = new NotImplementedRule();
 
     /**
      * {@code Metatypes:  "is" Type ("&" Type)*	 }
@@ -706,16 +737,6 @@ public class ParserRules {
     public static final Rule ParenDimension = new NotImplementedRule();
 
     /**
-     * {@code ParExpression:  "(" Expression ")"	 }
-     */
-    public static final Rule ParExpression = new NotImplementedRule();
-
-    /**
-     * {@code Primary:  Atom | Meta | MemberReference | Invocation	 }
-     */
-    public static final Rule Primary = new NotImplementedRule();
-
-    /**
      * {@code QuotedLiteralCharacter:  ~("'")	 }
      */
     public static final Rule QuotedLiteralCharacter = new NotImplementedRule();
@@ -751,11 +772,6 @@ public class ParserRules {
     public static final Rule SatisfiesCondition = new NotImplementedRule();
 
     /**
-     * {@code SelfReference:  "this" | "super" | "outer"	 }
-     */
-    public static final Rule SelfReference = new NotImplementedRule();
-
-    /**
      * {@code SequencedParam:  Annotation* UnionType "..." MemberName	 }
      */
     public static final Rule SequencedParam = new NotImplementedRule();
@@ -786,11 +802,6 @@ public class ParserRules {
     public static final Rule Specification = new NotImplementedRule();
 
     /**
-     * {@code Specifier:  "=" Expression	 }
-     */
-    public static final Rule Specifier = new NotImplementedRule();
-
-    /**
      * {@code Statement:  ExpressionStatement | Specification | DirectiveStatement | ControlStructure	 }
      */
     public static final Rule Statement = new DummyRule("Statement");
@@ -799,11 +810,6 @@ public class ParserRules {
      * {@code StringCharacter:  ~( "\" | "\"" ) | EscapeSequence	 }
      */
     public static final Rule StringCharacter = new NotImplementedRule();
-
-    /**
-     * {@code StringTemplate:  StringLiteral (Expression StringLiteral)+	 }
-     */
-    public static final Rule StringTemplate = new NotImplementedRule();
 
     /**
      * {@code Subtype:  "subtype" | MemberName "." "subtype"	 }
@@ -927,6 +933,7 @@ public class ParserRules {
 
     static {
         Block.one(LBRACE).zeroOrAny(Declaration, Statement).one(RBRACE);
+        Expression.any(Primary, OperatorExpression);
     }
 
 }
