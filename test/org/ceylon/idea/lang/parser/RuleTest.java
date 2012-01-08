@@ -89,17 +89,17 @@ public class RuleTest {
         valid(rule);
 
         // CompilerAnnotation+ ";"
-        valid(rule, LIDENTIFIER, SEMICOLON);
+        valid(rule, COMPILER_ANNOTATION, LIDENTIFIER, SEMICOLON);
 
         // import*
         valid(rule, IMPORT, LIDENTIFIER, LBRACE, RBRACE);
         valid(rule, IMPORT, LIDENTIFIER, LBRACE, RBRACE, IMPORT, LIDENTIFIER, LBRACE, RBRACE);
 
         // CompilationUnit : CompilerAnnotation+ ";" import
-        valid(rule, LIDENTIFIER, SEMICOLON, IMPORT, LIDENTIFIER, LBRACE, RBRACE);
+        valid(rule, COMPILER_ANNOTATION, LIDENTIFIER, SEMICOLON, IMPORT, LIDENTIFIER, LBRACE, RBRACE);
 
         // import com.example {...}
-        valid(rule, IMPORT, WS, LIDENTIFIER, MEMBER_OP, LIDENTIFIER, WS, LBRACE, ELLIPSIS, RBRACE);
+        valid(rule, IMPORT, LIDENTIFIER, MEMBER_OP, LIDENTIFIER, LBRACE, ELLIPSIS, RBRACE);
 
         // TODO: Declaration
     }
@@ -107,6 +107,7 @@ public class RuleTest {
     private void valid(Rule rule, CeylonToken... tokens) {
         builder.setTokens(tokens);
         assertTrue(rule.parseRequired(builder));
+        assertTrue(builder.eof());
     }
 
     private void invalid(Rule rule, CeylonToken... tokens) {
