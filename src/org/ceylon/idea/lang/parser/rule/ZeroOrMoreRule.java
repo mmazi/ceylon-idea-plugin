@@ -2,19 +2,11 @@ package org.ceylon.idea.lang.parser.rule;
 
 import com.intellij.lang.PsiBuilder;
 
-import static org.ceylon.idea.lang.parser.rule.SequenceRule.sequence;
+import static org.ceylon.idea.lang.parser.rule.Rules.sequence;
 
 class ZeroOrMoreRule implements Rule {
     private final Rule rule;
     private final String name;
-
-    public static Rule zeroOrMore(Rule rule) {
-        return new ZeroOrMoreRule(rule);
-    }
-
-    public static Rule zeroOrMore(Rule first, Rule second, Rule... rules) {
-        return zeroOrMore(sequence(first, second, rules));
-    }
 
     ZeroOrMoreRule(Rule rule) {
         this.rule = rule;

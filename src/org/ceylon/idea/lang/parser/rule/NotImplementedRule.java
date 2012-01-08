@@ -2,7 +2,7 @@ package org.ceylon.idea.lang.parser.rule;
 
 import com.intellij.lang.PsiBuilder;
 
-class NotImplementedRule implements Rule {
+public class NotImplementedRule implements Rule {
     private final String name;
 
     public NotImplementedRule() {

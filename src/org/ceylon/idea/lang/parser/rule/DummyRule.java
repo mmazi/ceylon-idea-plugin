@@ -2,7 +2,7 @@ package org.ceylon.idea.lang.parser.rule;
 
 import com.intellij.lang.PsiBuilder;
 
-class DummyRule extends NotImplementedRule {
+public class DummyRule extends NotImplementedRule {
     public DummyRule(String name) {
         super(name);
     }

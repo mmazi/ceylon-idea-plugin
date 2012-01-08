@@ -10,10 +10,6 @@ import java.util.List;
 class ZeroOrAnyRule implements Rule {
     private final List<Rule> rules = new LinkedList<Rule>();
 
-    public static Rule zeroOrAny(Rule first, Rule... rest) {
-        return new ZeroOrAnyRule(first, rest);
-    }
-
     ZeroOrAnyRule(Rule first, Rule... rest) {
         rules.add(first);
         rules.addAll(Arrays.asList(rest));

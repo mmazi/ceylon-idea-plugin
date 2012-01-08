@@ -4,7 +4,6 @@ import com.intellij.lang.ASTNode;
 import com.intellij.lang.PsiBuilder;
 import com.intellij.lang.PsiParser;
 import com.intellij.psi.tree.IElementType;
-import org.ceylon.idea.lang.parser.rule.ParserRules;
 import org.jetbrains.annotations.NotNull;
 
 

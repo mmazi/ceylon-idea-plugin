@@ -4,11 +4,7 @@ import org.ceylon.idea.lang.lexer.CeylonToken;
 import org.junit.Test;
 
 import static org.ceylon.idea.lang.lexer.CeylonToken.*;
-import static org.ceylon.idea.lang.parser.rule.AnyRule.any;
-import static org.ceylon.idea.lang.parser.rule.OneOrMoreRule.oneOrMore;
-import static org.ceylon.idea.lang.parser.rule.SequenceRule.sequence;
-import static org.ceylon.idea.lang.parser.rule.ZeroOrMoreRule.zeroOrMore;
-import static org.ceylon.idea.lang.parser.rule.ZeroOrOneRule.zeroOrOne;
+import static org.ceylon.idea.lang.parser.rule.Rules.*;
 import static org.junit.Assert.*;
 
 public class ParserEngineTest {
@@ -130,7 +126,7 @@ public class ParserEngineTest {
 
     @Test
     public void testZeroOrAny() {
-        Rule rule = ZeroOrAnyRule.zeroOrAny(COMMA, SEMICOLON);
+        Rule rule = Rules.zeroOrAny(COMMA, SEMICOLON);
 
         valid(rule);
 

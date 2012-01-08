@@ -10,10 +10,6 @@ import java.util.List;
 class SequenceRule implements Rule {
     private final List<Rule> rules = new ArrayList<Rule>();
 
-    public static Rule sequence(Rule first, Rule second, Rule... rest) {
-        return new SequenceRule(first, second, rest);
-    }
-
     SequenceRule(Rule first, Rule second, Rule... rest) {
         rules.add(first);
         rules.add(second);

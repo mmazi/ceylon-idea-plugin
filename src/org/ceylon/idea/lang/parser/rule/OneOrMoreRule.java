@@ -5,10 +5,6 @@ import com.intellij.lang.PsiBuilder;
 class OneOrMoreRule implements Rule {
     private final Rule rule;
 
-    public static Rule oneOrMore(Rule rule) {
-        return new OneOrMoreRule(rule);
-    }
-
     OneOrMoreRule(Rule rule) {
         this.rule = rule;
     }

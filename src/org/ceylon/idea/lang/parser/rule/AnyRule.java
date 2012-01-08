@@ -7,13 +7,9 @@ import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
-public class AnyRule implements Rule {
+class AnyRule implements Rule {
 
     private final List<Rule> rules = new LinkedList<Rule>();
-
-    public static Rule any(Rule first, Rule... rest) {
-        return new AnyRule(first, rest);
-    }
 
     AnyRule(Rule first, Rule... rest) {
         rules.add(first);

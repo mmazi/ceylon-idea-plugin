@@ -1,6 +1,8 @@
-package org.ceylon.idea.lang.parser.rule;
+package org.ceylon.idea.lang.parser;
 
 import org.ceylon.idea.lang.lexer.CeylonToken;
+import org.ceylon.idea.lang.parser.rule.MockPsiBuilder;
+import org.ceylon.idea.lang.parser.rule.Rule;
 import org.junit.Test;
 
 import static org.ceylon.idea.lang.lexer.CeylonToken.*;
@@ -66,6 +68,16 @@ public class RuleTest {
         Rule rule = ParserRules.AttributeSetter;
 
         valid(rule, ASSIGN, LIDENTIFIER, LBRACE, RBRACE);
+    }
+
+    @Test
+    public void testAttributeGetter() {
+        // AttributeGetter:   (UnionType | "value") MemberName Block
+        Rule rule = ParserRules.AttributeGetter;
+
+        valid(rule, VALUE_MODIFIER, LIDENTIFIER, LBRACE, RBRACE);
+        valid(rule, UIDENTIFIER, ARRAY, LIDENTIFIER, LBRACE, RBRACE);
+        valid(rule, UIDENTIFIER, UNION_OP, UIDENTIFIER, QMARK, LIDENTIFIER, LBRACE, RBRACE);
     }
 
     @Test

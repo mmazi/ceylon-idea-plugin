@@ -4,7 +4,11 @@ import org.ceylon.idea.CeylonTestCase;
 
 public class CeylonParsingTestCase extends CeylonTestCase {
 
-    public void testAttributeSetterDefinition$block() {
+    public void testAttribute$setter() {
+        doTest();
+    }
+
+    public void testAttribute$getter() {
         doTest();
     }
 

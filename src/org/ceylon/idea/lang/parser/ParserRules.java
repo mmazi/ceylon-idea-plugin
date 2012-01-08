@@ -1,11 +1,13 @@
-package org.ceylon.idea.lang.parser.rule;
+package org.ceylon.idea.lang.parser;
+
+import org.ceylon.idea.lang.parser.rule.ComplexRule;
+import org.ceylon.idea.lang.parser.rule.DummyRule;
+import org.ceylon.idea.lang.parser.rule.NotImplementedRule;
+import org.ceylon.idea.lang.parser.rule.Rule;
 
 import static org.ceylon.idea.lang.lexer.CeylonToken.*;
-import static org.ceylon.idea.lang.parser.rule.AnyRule.any;
-import static org.ceylon.idea.lang.parser.rule.ComplexRule.rule;
-import static org.ceylon.idea.lang.parser.rule.SequenceRule.sequence;
-import static org.ceylon.idea.lang.parser.rule.ZeroOrMoreRule.zeroOrMore;
-import static org.ceylon.idea.lang.parser.rule.ZeroOrOneRule.zeroOrOne;
+import static org.ceylon.idea.lang.parser.rule.Rules.*;
+
 
 @SuppressWarnings("unused")
 public class ParserRules {
@@ -104,9 +106,49 @@ public class ParserRules {
     public static final Rule Method = new DummyRule("Method");
 
     /**
+     * {@code TypeArguments:  "<" (UnionType ",")* (UnionType | SequencedType) ">" }
+     */
+    public static final Rule TypeArguments = new DummyRule("TypeArguments");
+
+    /**
+     * {@code TypeNameWithArguments:  TypeName TypeArguments?	 }
+     */
+    public static final Rule TypeNameWithArguments = rule("TypeNameWithArguments").one(TypeName).zeroOrOne(TypeArguments);
+
+    /**
+     * {@code Type:  TypeNameWithArguments ("." TypeNameWithArguments)*	 }
+     */
+    public static final Rule Type = rule("Type").one(TypeNameWithArguments).zeroOrMore(MEMBER_OP, TypeNameWithArguments);
+
+    /**
+     * {@code Abbreviation:  "?" | "[]"	 }
+     */
+    public static final Rule Abbreviation = any(QMARK, ARRAY);
+
+    /**
+     * {@code AbbreviatedType:  Type Abbreviation* }
+     */
+    public static final Rule AbbreviatedType = rule("AbbreviatedType").one(Type).zeroOrMore(Abbreviation);
+
+    /**
+     * {@code EntryType:  AbbreviatedType ("->" AbbreviatedType)? }
+     */
+    public static final Rule EntryType = rule("EntryType").one(AbbreviatedType).zeroOrOne(ENTRY_OP, AbbreviatedType);
+
+    /**
+     * {@code IntersectionType:  EntryType ("&" EntryType)*	 }
+     */
+    public static final Rule IntersectionType = rule("IntersectionType").one(EntryType).zeroOrMore(INTERSECTION_OP, EntryType);
+
+    /**
+     * {@code UnionType:  IntersectionType ("|" IntersectionType)* }
+     */
+    public static final Rule UnionType = rule("UnionType").one(IntersectionType).zeroOrMore(UNION_OP, IntersectionType);
+
+    /**
      * {@code AttributeHeader:  (UnionType | "value") MemberName	 }
      */
-    public static final Rule AttributeHeader = new DummyRule("AttributeHeader");
+    public static final Rule AttributeHeader = rule("AttributeHeader").any(UnionType, VALUE_MODIFIER).one(MemberName);
 
     /**
      * {@code SimpleAttribute:  AttributeHeader ( (Specifier | Initializer)? ";" | NamedArguments )	 }
@@ -142,17 +184,6 @@ public class ParserRules {
      * {@code CompilationUnit : (CompilerAnnotation+ ";")? import* (CompilerAnnotations Declaration)* EOF }
      */
     public static final Rule CompilationUnit = rule("CompilationUnit").zeroOrOne(CompilerAnnotation, CompilerAnnotations, SEMICOLON).zeroOrMore(Import).zeroOrMore(CompilerAnnotations, Declaration);
-
-
-    /**
-     * {@code AbbreviatedType:  Type Abbreviation* }
-     */
-    public static final Rule AbbreviatedType = new NotImplementedRule();
-
-    /**
-     * {@code Abbreviation:  "?" | "[]"	 }
-     */
-    public static final Rule Abbreviation = new NotImplementedRule();
 
     /**
      * {@code AbstractedType:  "abstracts" Type	 }
@@ -370,11 +401,6 @@ public class ParserRules {
     public static final Rule EntryParamPair = new NotImplementedRule();
 
     /**
-     * {@code EntryType:  AbbreviatedType ("->" AbbreviatedType)?	 }
-     */
-    public static final Rule EntryType = new NotImplementedRule();
-
-    /**
      * {@code EntryVariablePair:  Variable "->" Variable	 }
      */
     public static final Rule EntryVariablePair = new NotImplementedRule();
@@ -523,11 +549,6 @@ public class ParserRules {
      * {@code InterfaceInheritance:  CaseTypes? Metatypes? AdaptedTypes? SatisfiedTypes?	 }
      */
     public static final Rule InterfaceInheritance = new NotImplementedRule();
-
-    /**
-     * {@code IntersectionType:  EntryType ("&" EntryType)*	 }
-     */
-    public static final Rule IntersectionType = new NotImplementedRule();
 
     /**
      * {@code Introduction:  "adapt" Type SatisfiedTypes TypeConstraints? ";"	 }
@@ -825,11 +846,6 @@ public class ParserRules {
     public static final Rule Try = new NotImplementedRule();
 
     /**
-     * {@code TypeArguments:  "<" (UnionType ",")* (UnionType | SequencedType) ">" }
-     */
-    public static final Rule TypeArguments = new NotImplementedRule();
-
-    /**
      * {@code TypeArgument:  UnionType | Dimension	 }
      */
     public static final Rule TypeArgument = new NotImplementedRule();
@@ -865,11 +881,6 @@ public class ParserRules {
     public static final Rule TypeMeta = new NotImplementedRule();
 
     /**
-     * {@code TypeNameWithArguments:  TypeName TypeArguments?	 }
-     */
-    public static final Rule TypeNameWithArguments = new NotImplementedRule();
-
-    /**
      * {@code TypeParams:  "<" (TypeParam ",")* (TypeParam | SequencedTypeParam) ">"	 }
      */
     public static final Rule TypeParams = new NotImplementedRule();
@@ -883,16 +894,6 @@ public class ParserRules {
      * {@code TypeSpecifier:  "=" Type	 }
      */
     public static final Rule TypeSpecifier = new NotImplementedRule();
-
-    /**
-     * {@code Type:  TypeNameWithArguments ("." TypeNameWithArguments)*	 }
-     */
-    public static final Rule Type = new NotImplementedRule();
-
-    /**
-     * {@code UnionType:  IntersectionType ("|" IntersectionType)* }
-     */
-    public static final Rule UnionType = new NotImplementedRule();
 
     /**
      * {@code UppercaseChar:  "A".."Z" ;	 }

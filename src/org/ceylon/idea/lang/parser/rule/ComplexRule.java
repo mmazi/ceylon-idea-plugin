@@ -7,13 +7,9 @@ import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
-class ComplexRule implements Rule {
+public class ComplexRule implements Rule {
     private final String name;
     private final List<Rule> rules = new LinkedList<Rule>();
-
-    public static ComplexRule rule(String name) {
-        return new ComplexRule(name);
-    }
 
     ComplexRule(String name) {
         this.name = name;
