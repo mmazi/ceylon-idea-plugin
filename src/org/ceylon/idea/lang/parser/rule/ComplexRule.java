@@ -20,6 +20,10 @@ class ComplexRule implements Rule {
     }
 
     public boolean parseRequired(PsiBuilder builder) {
+        if (rules.isEmpty()) {
+            throw new IllegalStateException("No rules defined for " + name);
+        }
+
         PsiBuilder.Marker marker = builder.mark();
 
         for (Rule rule : rules) {
@@ -35,6 +39,10 @@ class ComplexRule implements Rule {
 
     @Override
     public boolean parseOptional(PsiBuilder builder) {
+        if (rules.isEmpty()) {
+            throw new IllegalStateException("No rules defined for " + name);
+        }
+
         PsiBuilder.Marker marker = builder.mark();
         for (Rule rule : rules) {
             boolean parsed = rule.parseOptional(builder);

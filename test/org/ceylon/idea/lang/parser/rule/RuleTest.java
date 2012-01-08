@@ -12,7 +12,7 @@ public class RuleTest {
 
     @Test
     public void testFullPackageName() {
-        Rule rule = Rule.FullPackageName;
+        Rule rule = ParserRules.FullPackageName;
 
         valid(rule, LIDENTIFIER);
         valid(rule, LIDENTIFIER, MEMBER_OP, LIDENTIFIER);
@@ -23,7 +23,7 @@ public class RuleTest {
     @Test
     public void testImportElements() {
         // ImportElements:  ImportElement ("," ImportElement)* ("," ImportWildcard)? | ImportWildcard
-        Rule rule = Rule.ImportElements;
+        Rule rule = ParserRules.ImportElements;
 
         // ImportElement
         valid(rule, UIDENTIFIER);
@@ -44,7 +44,7 @@ public class RuleTest {
     @Test
     public void testImport() {
         // Import:  "import" FullPackageName "{" ImportElements? "}"
-        Rule rule = Rule.Import;
+        Rule rule = ParserRules.Import;
 
         // Import:  "import" FullPackageName "{" "}"
         valid(rule, IMPORT, LIDENTIFIER, LBRACE, RBRACE);
@@ -61,9 +61,17 @@ public class RuleTest {
     }
 
     @Test
+    public void testAttributeSetter() {
+        // AttributeSetter:  "assign" MemberName Block
+        Rule rule = ParserRules.AttributeSetter;
+
+        valid(rule, ASSIGN, LIDENTIFIER, LBRACE, RBRACE);
+    }
+
+    @Test
     public void testCompilationUnit() {
         // CompilationUnit : (CompilerAnnotation+ ";")? import* (CompilerAnnotations Declaration)*
-        Rule rule = Rule.CompilationUnit;
+        Rule rule = ParserRules.CompilationUnit;
 
         // <empty>
         valid(rule);
