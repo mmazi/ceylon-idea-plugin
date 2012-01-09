@@ -16,7 +16,7 @@ public class CeylonParser implements PsiParser {
         PsiBuilder.Marker rootMarker = builder.mark();
 
 //        new ParseHelper(builder).parseCompilationUnit();
-        ParserRules.CompilationUnit.parseRequired(builder);
+        Grammar.CompilationUnit.parseRequired(builder);
 
         while (!builder.eof()) {
             builder.advanceLexer();

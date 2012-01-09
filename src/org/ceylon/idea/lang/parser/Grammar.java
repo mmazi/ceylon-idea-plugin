@@ -10,7 +10,7 @@ import static org.ceylon.idea.lang.parser.rule.Rules.*;
 
 
 @SuppressWarnings("unused")
-public class ParserRules {
+public class Grammar {
 
     /**
      * {@code Block:  "{" (Declaration | Statement)* "}"	 }
