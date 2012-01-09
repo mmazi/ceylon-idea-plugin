@@ -14,24 +14,53 @@ public class Grammar {
 
     /**
      * {@code Block:  "{" (Declaration | Statement)* "}"	 }
+     *
+     * @see #deferredInit()
      */
     public static final ComplexRule Block = rule("Block");
 
     /**
      * {@code Expression:  Primary | OperatorExpression	 }
+     *
+     * @see #deferredInit()
      */
     public static final ComplexRule Expression = rule("Expression");
 
     /**
      * {@code NamedArguments:  "{" NamedArgument* Sequence? "}"	 }
+     *
+     * @see #deferredInit()
      */
     public static final ComplexRule NamedArguments = rule("NamedArguments");
 
+    /**
+     * {@code Annotation:  MemberName ( Arguments | Literal+ )?	 }
+     *
+     * @see #deferredInit()
+     */
+    public static final ComplexRule Annotation = rule("Annotation");
+
+    /**
+     * {@code Param:  Annotation* (SimpleParam | CallableParam | EntryParamPair) }
+     *
+     * @see #deferredInit()
+     */
+    public static final ComplexRule Param = rule("Param");
+
+    /**
+     * {@code AnnotationName:  LIdentifier }
+     */
+    public static final Rule AnnotationName = rule("AnnotationName").one(LIDENTIFIER);
 
     /**
      * {@code TypeName:  UIdentifier }
      */
     public static final Rule TypeName = rule("TypeName").one(UIDENTIFIER);
+
+    /**
+     * {@code MemberName:  LIdentifier	 }
+     */
+    public static final Rule MemberName = rule("MemberName").one(LIDENTIFIER);
 
     /**
      * {@code TypeArguments:  "<" (UnionType ",")* (UnionType | SequencedType) ">" }
@@ -73,12 +102,6 @@ public class Grammar {
      */
     public static final Rule UnionType = rule("UnionType").one(IntersectionType).zeroOrMore(UNION_OP, IntersectionType);
 
-
-    /**
-     * {@code AnnotationName:  LIdentifier }
-     */
-    public static final Rule AnnotationName = rule("AnnotationName").one(LIDENTIFIER);
-
     /**
      * {@code CompilerAnnotation : "@" AnnotationName ("[" StringLiteral "]")? }
      */
@@ -115,11 +138,6 @@ public class Grammar {
     public static final Rule ImportTypeElement = rule("ImportTypeElement").zeroOrOne(TypeAlias).one(TypeName);
 
     /**
-     * {@code MemberName:  LIdentifier	 }
-     */
-    public static final Rule MemberName = rule("MemberName").one(LIDENTIFIER);
-
-    /**
      * {@code MethodAttributeAlias:  MemberName "="	 }
      */
     public static final Rule MethodAttributeAlias = rule("MethodAttributeAlias").sequence(MemberName, SPECIFY);
@@ -148,19 +166,24 @@ public class Grammar {
     public static final Rule Import = rule("Import").sequence(IMPORT, FullPackageName).one(LBRACE).zeroOrOne(ImportElements).one(RBRACE);
 
     /**
+     * {@code Sequence:  Expression ("," Expression)* | Expression "..."	 }
+     */
+    public static final Rule Sequence = new DummyRule("Sequence");
+
+    /**
      * {@code PositionalArguments:  "(" Expression ("," Expression)* ("," Sequence)? | Sequence? ")" }
      */
-    public static final Rule PositionalArguments = new DummyRule("PositionalArguments");
+    public static final Rule PositionalArguments = rule("PositionalArguments")
+            .one(LPAREN)
+            .any(
+                    sequence(Expression, zeroOrMore(COMMA, Expression), zeroOrOne(COMMA, Sequence)),
+                    zeroOrOne(Sequence))
+            .one(RPAREN);
 
     /**
      * {@code OperatorExpression:  ????? } // TODO: Check out language spec
      */
     public static final Rule OperatorExpression = new DummyRule("OperatorExpression");
-
-    /**
-     * {@code FunctionalArguments:  (MemberName FunctionalBody)+	 }
-     */
-    public static final Rule FunctionalArguments = new DummyRule("FunctionalArguments");
 
     /**
      * {@code IntegerLiteral:  Digits Magnitude?	 }
@@ -245,32 +268,22 @@ public class Grammar {
     /**
      * {@code SimpleParam:  UnionType MemberName	 }
      */
-    public static final Rule SimpleParam = new NotImplementedRule();
-
-    /**
-     * {@code CallableParam:  (UnionType | "void") MemberName Params+	 }
-     */
-    public static final Rule CallableParam = new NotImplementedRule();
+    public static final Rule SimpleParam = rule("SimpleParam").sequence(UnionType, MemberName);
 
     /**
      * {@code EntryParamPair:  SimpleParam "->" SimpleParam	 }
      */
-    public static final Rule EntryParamPair = new NotImplementedRule();
+    public static final Rule EntryParamPair = rule("EntryParamPair").sequence(SimpleParam, ENTRY_OP, SimpleParam);
 
     /**
      * {@code DefaultParam:  Param Specifier	 }
      */
-    public static final Rule DefaultParam = new NotImplementedRule();
+    public static final Rule DefaultParam = new NotImplementedRule("DefaultParam");
 
     /**
      * {@code SequencedParam:  Annotation* UnionType "..." MemberName	 }
      */
-    public static final Rule SequencedParam = new NotImplementedRule();
-
-    /**
-     * {@code Param:  Annotation* (SimpleParam | CallableParam | EntryParamPair) }
-     */
-    public static final ComplexRule Param = rule("Param");
+    public static final Rule SequencedParam = rule("SequencedParam").zeroOrMore(Annotation).sequence(UnionType, ELLIPSIS, MemberName);
 
     /**
      * {@code Params:   "(" Param ("," Param)* ("," DefaultParam)* ("," SequencedParam)? |  DefaultParam ("," DefaultParam)* ("," SequencedParam)? |  SequencedParam? ")"	 }
@@ -284,9 +297,24 @@ public class Grammar {
             .one(RPAREN);
 
     /**
+     * {@code CallableParam:  (UnionType | "void") MemberName Params+	 }
+     */
+    public static final Rule CallableParam = rule("CallableParam").any(UnionType, VOID_MODIFIER).one(MemberName).oneOrMore(Params);
+
+    /**
      * {@code FunctionalNamedArgument:  (UnionType | "function" | "void") MemberName Params+ (Block | NamedArguments)	 }
      */
     public static final Rule FunctionalNamedArgument = rule("FunctionalNamedArgument").any(UnionType, FUNCTION_MODIFIER, VOID_MODIFIER).one(MemberName).oneOrMore(Params).any(Block, NamedArguments);
+
+    /**
+     * {@code FunctionalBody:  Params? ( Block | "(" Expression ")" )	 }
+     */
+    public static final Rule FunctionalBody = rule("FunctionalBody").zeroOrOne(Params).any(Block, sequence(LPAREN, Expression, RPAREN));
+
+    /**
+     * {@code FunctionalArguments:  (MemberName FunctionalBody)+	 }
+     */
+    public static final Rule FunctionalArguments = rule("FunctionalArguments").sequence(MemberName, FunctionalBody);
 
     /**
      * {@code Object:  Annotation* ObjectHeader ClassBody	 }
@@ -299,19 +327,9 @@ public class Grammar {
     public static final Rule NamedArgument = any(SpecifiedNamedArgument, LocalNamedArgument, FunctionalNamedArgument, Object);
 
     /**
-     * {@code Sequence:  Expression ("," Expression)* | Expression "..."	 }
-     */
-    public static final Rule Sequence = new DummyRule("Sequence");
-
-    /**
      * {@code Arguments:  PositionalArguments FunctionalArguments? | NamedArguments }
      */
     public static final Rule Arguments = rule("Arguments").any(sequence(PositionalArguments, zeroOrOne(FunctionalArguments)), NamedArguments);
-
-    /**
-     * {@code Annotation:  MemberName ( Arguments | Literal+ )?	 }
-     */
-    public static final Rule Annotation = rule("Annotation").one(MemberName).zeroOrAny(Arguments, oneOrMore(Literal));
 
     /**
      * {@code Method:  Annotation* MethodHeader (Block | NamedArguments | Specifier? ";")	 }
@@ -361,452 +379,447 @@ public class Grammar {
     /**
      * {@code AbstractedType:  "abstracts" Type	 }
      */
-    public static final Rule AbstractedType = new NotImplementedRule();
+    public static final Rule AbstractedType = new NotImplementedRule("AbstractedType");
 
     /**
      * {@code AdaptedTypes:  "adapts" Type ("&" Type)*	 }
      */
-    public static final Rule AdaptedTypes = new NotImplementedRule();
+    public static final Rule AdaptedTypes = new NotImplementedRule("AdaptedTypes");
 
     /**
      * {@code Assignment:  ":=" | ".=" | "+=" | "-=" | "*=" | "/=" | "%=" | "&=" | "|=" | "^="| "~=" | "&&=" | "||=" ;	 }
      */
-    public static final Rule Assignment = new NotImplementedRule();
+    public static final Rule Assignment = new NotImplementedRule("Assignment");
 
     /**
      * {@code AttributeMeta:  Type "." MemberName	 }
      */
-    public static final Rule AttributeMeta = new NotImplementedRule();
+    public static final Rule AttributeMeta = new NotImplementedRule("AttributeMeta");
 
     /**
      * {@code BooleanCondition:  Expression }
      */
-    public static final Rule BooleanCondition = new NotImplementedRule();
+    public static final Rule BooleanCondition = new NotImplementedRule("BooleanCondition");
 
     /**
      * {@code Break:  "break" }
      */
-    public static final Rule Break = new NotImplementedRule();
+    public static final Rule Break = new NotImplementedRule("Break");
 
     /**
      * {@code CallableReference:  MethodReference | InitializerReference	 }
      */
-    public static final Rule CallableReference = new NotImplementedRule();
+    public static final Rule CallableReference = new NotImplementedRule("CallableReference");
 
     /**
      * {@code CallableVariable:  (UnionType | "void")? MemberName Params+	 }
      */
-    public static final Rule CallableVariable = new NotImplementedRule();
+    public static final Rule CallableVariable = new NotImplementedRule("CallableVariable");
 
     /**
      * {@code Case:  Expression ("," Expression)* | "is" UnionType | "satisfies" Type	 }
      */
-    public static final Rule Case = new NotImplementedRule();
+    public static final Rule Case = new NotImplementedRule("Case");
 
     /**
      * {@code CaseItem:  "case" "(" Case ")" Block	 }
      */
-    public static final Rule CaseItem = new NotImplementedRule();
+    public static final Rule CaseItem = new NotImplementedRule("CaseItem");
 
     /**
      * {@code Cases:  CaseItem+ DefaultCaseItem?	 }
      */
-    public static final Rule Cases = new NotImplementedRule();
+    public static final Rule Cases = new NotImplementedRule("Cases");
 
     /**
      * {@code CaseType:  MemberName | Type	 }
      */
-    public static final Rule CaseType = new NotImplementedRule();
+    public static final Rule CaseType = new NotImplementedRule("CaseType");
 
     /**
      * {@code CaseTypes:  "of" CaseType ("|" CaseType)*	 }
      */
-    public static final Rule CaseTypes = new NotImplementedRule();
+    public static final Rule CaseTypes = new NotImplementedRule("CaseTypes");
 
     /**
      * {@code Catch:  "catch" "(" Variable ")" Block	 }
      */
-    public static final Rule Catch = new NotImplementedRule();
+    public static final Rule Catch = new NotImplementedRule("Catch");
 
     /**
-     * {@code Character:  ~("`" | "\" | Tab | Formfeed | Newline | Return | Backspace) | EscapeSequence	 }
+     * {@code Character:  ~("`" | "\" | Tab | "Formfeed | Newline | Return | Backspace) | EscapeSequence	 }
      */
-    public static final Rule Character = new NotImplementedRule();
+    public static final Rule Character = new NotImplementedRule("Character");
 
     /**
      * {@code Class:  Annotation* ClassHeader (ClassBody | TypeSpecifier ";")	 }
      */
-    public static final Rule Class = new NotImplementedRule();
+    public static final Rule Class = new NotImplementedRule("Class");
 
     /**
      * {@code ClassBody:  "{" (Declaration | Statement)* "}"	 }
      */
-    public static final Rule ClassBody = new NotImplementedRule();
+    public static final Rule ClassBody = new NotImplementedRule("ClassBody");
 
     /**
      * {@code ClassHeader:  "class" TypeName TypeParams? Params ClassInheritance TypeConstraints?	 }
      */
-    public static final Rule ClassHeader = new NotImplementedRule();
+    public static final Rule ClassHeader = new NotImplementedRule("ClassHeader");
 
     /**
-     * {@code ClassInheritance:  CaseTypes? Metatypes? ExtendedType? SatisfiedTypes?	 }
+     * {@code ClassInheritance:  CaseTypes? "Metatypes? ExtendedType? SatisfiedTypes?	 }
      */
-    public static final Rule ClassInheritance = new NotImplementedRule();
+    public static final Rule ClassInheritance = new NotImplementedRule("ClassInheritance");
 
     /**
      * {@code ConcreteType:  "this" "is"	 }
      */
-    public static final Rule ConcreteType = new NotImplementedRule();
+    public static final Rule ConcreteType = new NotImplementedRule("ConcreteType");
 
     /**
      * {@code ConditionalTypes:  SatisfiedTypes Conditions	 }
      */
-    public static final Rule ConditionalTypes = new NotImplementedRule();
+    public static final Rule ConditionalTypes = new NotImplementedRule("ConditionalTypes");
 
     /**
      * {@code Condition:  BooleanCondition | IsCondition | ExistsOrNonemptyCondition | SatisfiesCondition	 }
      */
-    public static final Rule Condition = new NotImplementedRule();
+    public static final Rule Condition = new NotImplementedRule("Condition");
 
     /**
      * {@code Conditions:  "if" "(" Condition ("&&" Condition)* ")"	 }
      */
-    public static final Rule Conditions = new NotImplementedRule();
+    public static final Rule Conditions = new NotImplementedRule("Conditions");
 
     /**
      * {@code Continue:  "continue"	 }
      */
-    public static final Rule Continue = new NotImplementedRule();
+    public static final Rule Continue = new NotImplementedRule("Continue");
 
     /**
      * {@code ControlStructure:  IfElse | SwitchCaseElse | While | ForFail | TryCatchFinally	 }
      */
-    public static final Rule ControlStructure = new NotImplementedRule();
+    public static final Rule ControlStructure = new NotImplementedRule("ControlStructure");
 
     /**
      * {@code DateLiteral:   "'"  Digit{1,2} "/" Digit{1,2} "/" Digit{4}  "'"	 }
      */
-    public static final Rule DateLiteral = new NotImplementedRule();
+    public static final Rule DateLiteral = new NotImplementedRule("DateLiteral");
 
     /**
      * {@code DefaultCaseItem:  "else" Block	 }
      */
-    public static final Rule DefaultCaseItem = new NotImplementedRule();
+    public static final Rule DefaultCaseItem = new NotImplementedRule("DefaultCaseItem");
 
     /**
      * {@code Digit:  "0".."9"	 }
      */
-    public static final Rule Digit = new NotImplementedRule();
+    public static final Rule Digit = new NotImplementedRule("Digit");
 
     /**
      * {@code Digits:  Digit+ | Digit{1..3} ("_" Digit{3})+	 }
      */
-    public static final Rule Digits = new NotImplementedRule();
+    public static final Rule Digits = new NotImplementedRule("Digits");
 
     /**
-     * {@code DimensionAtom:  DimensionConstant | DimensionVariable | ParenDimension	 }
+     * {@code DimensionAtom:  DimensionConstant | DimensionVariable | "ParenDimension	 }
      */
-    public static final Rule DimensionAtom = new NotImplementedRule();
+    public static final Rule DimensionAtom = new NotImplementedRule("DimensionAtom");
 
     /**
      * {@code DimensionConstant:  "#" IntegerLiteral	 }
      */
-    public static final Rule DimensionConstant = new NotImplementedRule();
+    public static final Rule DimensionConstant = new NotImplementedRule("DimensionConstant");
 
     /**
      * {@code Dimension:  DimensionTerm ("+" DimensionTerm)*	 }
      */
-    public static final Rule Dimension = new NotImplementedRule();
+    public static final Rule Dimension = new NotImplementedRule("Dimension");
 
     /**
      * {@code DimensionTerm:  (DimensionConstant "*")* DimensionAtom	 }
      */
-    public static final Rule DimensionTerm = new NotImplementedRule();
+    public static final Rule DimensionTerm = new NotImplementedRule("DimensionTerm");
 
     /**
      * {@code DimensionVariable:  TypeName | "#" MemberName	 }
      */
-    public static final Rule DimensionVariable = new NotImplementedRule();
+    public static final Rule DimensionVariable = new NotImplementedRule("DimensionVariable");
 
     /**
      * {@code Directive:  Return | Throw | Break | Continue	 }
      */
-    public static final Rule Directive = new NotImplementedRule();
+    public static final Rule Directive = new NotImplementedRule("Directive");
 
     /**
      * {@code DirectiveStatement:  Directive ";"	 }
      */
-    public static final Rule DirectiveStatement = new NotImplementedRule();
+    public static final Rule DirectiveStatement = new NotImplementedRule("DirectiveStatement");
 
     /**
      * {@code Else:  "else" (Block | IfElse)	 }
      */
-    public static final Rule Else = new NotImplementedRule();
+    public static final Rule Else = new NotImplementedRule("Else");
 
     /**
      * {@code EntryVariablePair:  Variable "->" Variable	 }
      */
-    public static final Rule EntryVariablePair = new NotImplementedRule();
+    public static final Rule EntryVariablePair = new NotImplementedRule("EntryVariablePair");
 
     /**
      * {@code EscapeSequence:  "\" ("b" | "t" | "n" | "f" | "r" | "\" | "\"" | "'" | "`" )	 }
      */
-    public static final Rule EscapeSequence = new NotImplementedRule();
+    public static final Rule EscapeSequence = new NotImplementedRule("EscapeSequence");
 
     /**
      * {@code ExistsOrNonemptyCondition:  ("exists" | "nonempty") (Variable Specifier | MemberName)	 }
      */
-    public static final Rule ExistsOrNonemptyCondition = new NotImplementedRule();
+    public static final Rule ExistsOrNonemptyCondition = new NotImplementedRule("ExistsOrNonemptyCondition");
 
     /**
      * {@code Exponent:  ("E"|"e") ("+"|"-")? Digits	 }
      */
-    public static final Rule Exponent = new NotImplementedRule();
+    public static final Rule Exponent = new NotImplementedRule("Exponent");
 
     /**
      * {@code ExpressionStatement:  ( Assignment | IncrementOrDecrement | Invocation ) ";"	 }
      */
-    public static final Rule ExpressionStatement = new NotImplementedRule();
+    public static final Rule ExpressionStatement = new NotImplementedRule("ExpressionStatement");
 
     /**
      * {@code ExtendedType:  "extends" ("super" ".")? Type PositionalArguments	 }
      */
-    public static final Rule ExtendedType = new NotImplementedRule();
+    public static final Rule ExtendedType = new NotImplementedRule("ExtendedType");
 
     /**
      * {@code Fail:  "else" Block	 }
      */
-    public static final Rule Fail = new NotImplementedRule();
+    public static final Rule Fail = new NotImplementedRule("Fail");
 
     /**
      * {@code Finally:  "finally" Block	 }
      */
-    public static final Rule Finally = new NotImplementedRule();
+    public static final Rule Finally = new NotImplementedRule("Finally");
 
     /**
      * {@code ForFail:  For Fail?	 }
      */
-    public static final Rule ForFail = new NotImplementedRule();
+    public static final Rule ForFail = new NotImplementedRule("ForFail");
 
     /**
      * {@code For:  "for" "(" ForIterator ")" Block	 }
      */
-    public static final Rule For = new NotImplementedRule();
+    public static final Rule For = new NotImplementedRule("For");
 
     /**
      * {@code ForIterator:  IteratorVariable "in" Expression	 }
      */
-    public static final Rule ForIterator = new NotImplementedRule();
+    public static final Rule ForIterator = new NotImplementedRule("ForIterator");
 
     /**
      * {@code FractionalDigits:  Digit+ | (Digit{3} "_")+ Digit{1..3}	 }
      */
-    public static final Rule FractionalDigits = new NotImplementedRule();
+    public static final Rule FractionalDigits = new NotImplementedRule("FractionalDigits");
 
     /**
      * {@code FractionalMagnitude:  "m" | "u" | "n" | "p" | "f"	 }
      */
-    public static final Rule FractionalMagnitude = new NotImplementedRule();
-
-    /**
-     * {@code FunctionalBody:  Params? ( Block | "(" Expression ")" )	 }
-     */
-    public static final Rule FunctionalBody = new NotImplementedRule();
+    public static final Rule FractionalMagnitude = new NotImplementedRule("FractionalMagnitude");
 
     /**
      * {@code FunctionMeta:  MemberName TypeArguments?	 }
      */
-    public static final Rule FunctionMeta = new NotImplementedRule();
+    public static final Rule FunctionMeta = new NotImplementedRule("FunctionMeta");
 
     /**
      * {@code IdentifierChar:  LowercaseChar | UppercaseChar | Digit	 }
      */
-    public static final Rule IdentifierChar = new NotImplementedRule();
+    public static final Rule IdentifierChar = new NotImplementedRule("IdentifierChar");
 
     /**
      * {@code IfElse:  If Else?	 }
      */
-    public static final Rule IfElse = new NotImplementedRule();
+    public static final Rule IfElse = new NotImplementedRule("IfElse");
 
     /**
      * {@code If:  "if" "(" Condition ")" Block	 }
      */
-    public static final Rule If = new NotImplementedRule();
+    public static final Rule If = new NotImplementedRule("If");
 
     /**
      * {@code IncrementOrDecrement:  "--" | "++" ; }
      */
-    public static final Rule IncrementOrDecrement = new NotImplementedRule();
+    public static final Rule IncrementOrDecrement = new NotImplementedRule("IncrementOrDecrement");
 
     /**
      * {@code Initializer:  ":=" Expression	 }
      */
-    public static final Rule Initializer = new NotImplementedRule();
+    public static final Rule Initializer = new NotImplementedRule("Initializer");
 
     /**
      * {@code InitializerReference:  (Receiver ".")? TypeName TypeArguments?	 }
      */
-    public static final Rule InitializerReference = new NotImplementedRule();
+    public static final Rule InitializerReference = new NotImplementedRule("InitializerReference");
 
     /**
      * {@code Interface:  Annotation* InterfaceHeader (InterfaceBody | TypeSpecifier ";")	 }
      */
-    public static final Rule Interface = new NotImplementedRule();
+    public static final Rule Interface = new NotImplementedRule("Interface");
 
     /**
      * {@code InterfaceBody:  "{" Declaration* "}"	 }
      */
-    public static final Rule InterfaceBody = new NotImplementedRule();
+    public static final Rule InterfaceBody = new NotImplementedRule("InterfaceBody");
 
     /**
      * {@code InterfaceHeader:  "interface" TypeName TypeParams? InterfaceInheritance TypeConstraints?	 }
      */
-    public static final Rule InterfaceHeader = new NotImplementedRule();
+    public static final Rule InterfaceHeader = new NotImplementedRule("InterfaceHeader");
 
     /**
-     * {@code InterfaceInheritance:  CaseTypes? Metatypes? AdaptedTypes? SatisfiedTypes?	 }
+     * {@code InterfaceInheritance:  CaseTypes? "Metatypes? AdaptedTypes? SatisfiedTypes?	 }
      */
-    public static final Rule InterfaceInheritance = new NotImplementedRule();
+    public static final Rule InterfaceInheritance = new NotImplementedRule("InterfaceInheritance");
 
     /**
      * {@code Introduction:  "adapt" Type SatisfiedTypes TypeConstraints? ";"	 }
      */
-    public static final Rule Introduction = new NotImplementedRule();
+    public static final Rule Introduction = new NotImplementedRule("Introduction");
 
     /**
      * {@code IsCondition:  "is" (TypedVariable Specifier | UnionType MemberName)	 }
      */
-    public static final Rule IsCondition = new NotImplementedRule();
+    public static final Rule IsCondition = new NotImplementedRule("IsCondition");
 
     /**
      * {@code IteratorVariable:  Variable | CallableVariable | EntryVariablePair	 }
      */
-    public static final Rule IteratorVariable = new NotImplementedRule();
+    public static final Rule IteratorVariable = new NotImplementedRule("IteratorVariable");
 
     /**
      * {@code LineComment:  ("//"|"#!") ~(Newline|Return)* (Return Newline | Return | Newline)?	 }
      */
-    public static final Rule LineComment = new NotImplementedRule();
+    public static final Rule LineComment = new NotImplementedRule("LineComment");
 
     /**
      * {@code LoopCondition:  "while" "(" Condition ")"	 }
      */
-    public static final Rule LoopCondition = new NotImplementedRule();
+    public static final Rule LoopCondition = new NotImplementedRule("LoopCondition");
 
     /**
      * {@code LowercaseChar:  "a".."z" | "_" ;	 }
      */
-    public static final Rule LowercaseChar = new NotImplementedRule();
+    public static final Rule LowercaseChar = new NotImplementedRule("LowercaseChar");
 
     /**
      * {@code Magnitude:  "k" | "M" | "G" | "T" | "P"	 }
      */
-    public static final Rule Magnitude = new NotImplementedRule();
+    public static final Rule Magnitude = new NotImplementedRule("Magnitude");
 
     /**
-     * {@code Metatypes:  "is" Type ("&" Type)*	 }
+     * {@code "Metatypes:  "is" Type ("&" Type)*	 }
      */
-    public static final Rule Metatypes = new NotImplementedRule();
+    public static final Rule Metatypes = new NotImplementedRule("Metatypes");
 
     /**
      * {@code MethodHeader:  (UnionType | "function" | "void") MemberName TypeParams? Params+ Metatypes? TypeConstraints?	 }
      */
-    public static final Rule MethodHeader = new NotImplementedRule();
+    public static final Rule MethodHeader = new NotImplementedRule("MethodHeader");
 
     /**
      * {@code MethodMeta:  Type "." MemberName TypeArguments?	 }
      */
-    public static final Rule MethodMeta = new NotImplementedRule();
+    public static final Rule MethodMeta = new NotImplementedRule("MethodMeta");
 
     /**
      * {@code MethodReference:  (Receiver ".")? MemberName TypeArguments?	 }
      */
-    public static final Rule MethodReference = new NotImplementedRule();
+    public static final Rule MethodReference = new NotImplementedRule("MethodReference");
 
     /**
-     * {@code MultilineComment:  "/" "*" ( MultilineCommmentCharacter | MultilineComment )* "*" "/"	 }
+     * {@code "MultilineComment:  "/" "*" ( MultilineCommentCharacter | MultilineComment )* "*" "/"	 }
      */
-    public static final Rule MultilineComment = new NotImplementedRule();
+    public static final Rule MultilineComment = new NotImplementedRule("MultilineComment");
 
     /**
-     * {@code MultilineCommmentCharacter:  ~("/"|"*") | ("/" ~"*") => "/" | ("*" ~"/") => "*"	 }
+     * {@code MultilineCommentCharacter:  ~("/"|"*") | ("/" ~"*") => "/" | ("*" ~"/") => "*"	 }
      */
-    public static final Rule MultilineCommmentCharacter = new NotImplementedRule();
+    public static final Rule MultilineCommentCharacter = new NotImplementedRule("MultilineCommentCharacter");
 
     /**
      * {@code ObjectHeader:  "object" MemberName ObjectInheritance	 }
      */
-    public static final Rule ObjectHeader = new NotImplementedRule();
+    public static final Rule ObjectHeader = new NotImplementedRule("ObjectHeader");
 
     /**
      * {@code ObjectInheritance:  ExtendedType? SatisfiedTypes?	 }
      */
-    public static final Rule ObjectInheritance = new NotImplementedRule();
+    public static final Rule ObjectInheritance = new NotImplementedRule("ObjectInheritance");
 
     /**
      * {@code OuterReference:  (Receiver ".")? "outer"	 }
      */
-    public static final Rule OuterReference = new NotImplementedRule();
+    public static final Rule OuterReference = new NotImplementedRule("OuterReference");
 
     /**
-     * {@code ParenDimension:  "(" Dimension ")"	 }
+     * {@code "ParenDimension:  "(" Dimension ")"	 }
      */
-    public static final Rule ParenDimension = new NotImplementedRule();
+    public static final Rule ParenDimension = new NotImplementedRule("ParenDimension");
 
     /**
      * {@code QuotedLiteralCharacter:  ~("'")	 }
      */
-    public static final Rule QuotedLiteralCharacter = new NotImplementedRule();
+    public static final Rule QuotedLiteralCharacter = new NotImplementedRule("QuotedLiteralCharacter");
 
     /**
      * {@code Receiver:  Primary	 }
      */
-    public static final Rule Receiver = new NotImplementedRule();
+    public static final Rule Receiver = new NotImplementedRule("Receiver");
 
     /**
      * {@code Resource:  MemberName | InitializerReference Arguments | Variable Specifier	 }
      */
-    public static final Rule Resource = new NotImplementedRule();
+    public static final Rule Resource = new NotImplementedRule("Resource");
 
     /**
      * {@code Retry:  "retry"	 }
      */
-    public static final Rule Retry = new NotImplementedRule();
+    public static final Rule Retry = new NotImplementedRule("Retry");
 
     /**
      * {@code Return:  "return" Expression?	 }
      */
-    public static final Rule Return = new NotImplementedRule();
+    public static final Rule Return = new NotImplementedRule("Return");
 
     /**
      * {@code SatisfiedTypes:  "satisfies" Type ("&" Type)*	 }
      */
-    public static final Rule SatisfiedTypes = new NotImplementedRule();
+    public static final Rule SatisfiedTypes = new NotImplementedRule("SatisfiedTypes");
 
     /**
      * {@code SatisfiesCondition:  "satisfies" Type Type	 }
      */
-    public static final Rule SatisfiesCondition = new NotImplementedRule();
+    public static final Rule SatisfiesCondition = new NotImplementedRule("SatisfiesCondition");
 
     /**
      * {@code SequencedTypeParam:  TypeName "..."	 }
      */
-    public static final Rule SequencedTypeParam = new NotImplementedRule();
+    public static final Rule SequencedTypeParam = new NotImplementedRule("SequencedTypeParam");
 
     /**
      * {@code SequencedType:  TypeName "..."	 }
      */
-    public static final Rule SequencedType = new NotImplementedRule();
+    public static final Rule SequencedType = new NotImplementedRule("SequencedType");
 
     /**
      * {@code SequenceInstantiation:  "{" Sequence? "}" ;	 }
      */
-    public static final Rule SequenceInstantiation = new NotImplementedRule();
+    public static final Rule SequenceInstantiation = new NotImplementedRule("SequenceInstantiation");
 
     /**
      * {@code Specification:  MemberName Specifier ";"	 }
      */
-    public static final Rule Specification = new NotImplementedRule();
+    public static final Rule Specification = rule("Specification").sequence(MemberName, Specifier, SEMICOLON);
 
     /**
      * {@code Statement:  ExpressionStatement | Specification | DirectiveStatement | ControlStructure	 }
@@ -816,134 +829,133 @@ public class Grammar {
     /**
      * {@code StringCharacter:  ~( "\" | "\"" ) | EscapeSequence	 }
      */
-    public static final Rule StringCharacter = new NotImplementedRule();
+    public static final Rule StringCharacter = new NotImplementedRule("StringCharacter");
 
     /**
      * {@code Subtype:  "subtype" | MemberName "." "subtype"	 }
      */
-    public static final Rule Subtype = new NotImplementedRule();
+    public static final Rule Subtype = new NotImplementedRule("Subtype");
 
     /**
      * {@code SwitchCaseElse:  Switch ( Cases | "{" Cases "}" )	 }
      */
-    public static final Rule SwitchCaseElse = new NotImplementedRule();
+    public static final Rule SwitchCaseElse = new NotImplementedRule("SwitchCaseElse");
 
     /**
      * {@code Switch:  "switch" "(" Expression ")"	 }
      */
-    public static final Rule Switch = new NotImplementedRule();
+    public static final Rule Switch = new NotImplementedRule("Switch");
 
     /**
      * {@code Throw:  "throw" Expression?	 }
      */
-    public static final Rule Throw = new NotImplementedRule();
+    public static final Rule Throw = new NotImplementedRule("Throw");
 
     /**
      * {@code TimeLiteral:   "'"  Digit{1,2} ":" Digit{2} ( ":" Digit{2} ( ":" Digit{3} )? )?  (" " "AM"|"PM")?  (" " Character{3,4})?  "'"	 }
      */
-    public static final Rule TimeLiteral = new NotImplementedRule();
+    public static final Rule TimeLiteral = new NotImplementedRule("TimeLiteral");
 
     /**
      * {@code TryCatchFinally:  Try Catch* Finally?	 }
      */
-    public static final Rule TryCatchFinally = new NotImplementedRule();
+    public static final Rule TryCatchFinally = new NotImplementedRule("TryCatchFinally");
 
     /**
      * {@code Try:  "try" ("(" Resource ")")? Block	 }
      */
-    public static final Rule Try = new NotImplementedRule();
+    public static final Rule Try = new NotImplementedRule("Try");
 
     /**
      * {@code TypeArgument:  UnionType | Dimension	 }
      */
-    public static final Rule TypeArgument = new NotImplementedRule();
+    public static final Rule TypeArgument = new NotImplementedRule("TypeArgument");
 
     /**
      * {@code TypeConstraint:  "given" TypeName TypeParams? Params? TypeConstraintInheritance	 }
      */
-    public static final Rule TypeConstraint = new NotImplementedRule();
+    public static final Rule TypeConstraint = new NotImplementedRule("TypeConstraint");
 
     /**
      * {@code TypeConstraintInheritance:  CaseTypes? Metatypes? SatisfiedTypes? AbstractedType?	 }
      */
-    public static final Rule TypeConstraintInheritance = new NotImplementedRule();
+    public static final Rule TypeConstraintInheritance = new NotImplementedRule("TypeConstraintInheritance");
 
     /**
      * {@code TypeConstraints:  TypeConstraint+	 }
      */
-    public static final Rule TypeConstraints = new NotImplementedRule();
+    public static final Rule TypeConstraints = new NotImplementedRule("TypeConstraints");
 
     /**
      * {@code TypedQuotedLiteral:  TypeName QuotedLiteral	 }
      */
-    public static final Rule TypedQuotedLiteral = new NotImplementedRule();
+    public static final Rule TypedQuotedLiteral = new NotImplementedRule("TypedQuotedLiteral");
 
     /**
      * {@code TypedVariable:  UnionType MemberName	 }
      */
-    public static final Rule TypedVariable = new NotImplementedRule();
+    public static final Rule TypedVariable = new NotImplementedRule("TypedVariable");
 
     /**
      * {@code TypeMeta:  Type	 }
      */
-    public static final Rule TypeMeta = new NotImplementedRule();
+    public static final Rule TypeMeta = new NotImplementedRule("TypeMeta");
 
     /**
      * {@code TypeParams:  "<" (TypeParam ",")* (TypeParam | SequencedTypeParam) ">"	 }
      */
-    public static final Rule TypeParams = new NotImplementedRule();
+    public static final Rule TypeParams = new NotImplementedRule("TypeParams");
 
     /**
      * {@code TypeParam:  Variance? TypeName	 }
      */
-    public static final Rule TypeParam = new NotImplementedRule();
+    public static final Rule TypeParam = new NotImplementedRule("TypeParam");
 
     /**
      * {@code TypeSpecifier:  "=" Type	 }
      */
-    public static final Rule TypeSpecifier = new NotImplementedRule();
+    public static final Rule TypeSpecifier = new NotImplementedRule("TypeSpecifier");
 
     /**
      * {@code UppercaseChar:  "A".."Z" ;	 }
      */
-    public static final Rule UppercaseChar = new NotImplementedRule();
+    public static final Rule UppercaseChar = new NotImplementedRule("UppercaseChar");
 
     /**
      * {@code ValueMeta:  MemberName TypeArguments?	 }
      */
-    public static final Rule ValueMeta = new NotImplementedRule();
+    public static final Rule ValueMeta = new NotImplementedRule("ValueMeta");
 
     /**
      * {@code ValueReference:  (Receiver ".")? MemberName	 }
      */
-    public static final Rule ValueReference = new NotImplementedRule();
+    public static final Rule ValueReference = new NotImplementedRule("ValueReference");
 
     /**
      * {@code Variable:  UnionType? MemberName	 }
      */
-    public static final Rule Variable = new NotImplementedRule();
+    public static final Rule Variable = new NotImplementedRule("Variable");
 
     /**
      * {@code Variance:  "out" | "in"	 }
      */
-    public static final Rule Variance = new NotImplementedRule();
+    public static final Rule Variance = new NotImplementedRule("Variance");
 
     /**
      * {@code While:  LoopCondition Block	 }
      */
-    public static final Rule While = new NotImplementedRule();
-
-    /**
-     * {@code Whitespace:  " " | Tab | Formfeed | Newline | Return	 }
-     */
-    public static final Rule Whitespace = new NotImplementedRule();
+    public static final Rule While = new NotImplementedRule("While");
 
     static {
+        deferredInit();
+    }
+
+    private static void deferredInit() {
         Block.one(LBRACE).zeroOrAny(Declaration, Statement).one(RBRACE);
         Expression.any(Primary, OperatorExpression);
         NamedArguments.one(LBRACE).zeroOrMore(NamedArgument).zeroOrOne(Sequence).one(RBRACE);
         Param.zeroOrMore(Annotation).any(SimpleParam, CallableParam, EntryParamPair);
-
+        Annotation.one(MemberName).zeroOrAny(Arguments, oneOrMore(Literal));
     }
 
 }

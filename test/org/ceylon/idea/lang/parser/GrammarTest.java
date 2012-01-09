@@ -3,6 +3,7 @@ package org.ceylon.idea.lang.parser;
 import org.ceylon.idea.lang.lexer.CeylonToken;
 import org.ceylon.idea.lang.parser.rule.MockPsiBuilder;
 import org.ceylon.idea.lang.parser.rule.Rule;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import static org.ceylon.idea.lang.lexer.CeylonToken.*;
@@ -21,9 +22,11 @@ public class GrammarTest {
         valid(rule, UIDENTIFIER, QMARK);
         valid(rule, UIDENTIFIER, ARRAY);
         valid(rule, UIDENTIFIER, QMARK, ARRAY);
+        valid(rule, UIDENTIFIER, MEMBER_OP, UIDENTIFIER, QMARK, ARRAY);
     }
 
     @Test
+    @Ignore
     public void testAbstractedType() {
         // AbstractedType: "abstracts" Type
         Rule rule = Grammar.AbstractedType;
@@ -32,6 +35,7 @@ public class GrammarTest {
     }
 
     @Test
+    @Ignore
     public void testAdaptedTypes() {
         // AdaptedTypes: "adapts" Type ("&" Type)*
         Rule rule = Grammar.AdaptedTypes;
@@ -52,22 +56,18 @@ public class GrammarTest {
     }
 
     @Test
-    public void testAnnotationName() {
-        // AnnotationName: LIdentifier
-        Rule rule = Grammar.AnnotationName;
-
-        // TODO: Implement
-    }
-
-    @Test
     public void testArguments() {
         // Arguments: PositionalArguments FunctionalArguments? | NamedArguments
         Rule rule = Grammar.Arguments;
 
-        // TODO: Implement
+        valid(rule, LPAREN, STRING_LITERAL, RPAREN);
+        valid(rule, LBRACE, LIDENTIFIER, SPECIFY, STRING_LITERAL, SEMICOLON, RBRACE);
+
+        // TODO: FunctionalArguments
     }
 
     @Test
+    @Ignore
     public void testAssignment() {
         // Assignment: ":=" | ".=" | "+=" | "-=" | "*=" | "/=" | "%=" | "&=" | "|=" | "^="| "~=" | "&&=" | "||=" ;
         Rule rule = Grammar.Assignment;
@@ -76,6 +76,7 @@ public class GrammarTest {
     }
 
     @Test
+    @Ignore
     public void testAtom() {
         // Atom: Literal | StringTemplate | SelfReference | ParExpression
         Rule rule = Grammar.Atom;
@@ -84,6 +85,7 @@ public class GrammarTest {
     }
 
     @Test
+    @Ignore
     public void testAttribute() {
         // Attribute: Annotation* (SimpleAttribute | AttributeGetter | AttributeSetter)
         Rule rule = Grammar.Attribute;
@@ -102,6 +104,7 @@ public class GrammarTest {
     }
 
     @Test
+    @Ignore
     public void testAttributeHeader() {
         // AttributeHeader: (UnionType | "value") MemberName
         Rule rule = Grammar.AttributeHeader;
@@ -110,6 +113,7 @@ public class GrammarTest {
     }
 
     @Test
+    @Ignore
     public void testAttributeMeta() {
         // AttributeMeta: Type "." MemberName
         Rule rule = Grammar.AttributeMeta;
@@ -126,6 +130,7 @@ public class GrammarTest {
     }
 
     @Test
+    @Ignore
     public void testBlock() {
         // Block: "{" (Declaration | Statement)* "}"
         Rule rule = Grammar.Block;
@@ -134,6 +139,7 @@ public class GrammarTest {
     }
 
     @Test
+    @Ignore
     public void testBooleanCondition() {
         // BooleanCondition: Expression
         Rule rule = Grammar.BooleanCondition;
@@ -142,6 +148,7 @@ public class GrammarTest {
     }
 
     @Test
+    @Ignore
     public void testBreak() {
         // Break: "break"
         Rule rule = Grammar.Break;
@@ -150,6 +157,7 @@ public class GrammarTest {
     }
 
     @Test
+    @Ignore
     public void testCallableParam() {
         // CallableParam: (UnionType | "void") MemberName Params+
         Rule rule = Grammar.CallableParam;
@@ -158,6 +166,7 @@ public class GrammarTest {
     }
 
     @Test
+    @Ignore
     public void testCallableReference() {
         // CallableReference: MethodReference | InitializerReference
         Rule rule = Grammar.CallableReference;
@@ -166,6 +175,7 @@ public class GrammarTest {
     }
 
     @Test
+    @Ignore
     public void testCallableVariable() {
         // CallableVariable: (UnionType | "void")? MemberName Params+
         Rule rule = Grammar.CallableVariable;
@@ -174,6 +184,7 @@ public class GrammarTest {
     }
 
     @Test
+    @Ignore
     public void testCase() {
         // Case: Expression ("," Expression)* | "is" UnionType | "satisfies" Type
         Rule rule = Grammar.Case;
@@ -182,6 +193,7 @@ public class GrammarTest {
     }
 
     @Test
+    @Ignore
     public void testCaseItem() {
         // CaseItem: "case" "(" Case ")" Block
         Rule rule = Grammar.CaseItem;
@@ -190,6 +202,7 @@ public class GrammarTest {
     }
 
     @Test
+    @Ignore
     public void testCases() {
         // Cases: CaseItem+ DefaultCaseItem?
         Rule rule = Grammar.Cases;
@@ -198,6 +211,7 @@ public class GrammarTest {
     }
 
     @Test
+    @Ignore
     public void testCaseType() {
         // CaseType: MemberName | Type
         Rule rule = Grammar.CaseType;
@@ -206,6 +220,7 @@ public class GrammarTest {
     }
 
     @Test
+    @Ignore
     public void testCaseTypes() {
         // CaseTypes: "of" CaseType ("|" CaseType)*
         Rule rule = Grammar.CaseTypes;
@@ -214,6 +229,7 @@ public class GrammarTest {
     }
 
     @Test
+    @Ignore
     public void testCatch() {
         // Catch: "catch" "(" Variable ")" Block
         Rule rule = Grammar.Catch;
@@ -222,6 +238,7 @@ public class GrammarTest {
     }
 
     @Test
+    @Ignore
     public void testCharacter() {
         // Character: ~("`" | "\" | Tab | Formfeed | Newline | Return | Backspace) | EscapeSequence
         Rule rule = Grammar.Character;
@@ -230,6 +247,7 @@ public class GrammarTest {
     }
 
     @Test
+    @Ignore
     public void testCharacterLiteral() {
         // CharacterLiteral: "`" Character "`"
         Rule rule = Grammar.CharacterLiteral;
@@ -238,6 +256,7 @@ public class GrammarTest {
     }
 
     @Test
+    @Ignore
     public void testClass() {
         // Class: Annotation* ClassHeader (ClassBody | TypeSpecifier ";")
         Rule rule = Grammar.Class;
@@ -246,6 +265,7 @@ public class GrammarTest {
     }
 
     @Test
+    @Ignore
     public void testClassBody() {
         // ClassBody: "{" (Declaration | Statement)* "}"
         Rule rule = Grammar.ClassBody;
@@ -254,6 +274,7 @@ public class GrammarTest {
     }
 
     @Test
+    @Ignore
     public void testClassHeader() {
         // ClassHeader: "class" TypeName TypeParams? Params ClassInheritance TypeConstraints?
         Rule rule = Grammar.ClassHeader;
@@ -262,6 +283,7 @@ public class GrammarTest {
     }
 
     @Test
+    @Ignore
     public void testClassInheritance() {
         // ClassInheritance: CaseTypes? Metatypes? ExtendedType? SatisfiedTypes?
         Rule rule = Grammar.ClassInheritance;
@@ -294,6 +316,7 @@ public class GrammarTest {
     }
 
     @Test
+    @Ignore
     public void testCompilerAnnotation() {
         // CompilerAnnotation : "@" AnnotationName ("[" StringLiteral "]")?
         Rule rule = Grammar.CompilerAnnotation;
@@ -302,6 +325,7 @@ public class GrammarTest {
     }
 
     @Test
+    @Ignore
     public void testCompilerAnnotations() {
         // CompilerAnnotations: CompilerAnnotation*
         Rule rule = Grammar.CompilerAnnotations;
@@ -310,6 +334,7 @@ public class GrammarTest {
     }
 
     @Test
+    @Ignore
     public void testConcreteType() {
         // ConcreteType: "this" "is"
         Rule rule = Grammar.ConcreteType;
@@ -318,6 +343,7 @@ public class GrammarTest {
     }
 
     @Test
+    @Ignore
     public void testCondition() {
         // Condition: BooleanCondition | IsCondition | ExistsOrNonemptyCondition | SatisfiesCondition
         Rule rule = Grammar.Condition;
@@ -326,6 +352,7 @@ public class GrammarTest {
     }
 
     @Test
+    @Ignore
     public void testConditionalTypes() {
         // ConditionalTypes: SatisfiedTypes Conditions
         Rule rule = Grammar.ConditionalTypes;
@@ -334,6 +361,7 @@ public class GrammarTest {
     }
 
     @Test
+    @Ignore
     public void testConditions() {
         // Conditions: "if" "(" Condition ("&&" Condition)* ")"
         Rule rule = Grammar.Conditions;
@@ -342,6 +370,7 @@ public class GrammarTest {
     }
 
     @Test
+    @Ignore
     public void testContinue() {
         // Continue: "continue"
         Rule rule = Grammar.Continue;
@@ -350,6 +379,7 @@ public class GrammarTest {
     }
 
     @Test
+    @Ignore
     public void testControlStructure() {
         // ControlStructure: IfElse | SwitchCaseElse | While | ForFail | TryCatchFinally
         Rule rule = Grammar.ControlStructure;
@@ -358,6 +388,7 @@ public class GrammarTest {
     }
 
     @Test
+    @Ignore
     public void testDateLiteral() {
         // DateLiteral: "'" Digit{1,2} "/" Digit{1,2} "/" Digit{4} "'"
         Rule rule = Grammar.DateLiteral;
@@ -366,6 +397,7 @@ public class GrammarTest {
     }
 
     @Test
+    @Ignore
     public void testDeclaration() {
         // Declaration: Method | Attribute | TypeDeclaration
         Rule rule = Grammar.Declaration;
@@ -374,6 +406,7 @@ public class GrammarTest {
     }
 
     @Test
+    @Ignore
     public void testDefaultCaseItem() {
         // DefaultCaseItem: "else" Block
         Rule rule = Grammar.DefaultCaseItem;
@@ -382,6 +415,7 @@ public class GrammarTest {
     }
 
     @Test
+    @Ignore
     public void testDefaultParam() {
         // DefaultParam: Param Specifier
         Rule rule = Grammar.DefaultParam;
@@ -390,6 +424,7 @@ public class GrammarTest {
     }
 
     @Test
+    @Ignore
     public void testDigit() {
         // Digit: "0".."9"
         Rule rule = Grammar.Digit;
@@ -398,6 +433,7 @@ public class GrammarTest {
     }
 
     @Test
+    @Ignore
     public void testDigits() {
         // Digits: Digit+ | Digit{1..3} ("_" Digit{3})+
         Rule rule = Grammar.Digits;
@@ -406,6 +442,7 @@ public class GrammarTest {
     }
 
     @Test
+    @Ignore
     public void testDimension() {
         // Dimension: DimensionTerm ("+" DimensionTerm)*
         Rule rule = Grammar.Dimension;
@@ -414,6 +451,7 @@ public class GrammarTest {
     }
 
     @Test
+    @Ignore
     public void testDimensionAtom() {
         // DimensionAtom: DimensionConstant | DimensionVariable | ParenDimension
         Rule rule = Grammar.DimensionAtom;
@@ -422,6 +460,7 @@ public class GrammarTest {
     }
 
     @Test
+    @Ignore
     public void testDimensionConstant() {
         // DimensionConstant: "#" IntegerLiteral
         Rule rule = Grammar.DimensionConstant;
@@ -430,6 +469,7 @@ public class GrammarTest {
     }
 
     @Test
+    @Ignore
     public void testDimensionTerm() {
         // DimensionTerm: (DimensionConstant "*")* DimensionAtom
         Rule rule = Grammar.DimensionTerm;
@@ -438,6 +478,7 @@ public class GrammarTest {
     }
 
     @Test
+    @Ignore
     public void testDimensionVariable() {
         // DimensionVariable: TypeName | "#" MemberName
         Rule rule = Grammar.DimensionVariable;
@@ -446,6 +487,7 @@ public class GrammarTest {
     }
 
     @Test
+    @Ignore
     public void testDirective() {
         // Directive: Return | Throw | Break | Continue
         Rule rule = Grammar.Directive;
@@ -454,6 +496,7 @@ public class GrammarTest {
     }
 
     @Test
+    @Ignore
     public void testDirectiveStatement() {
         // DirectiveStatement: Directive ";"
         Rule rule = Grammar.DirectiveStatement;
@@ -462,6 +505,7 @@ public class GrammarTest {
     }
 
     @Test
+    @Ignore
     public void testElse() {
         // Else: "else" (Block | IfElse)
         Rule rule = Grammar.Else;
@@ -474,10 +518,11 @@ public class GrammarTest {
         // EntryParamPair: SimpleParam "->" SimpleParam
         Rule rule = Grammar.EntryParamPair;
 
-        // TODO: Implement
+        valid(rule, UIDENTIFIER, LIDENTIFIER, ENTRY_OP, UIDENTIFIER, LIDENTIFIER);
     }
 
     @Test
+    @Ignore
     public void testEntryType() {
         // EntryType: AbbreviatedType ("->" AbbreviatedType)?
         Rule rule = Grammar.EntryType;
@@ -486,6 +531,7 @@ public class GrammarTest {
     }
 
     @Test
+    @Ignore
     public void testEntryVariablePair() {
         // EntryVariablePair: Variable "->" Variable
         Rule rule = Grammar.EntryVariablePair;
@@ -494,6 +540,7 @@ public class GrammarTest {
     }
 
     @Test
+    @Ignore
     public void testEscapeSequence() {
         // EscapeSequence: "\" ("b" | "t" | "n" | "f" | "r" | "\" | "\"" | "'" | "`" )
         Rule rule = Grammar.EscapeSequence;
@@ -502,6 +549,7 @@ public class GrammarTest {
     }
 
     @Test
+    @Ignore
     public void testExistsOrNonemptyCondition() {
         // ExistsOrNonemptyCondition: ("exists" | "nonempty") (Variable Specifier | MemberName)
         Rule rule = Grammar.ExistsOrNonemptyCondition;
@@ -510,6 +558,7 @@ public class GrammarTest {
     }
 
     @Test
+    @Ignore
     public void testExponent() {
         // Exponent: ("E"|"e") ("+"|"-")? Digits
         Rule rule = Grammar.Exponent;
@@ -518,6 +567,7 @@ public class GrammarTest {
     }
 
     @Test
+    @Ignore
     public void testExpression() {
         // Expression: Primary | OperatorExpression
         Rule rule = Grammar.Expression;
@@ -526,6 +576,7 @@ public class GrammarTest {
     }
 
     @Test
+    @Ignore
     public void testExpressionStatement() {
         // ExpressionStatement: ( Assignment | IncrementOrDecrement | Invocation ) ";"
         Rule rule = Grammar.ExpressionStatement;
@@ -534,6 +585,7 @@ public class GrammarTest {
     }
 
     @Test
+    @Ignore
     public void testExtendedType() {
         // ExtendedType: "extends" ("super" ".")? Type PositionalArguments
         Rule rule = Grammar.ExtendedType;
@@ -542,6 +594,7 @@ public class GrammarTest {
     }
 
     @Test
+    @Ignore
     public void testFail() {
         // Fail: "else" Block
         Rule rule = Grammar.Fail;
@@ -550,6 +603,7 @@ public class GrammarTest {
     }
 
     @Test
+    @Ignore
     public void testFinally() {
         // Finally: "finally" Block
         Rule rule = Grammar.Finally;
@@ -558,6 +612,7 @@ public class GrammarTest {
     }
 
     @Test
+    @Ignore
     public void testFloatLiteral() {
         // FloatLiteral: Digits ("." FractionalDigits (Exponent | Magnitude | FractionalMagnitude)? | FractionalMagnitude)
         Rule rule = Grammar.FloatLiteral;
@@ -566,6 +621,7 @@ public class GrammarTest {
     }
 
     @Test
+    @Ignore
     public void testFor() {
         // For: "for" "(" ForIterator ")" Block
         Rule rule = Grammar.For;
@@ -574,6 +630,7 @@ public class GrammarTest {
     }
 
     @Test
+    @Ignore
     public void testForFail() {
         // ForFail: For Fail?
         Rule rule = Grammar.ForFail;
@@ -582,6 +639,7 @@ public class GrammarTest {
     }
 
     @Test
+    @Ignore
     public void testForIterator() {
         // ForIterator: IteratorVariable "in" Expression
         Rule rule = Grammar.ForIterator;
@@ -590,6 +648,7 @@ public class GrammarTest {
     }
 
     @Test
+    @Ignore
     public void testFractionalDigits() {
         // FractionalDigits: Digit+ | (Digit{3} "_")+ Digit{1..3}
         Rule rule = Grammar.FractionalDigits;
@@ -598,6 +657,7 @@ public class GrammarTest {
     }
 
     @Test
+    @Ignore
     public void testFractionalMagnitude() {
         // FractionalMagnitude: "m" | "u" | "n" | "p" | "f"
         Rule rule = Grammar.FractionalMagnitude;
@@ -616,19 +676,21 @@ public class GrammarTest {
     }
 
     @Test
+    @Ignore
     public void testFunctionalArguments() {
         // FunctionalArguments: (MemberName FunctionalBody)+
         Rule rule = Grammar.FunctionalArguments;
 
-        // TODO: Implement
     }
 
     @Test
+    @Ignore
     public void testFunctionalBody() {
         // FunctionalBody: Params? ( Block | "(" Expression ")" )
         Rule rule = Grammar.FunctionalBody;
 
-        // TODO: Implement
+        valid(rule, LBRACE, RBRACE);
+        valid(rule, LPAREN, STRING_LITERAL, RPAREN);
     }
 
     @Test
@@ -636,10 +698,18 @@ public class GrammarTest {
         // FunctionalNamedArgument: (UnionType | "function" | "void") MemberName Params+ (Block | NamedArguments)
         Rule rule = Grammar.FunctionalNamedArgument;
 
-        // TODO: Implement
+        // String|Number myfunc (String str) {}
+        valid(rule, FUNCTION_MODIFIER, LIDENTIFIER, LPAREN, UIDENTIFIER, LIDENTIFIER, RPAREN, LBRACE, RBRACE);
+
+        // function myfunc (String str) {}
+        valid(rule, FUNCTION_MODIFIER, LIDENTIFIER, LPAREN, UIDENTIFIER, LIDENTIFIER, RPAREN, LBRACE, RBRACE);
+
+        // void myfunc (String str) {str="text";}
+        valid(rule, VOID_MODIFIER, LIDENTIFIER, LPAREN, UIDENTIFIER, LIDENTIFIER, RPAREN, LBRACE, LIDENTIFIER, SPECIFY, STRING_LITERAL, SEMICOLON, RBRACE);
     }
 
     @Test
+    @Ignore
     public void testFunctionMeta() {
         // FunctionMeta: MemberName TypeArguments?
         Rule rule = Grammar.FunctionMeta;
@@ -648,6 +718,7 @@ public class GrammarTest {
     }
 
     @Test
+    @Ignore
     public void testIdentifierChar() {
         // IdentifierChar: LowercaseChar | UppercaseChar | Digit
         Rule rule = Grammar.IdentifierChar;
@@ -656,6 +727,7 @@ public class GrammarTest {
     }
 
     @Test
+    @Ignore
     public void testIf() {
         // If: "if" "(" Condition ")" Block
         Rule rule = Grammar.If;
@@ -664,6 +736,7 @@ public class GrammarTest {
     }
 
     @Test
+    @Ignore
     public void testIfElse() {
         // IfElse: If Else?
         Rule rule = Grammar.IfElse;
@@ -691,6 +764,7 @@ public class GrammarTest {
     }
 
     @Test
+    @Ignore
     public void testImportElement() {
         // ImportElement: ImportTypeElement | ImportMethodAttributeElement
         Rule rule = Grammar.ImportElement;
@@ -720,6 +794,7 @@ public class GrammarTest {
     }
 
     @Test
+    @Ignore
     public void testImportMethodAttributeElement() {
         // ImportMethodAttributeElement: MethodAttributeAlias? MemberName
         Rule rule = Grammar.ImportMethodAttributeElement;
@@ -728,6 +803,7 @@ public class GrammarTest {
     }
 
     @Test
+    @Ignore
     public void testImportTypeElement() {
         // ImportTypeElement: TypeAlias? TypeName
         Rule rule = Grammar.ImportTypeElement;
@@ -736,6 +812,7 @@ public class GrammarTest {
     }
 
     @Test
+    @Ignore
     public void testImportWildcard() {
         // ImportWildcard: "..."
         Rule rule = Grammar.ImportWildcard;
@@ -744,6 +821,7 @@ public class GrammarTest {
     }
 
     @Test
+    @Ignore
     public void testIncrementOrDecrement() {
         // IncrementOrDecrement: "--" | "++" ;
         Rule rule = Grammar.IncrementOrDecrement;
@@ -752,6 +830,7 @@ public class GrammarTest {
     }
 
     @Test
+    @Ignore
     public void testInitializer() {
         // Initializer: ":=" Expression
         Rule rule = Grammar.Initializer;
@@ -760,6 +839,7 @@ public class GrammarTest {
     }
 
     @Test
+    @Ignore
     public void testInitializerReference() {
         // InitializerReference: (Receiver ".")? TypeName TypeArguments?
         Rule rule = Grammar.InitializerReference;
@@ -768,6 +848,7 @@ public class GrammarTest {
     }
 
     @Test
+    @Ignore
     public void testIntegerLiteral() {
         // IntegerLiteral: Digits Magnitude?
         Rule rule = Grammar.IntegerLiteral;
@@ -776,6 +857,7 @@ public class GrammarTest {
     }
 
     @Test
+    @Ignore
     public void testInterface() {
         // Interface: Annotation* InterfaceHeader (InterfaceBody | TypeSpecifier ";")
         Rule rule = Grammar.Interface;
@@ -784,6 +866,7 @@ public class GrammarTest {
     }
 
     @Test
+    @Ignore
     public void testInterfaceBody() {
         // InterfaceBody: "{" Declaration* "}"
         Rule rule = Grammar.InterfaceBody;
@@ -792,6 +875,7 @@ public class GrammarTest {
     }
 
     @Test
+    @Ignore
     public void testInterfaceHeader() {
         // InterfaceHeader: "interface" TypeName TypeParams? InterfaceInheritance TypeConstraints?
         Rule rule = Grammar.InterfaceHeader;
@@ -800,6 +884,7 @@ public class GrammarTest {
     }
 
     @Test
+    @Ignore
     public void testInterfaceInheritance() {
         // InterfaceInheritance: CaseTypes? Metatypes? AdaptedTypes? SatisfiedTypes?
         Rule rule = Grammar.InterfaceInheritance;
@@ -808,6 +893,7 @@ public class GrammarTest {
     }
 
     @Test
+    @Ignore
     public void testIntersectionType() {
         // IntersectionType: EntryType ("&" EntryType)*
         Rule rule = Grammar.IntersectionType;
@@ -816,6 +902,7 @@ public class GrammarTest {
     }
 
     @Test
+    @Ignore
     public void testIntroduction() {
         // Introduction: "adapt" Type SatisfiedTypes TypeConstraints? ";"
         Rule rule = Grammar.Introduction;
@@ -824,6 +911,7 @@ public class GrammarTest {
     }
 
     @Test
+    @Ignore
     public void testInvocation() {
         // Invocation: Primary Arguments | SequenceInstantiation
         Rule rule = Grammar.Invocation;
@@ -832,6 +920,7 @@ public class GrammarTest {
     }
 
     @Test
+    @Ignore
     public void testIsCondition() {
         // IsCondition: "is" (TypedVariable Specifier | UnionType MemberName)
         Rule rule = Grammar.IsCondition;
@@ -840,6 +929,7 @@ public class GrammarTest {
     }
 
     @Test
+    @Ignore
     public void testIteratorVariable() {
         // IteratorVariable: Variable | CallableVariable | EntryVariablePair
         Rule rule = Grammar.IteratorVariable;
@@ -848,6 +938,7 @@ public class GrammarTest {
     }
 
     @Test
+    @Ignore
     public void testLineComment() {
         // LineComment: ("//"|"#!") ~(Newline|Return)* (Return Newline | Return | Newline)?
         Rule rule = Grammar.LineComment;
@@ -856,6 +947,7 @@ public class GrammarTest {
     }
 
     @Test
+    @Ignore
     public void testLiteral() {
         // Literal: IntegerLiteral | FloatLiteral | CharacterLiteral | StringLiteral | QuotedLiteral
         Rule rule = Grammar.Literal;
@@ -868,10 +960,14 @@ public class GrammarTest {
         // LocalNamedArgument: (UnionType | "value") MemberName (Block | NamedArguments)
         Rule rule = Grammar.LocalNamedArgument;
 
-        // TODO: Implement
+        valid(rule, VALUE_MODIFIER, LIDENTIFIER, LBRACE, RBRACE);
+        valid(rule, VALUE_MODIFIER, LIDENTIFIER, LBRACE, LIDENTIFIER, SPECIFY, STRING_LITERAL, SEMICOLON, RBRACE);
+        valid(rule, VALUE_MODIFIER, LIDENTIFIER, LBRACE, LIDENTIFIER, SPECIFY, STRING_LITERAL, SEMICOLON, RBRACE);
+        valid(rule, UIDENTIFIER, INTERSECTION_OP, UIDENTIFIER, LIDENTIFIER, LBRACE, LIDENTIFIER, SPECIFY, STRING_LITERAL, SEMICOLON, RBRACE);
     }
 
     @Test
+    @Ignore
     public void testLoopCondition() {
         // LoopCondition: "while" "(" Condition ")"
         Rule rule = Grammar.LoopCondition;
@@ -880,6 +976,7 @@ public class GrammarTest {
     }
 
     @Test
+    @Ignore
     public void testLowercaseChar() {
         // LowercaseChar: "a".."z" | "_" ;
         Rule rule = Grammar.LowercaseChar;
@@ -888,6 +985,7 @@ public class GrammarTest {
     }
 
     @Test
+    @Ignore
     public void testMagnitude() {
         // Magnitude: "k" | "M" | "G" | "T" | "P"
         Rule rule = Grammar.Magnitude;
@@ -896,6 +994,7 @@ public class GrammarTest {
     }
 
     @Test
+    @Ignore
     public void testMemberName() {
         // MemberName: LIdentifier
         Rule rule = Grammar.MemberName;
@@ -904,6 +1003,7 @@ public class GrammarTest {
     }
 
     @Test
+    @Ignore
     public void testMemberReference() {
         // MemberReference: CallableReference | ValueReference
         Rule rule = Grammar.MemberReference;
@@ -912,6 +1012,7 @@ public class GrammarTest {
     }
 
     @Test
+    @Ignore
     public void testMeta() {
         // Meta: TypeMeta | MethodMeta | AttributeMeta | FunctionMeta | ValueMeta
         Rule rule = Grammar.Meta;
@@ -920,6 +1021,7 @@ public class GrammarTest {
     }
 
     @Test
+    @Ignore
     public void testMetatypes() {
         // Metatypes: "is" Type ("&" Type)*
         Rule rule = Grammar.Metatypes;
@@ -928,6 +1030,7 @@ public class GrammarTest {
     }
 
     @Test
+    @Ignore
     public void testMethod() {
         // Method: Annotation* MethodHeader (Block | NamedArguments | Specifier? ";")
         Rule rule = Grammar.Method;
@@ -936,6 +1039,7 @@ public class GrammarTest {
     }
 
     @Test
+    @Ignore
     public void testMethodAttributeAlias() {
         // MethodAttributeAlias: MemberName "="
         Rule rule = Grammar.MethodAttributeAlias;
@@ -944,6 +1048,7 @@ public class GrammarTest {
     }
 
     @Test
+    @Ignore
     public void testMethodHeader() {
         // MethodHeader: (UnionType | "function" | "void") MemberName TypeParams? Params+ Metatypes? TypeConstraints?
         Rule rule = Grammar.MethodHeader;
@@ -952,6 +1057,7 @@ public class GrammarTest {
     }
 
     @Test
+    @Ignore
     public void testMethodMeta() {
         // MethodMeta: Type "." MemberName TypeArguments?
         Rule rule = Grammar.MethodMeta;
@@ -960,6 +1066,7 @@ public class GrammarTest {
     }
 
     @Test
+    @Ignore
     public void testMethodReference() {
         // MethodReference: (Receiver ".")? MemberName TypeArguments?
         Rule rule = Grammar.MethodReference;
@@ -968,6 +1075,7 @@ public class GrammarTest {
     }
 
     @Test
+    @Ignore
     public void testMultilineComment() {
         // MultilineComment: "/" "*" ( MultilineCommmentCharacter | MultilineComment )* "*" "/"
         Rule rule = Grammar.MultilineComment;
@@ -976,14 +1084,16 @@ public class GrammarTest {
     }
 
     @Test
+    @Ignore
     public void testMultilineCommmentCharacter() {
         // MultilineCommmentCharacter: ~("/"|"*") | ("/" ~"*") => "/" | ("*" ~"/") => "*"
-        Rule rule = Grammar.MultilineCommmentCharacter;
+        Rule rule = Grammar.MultilineCommentCharacter;
 
         // TODO: Implement
     }
 
     @Test
+    @Ignore
     public void testNamedArgument() {
         // NamedArgument: SpecifiedNamedArgument | LocalNamedArgument | FunctionalNamedArgument | Object
         Rule rule = Grammar.NamedArgument;
@@ -992,14 +1102,17 @@ public class GrammarTest {
     }
 
     @Test
+    @Ignore
     public void testNamedArguments() {
         // NamedArguments: "{" NamedArgument* Sequence? "}"
         Rule rule = Grammar.NamedArguments;
 
+        valid(rule, LBRACE, LIDENTIFIER, SPECIFY, STRING_LITERAL, SEMICOLON, RBRACE);
         // TODO: Implement
     }
 
     @Test
+    @Ignore
     public void testObject() {
         // Object: Annotation* ObjectHeader ClassBody
         Rule rule = Grammar.Object;
@@ -1008,6 +1121,7 @@ public class GrammarTest {
     }
 
     @Test
+    @Ignore
     public void testObjectHeader() {
         // ObjectHeader: "object" MemberName ObjectInheritance
         Rule rule = Grammar.ObjectHeader;
@@ -1016,6 +1130,7 @@ public class GrammarTest {
     }
 
     @Test
+    @Ignore
     public void testObjectInheritance() {
         // ObjectInheritance: ExtendedType? SatisfiedTypes?
         Rule rule = Grammar.ObjectInheritance;
@@ -1024,6 +1139,7 @@ public class GrammarTest {
     }
 
     @Test
+    @Ignore
     public void testOperatorExpression() {
         // OperatorExpression: ????? }
         // TODO: Check out language spec
@@ -1033,6 +1149,7 @@ public class GrammarTest {
     }
 
     @Test
+    @Ignore
     public void testOuterReference() {
         // OuterReference: (Receiver ".")? "outer"
         Rule rule = Grammar.OuterReference;
@@ -1041,14 +1158,7 @@ public class GrammarTest {
     }
 
     @Test
-    public void testPackageName() {
-        // PackageName: PIdentifier
-        Rule rule = Grammar.PackageName;
-
-        // TODO: Implement
-    }
-
-    @Test
+    @Ignore
     public void testParam() {
         // Param: Annotation* (SimpleParam | CallableParam | EntryParamPair)
         Rule rule = Grammar.Param;
@@ -1057,6 +1167,7 @@ public class GrammarTest {
     }
 
     @Test
+    @Ignore
     public void testParams() {
         // Params: "(" Param ("," Param)* ("," DefaultParam)* ("," SequencedParam)? | DefaultParam ("," DefaultParam)* ("," SequencedParam)? | SequencedParam? ")"
         Rule rule = Grammar.Params;
@@ -1065,6 +1176,7 @@ public class GrammarTest {
     }
 
     @Test
+    @Ignore
     public void testParenDimension() {
         // ParenDimension: "(" Dimension ")"
         Rule rule = Grammar.ParenDimension;
@@ -1073,6 +1185,7 @@ public class GrammarTest {
     }
 
     @Test
+    @Ignore
     public void testParExpression() {
         // ParExpression: "(" Expression ")"
         Rule rule = Grammar.ParExpression;
@@ -1082,13 +1195,17 @@ public class GrammarTest {
 
     @Test
     public void testPositionalArguments() {
+        // TODO: The grammar is not clear here:
         // PositionalArguments: "(" Expression ("," Expression)* ("," Sequence)? | Sequence? ")"
         Rule rule = Grammar.PositionalArguments;
 
-        // TODO: Implement
+        valid(rule, LPAREN, STRING_LITERAL, RPAREN);
+        valid(rule, LPAREN, STRING_LITERAL, COMMA, STRING_LITERAL, RPAREN);
+        // TODO: more tests after grammar clarification
     }
 
     @Test
+    @Ignore
     public void testPrimary() {
         // Primary: Atom | Meta | MemberReference | Invocation
         Rule rule = Grammar.Primary;
@@ -1097,6 +1214,7 @@ public class GrammarTest {
     }
 
     @Test
+    @Ignore
     public void testQuotedLiteral() {
         // QuotedLiteral: "'" QuotedLiteralCharacter* "'"
         Rule rule = Grammar.QuotedLiteral;
@@ -1105,6 +1223,7 @@ public class GrammarTest {
     }
 
     @Test
+    @Ignore
     public void testQuotedLiteralCharacter() {
         // QuotedLiteralCharacter: ~("'")
         Rule rule = Grammar.QuotedLiteralCharacter;
@@ -1113,6 +1232,7 @@ public class GrammarTest {
     }
 
     @Test
+    @Ignore
     public void testReceiver() {
         // Receiver: Primary
         Rule rule = Grammar.Receiver;
@@ -1121,6 +1241,7 @@ public class GrammarTest {
     }
 
     @Test
+    @Ignore
     public void testResource() {
         // Resource: MemberName | InitializerReference Arguments | Variable Specifier
         Rule rule = Grammar.Resource;
@@ -1129,6 +1250,7 @@ public class GrammarTest {
     }
 
     @Test
+    @Ignore
     public void testRetry() {
         // Retry: "retry"
         Rule rule = Grammar.Retry;
@@ -1137,6 +1259,7 @@ public class GrammarTest {
     }
 
     @Test
+    @Ignore
     public void testReturn() {
         // Return: "return" Expression?
         Rule rule = Grammar.Return;
@@ -1145,6 +1268,7 @@ public class GrammarTest {
     }
 
     @Test
+    @Ignore
     public void testSatisfiedTypes() {
         // SatisfiedTypes: "satisfies" Type ("&" Type)*
         Rule rule = Grammar.SatisfiedTypes;
@@ -1153,6 +1277,7 @@ public class GrammarTest {
     }
 
     @Test
+    @Ignore
     public void testSatisfiesCondition() {
         // SatisfiesCondition: "satisfies" Type Type
         Rule rule = Grammar.SatisfiesCondition;
@@ -1161,6 +1286,7 @@ public class GrammarTest {
     }
 
     @Test
+    @Ignore
     public void testSelfReference() {
         // SelfReference: "this" | "super" | "outer"
         Rule rule = Grammar.SelfReference;
@@ -1169,6 +1295,7 @@ public class GrammarTest {
     }
 
     @Test
+    @Ignore
     public void testSequence() {
         // Sequence: Expression ("," Expression)* | Expression "..."
         Rule rule = Grammar.Sequence;
@@ -1181,10 +1308,12 @@ public class GrammarTest {
         // SequencedParam: Annotation* UnionType "..." MemberName
         Rule rule = Grammar.SequencedParam;
 
-        // TODO: Implement
+        valid(rule, UIDENTIFIER, ELLIPSIS, LIDENTIFIER);
+        valid(rule, UIDENTIFIER, CeylonToken.UNION_OP, UIDENTIFIER, ELLIPSIS, LIDENTIFIER);
     }
 
     @Test
+    @Ignore
     public void testSequencedType() {
         // SequencedType: TypeName "..."
         Rule rule = Grammar.SequencedType;
@@ -1193,6 +1322,7 @@ public class GrammarTest {
     }
 
     @Test
+    @Ignore
     public void testSequencedTypeParam() {
         // SequencedTypeParam: TypeName "..."
         Rule rule = Grammar.SequencedTypeParam;
@@ -1201,6 +1331,7 @@ public class GrammarTest {
     }
 
     @Test
+    @Ignore
     public void testSequenceInstantiation() {
         // SequenceInstantiation: "{" Sequence? "}" ;
         Rule rule = Grammar.SequenceInstantiation;
@@ -1209,6 +1340,7 @@ public class GrammarTest {
     }
 
     @Test
+    @Ignore
     public void testSimpleAttribute() {
         // SimpleAttribute: AttributeHeader ( (Specifier | Initializer)? ";" | NamedArguments )
         Rule rule = Grammar.SimpleAttribute;
@@ -1217,6 +1349,7 @@ public class GrammarTest {
     }
 
     @Test
+    @Ignore
     public void testSimpleParam() {
         // SimpleParam: UnionType MemberName
         Rule rule = Grammar.SimpleParam;
@@ -1229,7 +1362,7 @@ public class GrammarTest {
         // Specification: MemberName Specifier ";"
         Rule rule = Grammar.Specification;
 
-        // TODO: Implement
+        valid(rule, LIDENTIFIER, SPECIFY, STRING_LITERAL, SEMICOLON);
     }
 
     @Test
@@ -1237,7 +1370,7 @@ public class GrammarTest {
         // SpecifiedNamedArgument: MemberName Specifier ";"
         Rule rule = Grammar.SpecifiedNamedArgument;
 
-        // TODO: Implement
+        valid(rule, LIDENTIFIER, SPECIFY, STRING_LITERAL, SEMICOLON);
     }
 
     @Test
@@ -1245,10 +1378,11 @@ public class GrammarTest {
         // Specifier: "=" Expression
         Rule rule = Grammar.Specifier;
 
-        // TODO: Implement
+        valid(rule, SPECIFY, THIS);
     }
 
     @Test
+    @Ignore
     public void testStatement() {
         // Statement: ExpressionStatement | Specification | DirectiveStatement | ControlStructure
         Rule rule = Grammar.Statement;
@@ -1257,6 +1391,7 @@ public class GrammarTest {
     }
 
     @Test
+    @Ignore
     public void testStringCharacter() {
         // StringCharacter: ~( "\" | "\"" ) | EscapeSequence
         Rule rule = Grammar.StringCharacter;
@@ -1265,6 +1400,7 @@ public class GrammarTest {
     }
 
     @Test
+    @Ignore
     public void testStringTemplate() {
         // StringTemplate: StringLiteral (Expression StringLiteral)+
         Rule rule = Grammar.StringTemplate;
@@ -1273,6 +1409,7 @@ public class GrammarTest {
     }
 
     @Test
+    @Ignore
     public void testSubtype() {
         // Subtype: "subtype" | MemberName "." "subtype"
         Rule rule = Grammar.Subtype;
@@ -1281,6 +1418,7 @@ public class GrammarTest {
     }
 
     @Test
+    @Ignore
     public void testSwitch() {
         // Switch: "switch" "(" Expression ")"
         Rule rule = Grammar.Switch;
@@ -1289,6 +1427,7 @@ public class GrammarTest {
     }
 
     @Test
+    @Ignore
     public void testSwitchCaseElse() {
         // SwitchCaseElse: Switch ( Cases | "{" Cases "}" )
         Rule rule = Grammar.SwitchCaseElse;
@@ -1297,6 +1436,7 @@ public class GrammarTest {
     }
 
     @Test
+    @Ignore
     public void testThrow() {
         // Throw: "throw" Expression?
         Rule rule = Grammar.Throw;
@@ -1305,6 +1445,7 @@ public class GrammarTest {
     }
 
     @Test
+    @Ignore
     public void testTimeLiteral() {
         // TimeLiteral: "'" Digit{1,2} ":" Digit{2} ( ":" Digit{2} ( ":" Digit{3} )? )? (" " "AM"|"PM")? (" " Character{3,4})? "'"
         Rule rule = Grammar.TimeLiteral;
@@ -1313,6 +1454,7 @@ public class GrammarTest {
     }
 
     @Test
+    @Ignore
     public void testTry() {
         // Try: "try" ("(" Resource ")")? Block
         Rule rule = Grammar.Try;
@@ -1321,6 +1463,7 @@ public class GrammarTest {
     }
 
     @Test
+    @Ignore
     public void testTryCatchFinally() {
         // TryCatchFinally: Try Catch* Finally?
         Rule rule = Grammar.TryCatchFinally;
@@ -1329,6 +1472,7 @@ public class GrammarTest {
     }
 
     @Test
+    @Ignore
     public void testType() {
         // Type: TypeNameWithArguments ("." TypeNameWithArguments)*
         Rule rule = Grammar.Type;
@@ -1337,6 +1481,7 @@ public class GrammarTest {
     }
 
     @Test
+    @Ignore
     public void testTypeAlias() {
         // TypeAlias: TypeName "="
         Rule rule = Grammar.TypeAlias;
@@ -1345,6 +1490,7 @@ public class GrammarTest {
     }
 
     @Test
+    @Ignore
     public void testTypeArgument() {
         // TypeArgument: UnionType | Dimension
         Rule rule = Grammar.TypeArgument;
@@ -1353,6 +1499,7 @@ public class GrammarTest {
     }
 
     @Test
+    @Ignore
     public void testTypeArguments() {
         // TypeArguments: "<" (UnionType ",")* (UnionType | SequencedType) ">"
         Rule rule = Grammar.TypeArguments;
@@ -1361,6 +1508,7 @@ public class GrammarTest {
     }
 
     @Test
+    @Ignore
     public void testTypeConstraint() {
         // TypeConstraint: "given" TypeName TypeParams? Params? TypeConstraintInheritance
         Rule rule = Grammar.TypeConstraint;
@@ -1369,6 +1517,7 @@ public class GrammarTest {
     }
 
     @Test
+    @Ignore
     public void testTypeConstraintInheritance() {
         // TypeConstraintInheritance: CaseTypes? Metatypes? SatisfiedTypes? AbstractedType?
         Rule rule = Grammar.TypeConstraintInheritance;
@@ -1377,6 +1526,7 @@ public class GrammarTest {
     }
 
     @Test
+    @Ignore
     public void testTypeConstraints() {
         // TypeConstraints: TypeConstraint+
         Rule rule = Grammar.TypeConstraints;
@@ -1385,6 +1535,7 @@ public class GrammarTest {
     }
 
     @Test
+    @Ignore
     public void testTypeDeclaration() {
         // TypeDeclaration: Class | Object | Interface
         Rule rule = Grammar.TypeDeclaration;
@@ -1393,6 +1544,7 @@ public class GrammarTest {
     }
 
     @Test
+    @Ignore
     public void testTypedQuotedLiteral() {
         // TypedQuotedLiteral: TypeName QuotedLiteral
         Rule rule = Grammar.TypedQuotedLiteral;
@@ -1401,6 +1553,7 @@ public class GrammarTest {
     }
 
     @Test
+    @Ignore
     public void testTypedVariable() {
         // TypedVariable: UnionType MemberName
         Rule rule = Grammar.TypedVariable;
@@ -1409,6 +1562,7 @@ public class GrammarTest {
     }
 
     @Test
+    @Ignore
     public void testTypeMeta() {
         // TypeMeta: Type
         Rule rule = Grammar.TypeMeta;
@@ -1417,6 +1571,7 @@ public class GrammarTest {
     }
 
     @Test
+    @Ignore
     public void testTypeName() {
         // TypeName: UIdentifier
         Rule rule = Grammar.TypeName;
@@ -1425,6 +1580,7 @@ public class GrammarTest {
     }
 
     @Test
+    @Ignore
     public void testTypeNameWithArguments() {
         // TypeNameWithArguments: TypeName TypeArguments?
         Rule rule = Grammar.TypeNameWithArguments;
@@ -1433,6 +1589,7 @@ public class GrammarTest {
     }
 
     @Test
+    @Ignore
     public void testTypeParam() {
         // TypeParam: Variance? TypeName
         Rule rule = Grammar.TypeParam;
@@ -1441,6 +1598,7 @@ public class GrammarTest {
     }
 
     @Test
+    @Ignore
     public void testTypeParams() {
         // TypeParams: "<" (TypeParam ",")* (TypeParam | SequencedTypeParam) ">"
         Rule rule = Grammar.TypeParams;
@@ -1449,6 +1607,7 @@ public class GrammarTest {
     }
 
     @Test
+    @Ignore
     public void testTypeSpecifier() {
         // TypeSpecifier: "=" Type
         Rule rule = Grammar.TypeSpecifier;
@@ -1461,18 +1620,12 @@ public class GrammarTest {
         // UnionType: IntersectionType ("|" IntersectionType)*
         Rule rule = Grammar.UnionType;
 
-        // TODO: Implement
+        valid(rule, UIDENTIFIER);
+        valid(rule, UIDENTIFIER, UNION_OP, UIDENTIFIER);
     }
 
     @Test
-    public void testUppercaseChar() {
-        // UppercaseChar: "A".."Z" ;
-        Rule rule = Grammar.UppercaseChar;
-
-        // TODO: Implement
-    }
-
-    @Test
+    @Ignore
     public void testValueMeta() {
         // ValueMeta: MemberName TypeArguments?
         Rule rule = Grammar.ValueMeta;
@@ -1481,6 +1634,7 @@ public class GrammarTest {
     }
 
     @Test
+    @Ignore
     public void testValueReference() {
         // ValueReference: (Receiver ".")? MemberName
         Rule rule = Grammar.ValueReference;
@@ -1489,6 +1643,7 @@ public class GrammarTest {
     }
 
     @Test
+    @Ignore
     public void testVariable() {
         // Variable: UnionType? MemberName
         Rule rule = Grammar.Variable;
@@ -1497,6 +1652,7 @@ public class GrammarTest {
     }
 
     @Test
+    @Ignore
     public void testVariance() {
         // Variance: "out" | "in"
         Rule rule = Grammar.Variance;
@@ -1505,21 +1661,13 @@ public class GrammarTest {
     }
 
     @Test
+    @Ignore
     public void testWhile() {
         // While: LoopCondition Block
         Rule rule = Grammar.While;
 
         // TODO: Implement
     }
-
-    @Test
-    public void testWhitespace() {
-        // Whitespace: " " | Tab | Formfeed | Newline | Return
-        Rule rule = Grammar.Whitespace;
-
-        // TODO: Implement
-    }
-
 
     private void valid(Rule rule, CeylonToken... tokens) {
         builder.setTokens(tokens);

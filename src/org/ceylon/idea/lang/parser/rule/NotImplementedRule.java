@@ -5,9 +5,11 @@ import com.intellij.lang.PsiBuilder;
 public class NotImplementedRule implements Rule {
     private final String name;
 
+/*
     public NotImplementedRule() {
         name = "(UNKNOWN)";
     }
+*/
 
     public NotImplementedRule(String name) {
         this.name = name;
@@ -20,7 +22,7 @@ public class NotImplementedRule implements Rule {
 
     @Override
     public boolean parseOptional(PsiBuilder builder) {
-        throw new RuntimeException(name + "The rule is not implemented yet");
+        throw new RuntimeException(name + " rule is not implemented yet");
     }
 
     @Override
