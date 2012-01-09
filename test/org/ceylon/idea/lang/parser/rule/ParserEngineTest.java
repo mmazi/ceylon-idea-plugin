@@ -75,7 +75,7 @@ public class ParserEngineTest {
 
     @Test
     public void testZeroOrOneSequence() {
-        Rule rule = zeroOrOne(sequence(LBRACE, RBRACE));
+        Rule rule = zeroOrOne(LBRACE, RBRACE);
 
         valid(rule, SEMICOLON);
         assertEquals(SEMICOLON, builder.getTokenType());
@@ -89,7 +89,7 @@ public class ParserEngineTest {
 
     @Test
     public void testZeroOrMoreSequence() {
-        Rule rule = zeroOrMore(sequence(LBRACE, RBRACE));
+        Rule rule = zeroOrMore(LBRACE, RBRACE);
 
         valid(rule, SEMICOLON);
         assertEquals(SEMICOLON, builder.getTokenType());

@@ -1,20 +1,24 @@
 package org.ceylon.idea.lang.parser.rule;
 
 public class Rules {
+    public static ComplexRule rule(String name) {
+        return new ComplexRule(name);
+    }
+
     public static Rule any(Rule first, Rule second, Rule... rest) {
         return new AnyRule(first, second, rest);
     }
 
-    public static ComplexRule rule(String name) {
-        return new ComplexRule(name);
+    public static Rule sequence(Rule first, Rule second, Rule... rest) {
+        return new SequenceRule(first, second, rest);
     }
 
     public static Rule oneOrMore(Rule rule) {
         return new OneOrMoreRule(rule);
     }
 
-    public static Rule sequence(Rule first, Rule second, Rule... rest) {
-        return new SequenceRule(first, second, rest);
+    public static Rule oneOrMore(Rule first, Rule second, Rule... rest) {
+        return new OneOrMoreRule(first, second, rest);
     }
 
     public static Rule zeroOrOne(Rule rule) {
@@ -34,6 +38,6 @@ public class Rules {
     }
 
     public static Rule zeroOrMore(Rule first, Rule second, Rule... rules) {
-        return zeroOrMore(sequence(first, second, rules));
+        return new ZeroOrMoreRule(first, second, rules);
     }
 }

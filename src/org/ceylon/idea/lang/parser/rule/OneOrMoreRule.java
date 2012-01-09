@@ -9,6 +9,10 @@ class OneOrMoreRule implements Rule {
         this.rule = rule;
     }
 
+    OneOrMoreRule(Rule first, Rule second, Rule... rules) {
+        this(new SequenceRule(first, second, rules));
+    }
+
     @Override
     public boolean parseRequired(PsiBuilder builder) {
         boolean parsed = rule.parseRequired(builder);
