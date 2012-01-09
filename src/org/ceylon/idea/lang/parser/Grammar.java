@@ -213,7 +213,7 @@ public class Grammar {
     /**
      * {@code StringTemplate:  StringLiteral (Expression StringLiteral)+	 }
      */
-    public static final Rule StringTemplate = new DummyRule("StringTemplate");
+    public static final Rule StringTemplate = rule("StringTemplate").one(STRING_LITERAL).oneOrMore(Expression, STRING_LITERAL);
 
     /**
      * {@code SelfReference:  "this" | "super" | "outer"	 }
