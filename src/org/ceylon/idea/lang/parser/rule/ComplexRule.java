@@ -78,8 +78,8 @@ public class ComplexRule implements Rule {
         return this;
     }
 
-    public ComplexRule any(Rule first, Rule... rest) {
-        rules.add(new AnyRule(first, rest));
+    public ComplexRule any(Rule first, Rule second, Rule... rest) {
+        rules.add(new AnyRule(first, second, rest));
         return this;
     }
 

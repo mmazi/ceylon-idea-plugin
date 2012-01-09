@@ -1,8 +1,8 @@
 package org.ceylon.idea.lang.parser.rule;
 
 public class Rules {
-    public static Rule any(Rule first, Rule... rest) {
-        return new AnyRule(first, rest);
+    public static Rule any(Rule first, Rule second, Rule... rest) {
+        return new AnyRule(first, second, rest);
     }
 
     public static ComplexRule rule(String name) {

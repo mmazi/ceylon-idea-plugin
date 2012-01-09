@@ -11,8 +11,9 @@ class AnyRule implements Rule {
 
     private final List<Rule> rules = new LinkedList<Rule>();
 
-    AnyRule(Rule first, Rule... rest) {
+    AnyRule(Rule first, Rule second, Rule... rest) {
         rules.add(first);
+        rules.add(second);
         rules.addAll(Arrays.asList(rest));
     }
 
