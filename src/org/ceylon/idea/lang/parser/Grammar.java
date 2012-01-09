@@ -278,7 +278,7 @@ public class Grammar {
     /**
      * {@code DefaultParam:  Param Specifier	 }
      */
-    public static final Rule DefaultParam = new NotImplementedRule("DefaultParam");
+    public static final Rule DefaultParam = rule("DefaultParam").sequence(Param, Specifier);
 
     /**
      * {@code SequencedParam:  Annotation* UnionType "..." MemberName	 }

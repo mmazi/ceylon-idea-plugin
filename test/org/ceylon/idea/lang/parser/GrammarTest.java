@@ -415,31 +415,13 @@ public class GrammarTest {
     }
 
     @Test
-    @Ignore
     public void testDefaultParam() {
         // DefaultParam: Param Specifier
         Rule rule = Grammar.DefaultParam;
 
-        // TODO: Implement
+        valid(rule, UIDENTIFIER, LIDENTIFIER, SPECIFY, STRING_LITERAL);
     }
 
-    @Test
-    @Ignore
-    public void testDigit() {
-        // Digit: "0".."9"
-        Rule rule = Grammar.Digit;
-
-        // TODO: Implement
-    }
-
-    @Test
-    @Ignore
-    public void testDigits() {
-        // Digits: Digit+ | Digit{1..3} ("_" Digit{3})+
-        Rule rule = Grammar.Digits;
-
-        // TODO: Implement
-    }
 
     @Test
     @Ignore
