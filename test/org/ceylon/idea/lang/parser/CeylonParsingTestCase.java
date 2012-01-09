@@ -16,7 +16,7 @@ public class CeylonParsingTestCase extends CeylonTestCase {
         doTest();
     }
 
-    public void testAttribute$getter() {
+    public void testAttribute$simple() {
         doTest();
     }
 

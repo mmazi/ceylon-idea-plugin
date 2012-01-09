@@ -27,6 +27,8 @@ LINE_COMMENT= ("//"|"#!") [^\n\r]*  ("\r\n" | "\r" | "\n")?
 COMMENT_TAIL=([^"*"]*("*"+[^"*""/"])?)*("*"+"/")?
 MULTI_COMMENT=("/*"[^"*"]{COMMENT_TAIL})|"/*"
 STRING_LITERAL=\"([^\\\"\r\n]|{ESCAPE_SEQUENCE})*(\"|\\)?
+QUOTED_LITERAL=\'([^\\\'\r\n]|{ESCAPE_SEQUENCE})*(\'|\\)?
+CHAR_LITERAL=\`([^\`]|{ESCAPE_SEQUENCE})\`
 ESCAPE_SEQUENCE=\\[^\r\n]
 
 %%
@@ -35,6 +37,8 @@ ESCAPE_SEQUENCE=\\[^\r\n]
 <YYINITIAL> {LINE_COMMENT} { return LINE_COMMENT; }
 <YYINITIAL> {MULTI_COMMENT} { return MULTI_COMMENT; }
 <YYINITIAL> {STRING_LITERAL} { return STRING_LITERAL; }
+<YYINITIAL> {QUOTED_LITERAL} { return QUOTED_LITERAL; }
+<YYINITIAL> {CHAR_LITERAL} { return CHAR_LITERAL; }
 
 
 <YYINITIAL> "abstracts" { return ABSTRACTED_TYPE; }

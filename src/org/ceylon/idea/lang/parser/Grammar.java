@@ -48,6 +48,11 @@ public class Grammar {
     public static final ComplexRule Param = rule("Param");
 
     /**
+     * {@code UnionType:  IntersectionType ("|" IntersectionType)* }
+     */
+    public static final ComplexRule UnionType = rule("UnionType");
+
+    /**
      * {@code AnnotationName:  LIdentifier }
      */
     public static final Rule AnnotationName = rule("AnnotationName").one(LIDENTIFIER);
@@ -63,9 +68,14 @@ public class Grammar {
     public static final Rule MemberName = rule("MemberName").one(LIDENTIFIER);
 
     /**
+     * {@code SequencedType:  TypeName "..."	 }
+     */
+    public static final Rule SequencedType = rule("SequencedType").sequence(TypeName, ELLIPSIS);
+
+    /**
      * {@code TypeArguments:  "<" (UnionType ",")* (UnionType | SequencedType) ">" }
      */
-    public static final Rule TypeArguments = new DummyRule("TypeArguments");
+    public static final Rule TypeArguments = rule("TypeArguments").one(SMALLER_OP).zeroOrMore(UnionType, COMMA).any(UnionType, SequencedType).one(LARGER_OP);
 
     /**
      * {@code TypeNameWithArguments:  TypeName TypeArguments?	 }
@@ -96,11 +106,6 @@ public class Grammar {
      * {@code IntersectionType:  EntryType ("&" EntryType)*	 }
      */
     public static final Rule IntersectionType = rule("IntersectionType").one(EntryType).zeroOrMore(INTERSECTION_OP, EntryType);
-
-    /**
-     * {@code UnionType:  IntersectionType ("|" IntersectionType)* }
-     */
-    public static final Rule UnionType = rule("UnionType").one(IntersectionType).zeroOrMore(UNION_OP, IntersectionType);
 
     /**
      * {@code CompilerAnnotation : "@" AnnotationName ("[" StringLiteral "]")? }
@@ -167,8 +172,9 @@ public class Grammar {
 
     /**
      * {@code Sequence:  Expression ("," Expression)* | Expression "..."	 }
+     * TODO: differs from spec
      */
-    public static final Rule Sequence = new DummyRule("Sequence");
+    public static final Rule Sequence = rule("Sequence").one(Expression).zeroOrMore(COMMA, Expression).zeroOrOne(ELLIPSIS);
 
     /**
      * {@code PositionalArguments:  "(" Expression ("," Expression)* ("," Sequence)? | Sequence? ")" }
@@ -196,19 +202,9 @@ public class Grammar {
     public static final Rule FloatLiteral = new DummyRule("FloatLiteral");
 
     /**
-     * {@code CharacterLiteral:  "`" Character "`"	 }
-     */
-    public static final Rule CharacterLiteral = new DummyRule("CharacterLiteral");
-
-    /**
-     * {@code QuotedLiteral:  "'" QuotedLiteralCharacter* "'"	 }
-     */
-    public static final Rule QuotedLiteral = new DummyRule("QuotedLiteral");
-
-    /**
      * {@code Literal:  IntegerLiteral | FloatLiteral | CharacterLiteral | StringLiteral | QuotedLiteral	 }
      */
-    public static final Rule Literal = any(IntegerLiteral, FloatLiteral, CharacterLiteral, STRING_LITERAL, QuotedLiteral);
+    public static final Rule Literal = any(IntegerLiteral, FloatLiteral, CHAR_LITERAL, STRING_LITERAL, QUOTED_LITERAL);
 
     /**
      * {@code StringTemplate:  StringLiteral (Expression StringLiteral)+	 }
@@ -342,9 +338,14 @@ public class Grammar {
     public static final Rule AttributeHeader = rule("AttributeHeader").any(UnionType, VALUE_MODIFIER).one(MemberName);
 
     /**
+     * {@code Initializer:  ":=" Expression	 }
+     */
+    public static final Rule Initializer = rule("Initializer").sequence(ASSIGN_OP, Expression);
+
+    /**
      * {@code SimpleAttribute:  AttributeHeader ( (Specifier | Initializer)? ";" | NamedArguments )	 }
      */
-    public static final Rule SimpleAttribute = new DummyRule("SimpleAttribute");
+    public static final Rule SimpleAttribute = rule("SimpleAttribute").one(AttributeHeader).any(sequence(zeroOrAny(Specifier, Initializer), SEMICOLON), NamedArguments);
 
     /**
      * {@code AttributeGetter:  AttributeHeader Block	 }
@@ -445,11 +446,6 @@ public class Grammar {
      * {@code Catch:  "catch" "(" Variable ")" Block	 }
      */
     public static final Rule Catch = new NotImplementedRule("Catch");
-
-    /**
-     * {@code Character:  ~("`" | "\" | Tab | "Formfeed | Newline | Return | Backspace) | EscapeSequence	 }
-     */
-    public static final Rule Character = new NotImplementedRule("Character");
 
     /**
      * {@code Class:  Annotation* ClassHeader (ClassBody | TypeSpecifier ";")	 }
@@ -567,11 +563,6 @@ public class Grammar {
     public static final Rule EntryVariablePair = new NotImplementedRule("EntryVariablePair");
 
     /**
-     * {@code EscapeSequence:  "\" ("b" | "t" | "n" | "f" | "r" | "\" | "\"" | "'" | "`" )	 }
-     */
-    public static final Rule EscapeSequence = new NotImplementedRule("EscapeSequence");
-
-    /**
      * {@code ExistsOrNonemptyCondition:  ("exists" | "nonempty") (Variable Specifier | MemberName)	 }
      */
     public static final Rule ExistsOrNonemptyCondition = new NotImplementedRule("ExistsOrNonemptyCondition");
@@ -632,11 +623,6 @@ public class Grammar {
     public static final Rule FunctionMeta = new NotImplementedRule("FunctionMeta");
 
     /**
-     * {@code IdentifierChar:  LowercaseChar | UppercaseChar | Digit	 }
-     */
-    public static final Rule IdentifierChar = new NotImplementedRule("IdentifierChar");
-
-    /**
      * {@code IfElse:  If Else?	 }
      */
     public static final Rule IfElse = new NotImplementedRule("IfElse");
@@ -650,11 +636,6 @@ public class Grammar {
      * {@code IncrementOrDecrement:  "--" | "++" ; }
      */
     public static final Rule IncrementOrDecrement = new NotImplementedRule("IncrementOrDecrement");
-
-    /**
-     * {@code Initializer:  ":=" Expression	 }
-     */
-    public static final Rule Initializer = new NotImplementedRule("Initializer");
 
     /**
      * {@code InitializerReference:  (Receiver ".")? TypeName TypeArguments?	 }
@@ -697,19 +678,9 @@ public class Grammar {
     public static final Rule IteratorVariable = new NotImplementedRule("IteratorVariable");
 
     /**
-     * {@code LineComment:  ("//"|"#!") ~(Newline|Return)* (Return Newline | Return | Newline)?	 }
-     */
-    public static final Rule LineComment = new NotImplementedRule("LineComment");
-
-    /**
      * {@code LoopCondition:  "while" "(" Condition ")"	 }
      */
     public static final Rule LoopCondition = new NotImplementedRule("LoopCondition");
-
-    /**
-     * {@code LowercaseChar:  "a".."z" | "_" ;	 }
-     */
-    public static final Rule LowercaseChar = new NotImplementedRule("LowercaseChar");
 
     /**
      * {@code Magnitude:  "k" | "M" | "G" | "T" | "P"	 }
@@ -736,15 +707,6 @@ public class Grammar {
      */
     public static final Rule MethodReference = new NotImplementedRule("MethodReference");
 
-    /**
-     * {@code "MultilineComment:  "/" "*" ( MultilineCommentCharacter | MultilineComment )* "*" "/"	 }
-     */
-    public static final Rule MultilineComment = new NotImplementedRule("MultilineComment");
-
-    /**
-     * {@code MultilineCommentCharacter:  ~("/"|"*") | ("/" ~"*") => "/" | ("*" ~"/") => "*"	 }
-     */
-    public static final Rule MultilineCommentCharacter = new NotImplementedRule("MultilineCommentCharacter");
 
     /**
      * {@code ObjectHeader:  "object" MemberName ObjectInheritance	 }
@@ -765,11 +727,6 @@ public class Grammar {
      * {@code "ParenDimension:  "(" Dimension ")"	 }
      */
     public static final Rule ParenDimension = new NotImplementedRule("ParenDimension");
-
-    /**
-     * {@code QuotedLiteralCharacter:  ~("'")	 }
-     */
-    public static final Rule QuotedLiteralCharacter = new NotImplementedRule("QuotedLiteralCharacter");
 
     /**
      * {@code Receiver:  Primary	 }
@@ -804,12 +761,7 @@ public class Grammar {
     /**
      * {@code SequencedTypeParam:  TypeName "..."	 }
      */
-    public static final Rule SequencedTypeParam = new NotImplementedRule("SequencedTypeParam");
-
-    /**
-     * {@code SequencedType:  TypeName "..."	 }
-     */
-    public static final Rule SequencedType = new NotImplementedRule("SequencedType");
+    public static final Rule SequencedTypeParam = rule("SequencedTypeParam").sequence(TypeName, ELLIPSIS);
 
     /**
      * {@code SequenceInstantiation:  "{" Sequence? "}" ;	 }
@@ -825,11 +777,6 @@ public class Grammar {
      * {@code Statement:  ExpressionStatement | Specification | DirectiveStatement | ControlStructure	 }
      */
     public static final Rule Statement = new DummyRule("Statement");
-
-    /**
-     * {@code StringCharacter:  ~( "\" | "\"" ) | EscapeSequence	 }
-     */
-    public static final Rule StringCharacter = new NotImplementedRule("StringCharacter");
 
     /**
      * {@code Subtype:  "subtype" | MemberName "." "subtype"	 }
@@ -917,11 +864,6 @@ public class Grammar {
     public static final Rule TypeSpecifier = new NotImplementedRule("TypeSpecifier");
 
     /**
-     * {@code UppercaseChar:  "A".."Z" ;	 }
-     */
-    public static final Rule UppercaseChar = new NotImplementedRule("UppercaseChar");
-
-    /**
      * {@code ValueMeta:  MemberName TypeArguments?	 }
      */
     public static final Rule ValueMeta = new NotImplementedRule("ValueMeta");
@@ -956,6 +898,8 @@ public class Grammar {
         NamedArguments.one(LBRACE).zeroOrMore(NamedArgument).zeroOrOne(Sequence).one(RBRACE);
         Param.zeroOrMore(Annotation).any(SimpleParam, CallableParam, EntryParamPair);
         Annotation.one(MemberName).zeroOrAny(Arguments, oneOrMore(Literal));
+        UnionType.one(IntersectionType).zeroOrMore(UNION_OP, IntersectionType);
+
     }
 
 }

@@ -58,6 +58,11 @@ public class ComplexRule implements Rule {
         return this;
     }
 
+    public ComplexRule oneOrMore(Rule first, Rule second, Rule... rest) {
+        rules.add(new OneOrMoreRule(first, second, rest));
+        return this;
+    }
+
     public ComplexRule zeroOrOne(Rule rule) {
         this.rules.add(new ZeroOrOneRule(rule));
         return this;

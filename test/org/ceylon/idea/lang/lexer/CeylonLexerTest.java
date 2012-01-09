@@ -20,6 +20,13 @@ public class CeylonLexerTest {
     }
 
     @Test
+    public void testLiterals() {
+        testTokenization("\"text\"", STRING_LITERAL);
+        testTokenization("'text'", QUOTED_LITERAL);
+        testTokenization("`t`", CHAR_LITERAL);
+    }
+
+    @Test
     public void testCurlyBraces() {
         testTokenization("{", LBRACE);
         testTokenization("}", RBRACE);
