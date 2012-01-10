@@ -105,12 +105,13 @@ public class GrammarTest {
     }
 
     @Test
-    @Ignore
     public void testAttributeHeader() {
         // AttributeHeader: (UnionType | "value") MemberName
         Rule rule = Grammar.AttributeHeader;
 
-        // TODO: Implement
+        valid(rule, UIDENTIFIER, LIDENTIFIER);
+        valid(rule, UIDENTIFIER, UNION_OP, UIDENTIFIER, LIDENTIFIER);
+        valid(rule, VALUE_MODIFIER, LIDENTIFIER);
     }
 
     @Test
@@ -136,7 +137,9 @@ public class GrammarTest {
         // Block: "{" (Declaration | Statement)* "}"
         Rule rule = Grammar.Block;
 
-        // TODO: Implement
+        valid(rule, LBRACE, RBRACE);
+        valid(rule, LBRACE, UIDENTIFIER, LIDENTIFIER, SEMICOLON, RBRACE);
+        // TODO: Statement
     }
 
     @Test
@@ -941,12 +944,15 @@ public class GrammarTest {
     }
 
     @Test
-    @Ignore
     public void testMethod() {
         // Method: Annotation* MethodHeader (Block | NamedArguments | Specifier? ";")
         Rule rule = Grammar.Method;
 
-        // TODO: Implement
+        valid(rule, LIDENTIFIER, UIDENTIFIER, LIDENTIFIER, LPAREN, RPAREN, LBRACE, RBRACE);
+        valid(rule, VOID_MODIFIER, LIDENTIFIER, LPAREN, RPAREN, LBRACE, RBRACE);
+        valid(rule, VOID_MODIFIER, LIDENTIFIER, LPAREN, RPAREN, LBRACE, STRING_LITERAL, COMMA, STRING_LITERAL, RBRACE);
+        valid(rule, VOID_MODIFIER, LIDENTIFIER, LPAREN, RPAREN, SEMICOLON);
+        valid(rule, VOID_MODIFIER, LIDENTIFIER, LPAREN, RPAREN, SPECIFY, CHAR_LITERAL, SEMICOLON);
     }
 
     @Test
@@ -959,12 +965,15 @@ public class GrammarTest {
     }
 
     @Test
-    @Ignore
     public void testMethodHeader() {
         // MethodHeader: (UnionType | "function" | "void") MemberName TypeParams? Params+ Metatypes? TypeConstraints?
         Rule rule = Grammar.MethodHeader;
 
-        // TODO: Implement
+        valid(rule, UIDENTIFIER, LIDENTIFIER, LPAREN, RPAREN);
+        valid(rule, FUNCTION_MODIFIER, LIDENTIFIER, LPAREN, RPAREN);
+        valid(rule, VOID_MODIFIER, LIDENTIFIER, LPAREN, RPAREN);
+        valid(rule, VOID_MODIFIER, LIDENTIFIER, LPAREN, UIDENTIFIER, LIDENTIFIER, RPAREN);
+        // TODO: More tests
     }
 
     @Test

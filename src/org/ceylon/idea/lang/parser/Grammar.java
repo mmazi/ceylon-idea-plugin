@@ -53,11 +53,6 @@ public class Grammar {
     public static final ComplexRule UnionType = rule("UnionType");
 
     /**
-     * {@code AnnotationName:  LIdentifier }
-     */
-    public static final Rule AnnotationName = rule("AnnotationName").one(LIDENTIFIER);
-
-    /**
      * {@code TypeName:  UIdentifier }
      */
     public static final Rule TypeName = rule("TypeName").one(UIDENTIFIER);
@@ -108,16 +103,6 @@ public class Grammar {
     public static final Rule IntersectionType = rule("IntersectionType").one(EntryType).zeroOrMore(INTERSECTION_OP, EntryType);
 
     /**
-     * {@code CompilerAnnotation : "@" AnnotationName ("[" StringLiteral "]")? }
-     */
-    public static final Rule CompilerAnnotation = rule("CompilerAnnotation").sequence(COMPILER_ANNOTATION, AnnotationName).zeroOrOne(INDEX_OP, STRING_LITERAL, RBRACKET);
-
-    /**
-     * {@code CompilerAnnotations: CompilerAnnotation* }
-     */
-    public static final Rule CompilerAnnotations = zeroOrMore(CompilerAnnotation);
-
-    /**
      * {@code PackageName:  PIdentifier }
      */
     public static final Rule PackageName = rule("PackageName").one(LIDENTIFIER);
@@ -164,11 +149,6 @@ public class Grammar {
             .any(
                     sequence(ImportElement, zeroOrMore(COMMA, ImportElement), zeroOrOne(COMMA, ImportWildcard)),
                     ImportWildcard);
-
-    /**
-     * {@code Import:  "import" FullPackageName "{" ImportElements? "}" }
-     */
-    public static final Rule Import = rule("Import").sequence(IMPORT, FullPackageName).one(LBRACE).zeroOrOne(ImportElements).one(RBRACE);
 
     /**
      * {@code Sequence:  Expression ("," Expression)* | Expression "..."	 }
@@ -328,9 +308,24 @@ public class Grammar {
     public static final Rule Arguments = rule("Arguments").any(sequence(PositionalArguments, zeroOrOne(FunctionalArguments)), NamedArguments);
 
     /**
-     * {@code Method:  Annotation* MethodHeader (Block | NamedArguments | Specifier? ";")	 }
+     * {@code TypeParams:  "<" (TypeParam ",")* (TypeParam | SequencedTypeParam) ">"	 }
      */
-    public static final Rule Method = new DummyRule("Method");
+    public static final Rule TypeParams = new DummyRule("TypeParams");
+
+    /**
+     * {@code "Metatypes:  "is" Type ("&" Type)*	 }
+     */
+    public static final Rule Metatypes = new DummyRule("Metatypes");
+
+    /**
+     * {@code TypeConstraints:  TypeConstraint+	 }
+     */
+    public static final Rule TypeConstraints = new DummyRule("TypeConstraints");
+
+    /**
+     * {@code MethodHeader:  (UnionType | "function" | "void") MemberName TypeParams? Params+ Metatypes? TypeConstraints?	 }
+     */
+    public static final Rule MethodHeader = rule("MethodHeader").any(UnionType, FUNCTION_MODIFIER, VOID_MODIFIER).one(MemberName).zeroOrOne(TypeParams).oneOrMore(Params).zeroOrMore(Metatypes).zeroOrMore(TypeConstraints);
 
     /**
      * {@code AttributeHeader:  (UnionType | "value") MemberName	 }
@@ -356,26 +351,6 @@ public class Grammar {
      * {@code AttributeSetter:  "assign" MemberName Block }
      */
     public static final Rule AttributeSetter = rule("AttributeSetter").sequence(ASSIGN, MemberName, Block);
-
-    /**
-     * {@code Attribute:  Annotation* (SimpleAttribute | AttributeGetter | AttributeSetter)	 }
-     */
-    public static final Rule Attribute = rule("Attribute").zeroOrMore(Annotation).any(SimpleAttribute, AttributeGetter, AttributeSetter);
-
-    /**
-     * {@code TypeDeclaration:  Class | Object | Interface	 }
-     */
-    public static final Rule TypeDeclaration = new DummyRule("TypeDeclaration");
-
-    /**
-     * {@code Declaration:  Method | Attribute | TypeDeclaration }
-     */
-    public static final Rule Declaration = any(Method, Attribute, TypeDeclaration);
-
-    /**
-     * {@code CompilationUnit : (CompilerAnnotation+ ";")? import* (CompilerAnnotations Declaration)* EOF }
-     */
-    public static final Rule CompilationUnit = rule("CompilationUnit").zeroOrOne(CompilerAnnotation, CompilerAnnotations, SEMICOLON).zeroOrMore(Import).zeroOrMore(CompilerAnnotations, Declaration);
 
     /**
      * {@code AbstractedType:  "abstracts" Type	 }
@@ -493,11 +468,6 @@ public class Grammar {
     public static final Rule Continue = new NotImplementedRule("Continue");
 
     /**
-     * {@code ControlStructure:  IfElse | SwitchCaseElse | While | ForFail | TryCatchFinally	 }
-     */
-    public static final Rule ControlStructure = new NotImplementedRule("ControlStructure");
-
-    /**
      * {@code DateLiteral:   "'"  Digit{1,2} "/" Digit{1,2} "/" Digit{4}  "'"	 }
      */
     public static final Rule DateLiteral = new NotImplementedRule("DateLiteral");
@@ -511,6 +481,11 @@ public class Grammar {
      * {@code Digit:  "0".."9"	 }
      */
     public static final Rule Digit = new NotImplementedRule("Digit");
+
+    /**
+     * {@code AnnotationName:  LIdentifier }
+     */
+    public static final Rule AnnotationName = rule("AnnotationName").one(LIDENTIFIER);
 
     /**
      * {@code Digits:  Digit+ | Digit{1..3} ("_" Digit{3})+	 }
@@ -548,11 +523,6 @@ public class Grammar {
     public static final Rule Directive = new NotImplementedRule("Directive");
 
     /**
-     * {@code DirectiveStatement:  Directive ";"	 }
-     */
-    public static final Rule DirectiveStatement = new NotImplementedRule("DirectiveStatement");
-
-    /**
      * {@code Else:  "else" (Block | IfElse)	 }
      */
     public static final Rule Else = new NotImplementedRule("Else");
@@ -571,11 +541,6 @@ public class Grammar {
      * {@code Exponent:  ("E"|"e") ("+"|"-")? Digits	 }
      */
     public static final Rule Exponent = new NotImplementedRule("Exponent");
-
-    /**
-     * {@code ExpressionStatement:  ( Assignment | IncrementOrDecrement | Invocation ) ";"	 }
-     */
-    public static final Rule ExpressionStatement = new NotImplementedRule("ExpressionStatement");
 
     /**
      * {@code ExtendedType:  "extends" ("super" ".")? Type PositionalArguments	 }
@@ -688,16 +653,6 @@ public class Grammar {
     public static final Rule Magnitude = new NotImplementedRule("Magnitude");
 
     /**
-     * {@code "Metatypes:  "is" Type ("&" Type)*	 }
-     */
-    public static final Rule Metatypes = new NotImplementedRule("Metatypes");
-
-    /**
-     * {@code MethodHeader:  (UnionType | "function" | "void") MemberName TypeParams? Params+ Metatypes? TypeConstraints?	 }
-     */
-    public static final Rule MethodHeader = new NotImplementedRule("MethodHeader");
-
-    /**
      * {@code MethodMeta:  Type "." MemberName TypeArguments?	 }
      */
     public static final Rule MethodMeta = new NotImplementedRule("MethodMeta");
@@ -706,7 +661,6 @@ public class Grammar {
      * {@code MethodReference:  (Receiver ".")? MemberName TypeArguments?	 }
      */
     public static final Rule MethodReference = new NotImplementedRule("MethodReference");
-
 
     /**
      * {@code ObjectHeader:  "object" MemberName ObjectInheritance	 }
@@ -738,6 +692,7 @@ public class Grammar {
      */
     public static final Rule Resource = new NotImplementedRule("Resource");
 
+
     /**
      * {@code Retry:  "retry"	 }
      */
@@ -767,16 +722,6 @@ public class Grammar {
      * {@code SequenceInstantiation:  "{" Sequence? "}" ;	 }
      */
     public static final Rule SequenceInstantiation = new NotImplementedRule("SequenceInstantiation");
-
-    /**
-     * {@code Specification:  MemberName Specifier ";"	 }
-     */
-    public static final Rule Specification = rule("Specification").sequence(MemberName, Specifier, SEMICOLON);
-
-    /**
-     * {@code Statement:  ExpressionStatement | Specification | DirectiveStatement | ControlStructure	 }
-     */
-    public static final Rule Statement = new DummyRule("Statement");
 
     /**
      * {@code Subtype:  "subtype" | MemberName "." "subtype"	 }
@@ -829,11 +774,6 @@ public class Grammar {
     public static final Rule TypeConstraintInheritance = new NotImplementedRule("TypeConstraintInheritance");
 
     /**
-     * {@code TypeConstraints:  TypeConstraint+	 }
-     */
-    public static final Rule TypeConstraints = new NotImplementedRule("TypeConstraints");
-
-    /**
      * {@code TypedQuotedLiteral:  TypeName QuotedLiteral	 }
      */
     public static final Rule TypedQuotedLiteral = new NotImplementedRule("TypedQuotedLiteral");
@@ -847,11 +787,6 @@ public class Grammar {
      * {@code TypeMeta:  Type	 }
      */
     public static final Rule TypeMeta = new NotImplementedRule("TypeMeta");
-
-    /**
-     * {@code TypeParams:  "<" (TypeParam ",")* (TypeParam | SequencedTypeParam) ">"	 }
-     */
-    public static final Rule TypeParams = new NotImplementedRule("TypeParams");
 
     /**
      * {@code TypeParam:  Variance? TypeName	 }
@@ -887,6 +822,76 @@ public class Grammar {
      * {@code While:  LoopCondition Block	 }
      */
     public static final Rule While = new NotImplementedRule("While");
+
+    /**
+     * {@code ExpressionStatement:  ( Assignment | IncrementOrDecrement | Invocation ) ";"	 }
+     */
+    public static final Rule ExpressionStatement = new DummyRule("ExpressionStatement");
+
+    /**
+     * {@code Specification:  MemberName Specifier ";"	 }
+     */
+    public static final Rule Specification = rule("Specification").sequence(MemberName, Specifier, SEMICOLON);
+
+    /**
+     * {@code DirectiveStatement:  Directive ";"	 }
+     */
+    public static final Rule DirectiveStatement = new DummyRule("DirectiveStatement");
+
+    /**
+     * {@code ControlStructure:  IfElse | SwitchCaseElse | While | ForFail | TryCatchFinally	 }
+     */
+    public static final Rule ControlStructure = new DummyRule("ControlStructure");
+
+    /**
+     * {@code Statement:  ExpressionStatement | Specification | DirectiveStatement | ControlStructure	 }
+     */
+    public static final Rule Statement = rule("Statement").any(ExpressionStatement, Specification, DirectiveStatement, ControlStructure);
+
+    /**
+     * {@code CompilerAnnotation : "@" AnnotationName ("[" StringLiteral "]")? }
+     */
+    public static final Rule CompilerAnnotation = rule("CompilerAnnotation").sequence(COMPILER_ANNOTATION, AnnotationName).zeroOrOne(INDEX_OP, STRING_LITERAL, RBRACKET);
+
+
+    /**
+     * {@code CompilerAnnotations: CompilerAnnotation* }
+     */
+    public static final Rule CompilerAnnotations = zeroOrMore(CompilerAnnotation);
+
+    /**
+     * {@code Import:  "import" FullPackageName "{" ImportElements? "}" }
+     */
+    public static final Rule Import = rule("Import").sequence(IMPORT, FullPackageName).one(LBRACE).zeroOrOne(ImportElements).one(RBRACE);
+
+    // ====================================
+
+
+    /**
+     * {@code Method:  Annotation* MethodHeader (Block | NamedArguments | Specifier? ";")	 }
+     */
+    public static final Rule Method = rule("Method").zeroOrOne(Annotation).one(MethodHeader).any(Block, NamedArguments, sequence(zeroOrOne(Specifier), SEMICOLON));
+
+
+    /**
+     * {@code Attribute:  Annotation* (SimpleAttribute | AttributeGetter | AttributeSetter)	 }
+     */
+    public static final Rule Attribute = rule("Attribute").zeroOrMore(Annotation).any(SimpleAttribute, AttributeGetter, AttributeSetter);
+
+    /**
+     * {@code TypeDeclaration:  Class | Object | Interface	 }
+     */
+    public static final Rule TypeDeclaration = new DummyRule("TypeDeclaration");
+
+    /**
+     * {@code Declaration:  Method | Attribute | TypeDeclaration }
+     */
+    public static final Rule Declaration = any(Method, Attribute, TypeDeclaration);
+
+    /**
+     * {@code CompilationUnit : (CompilerAnnotation+ ";")? import* (CompilerAnnotations Declaration)* EOF }
+     */
+    public static final Rule CompilationUnit = rule("CompilationUnit").zeroOrOne(CompilerAnnotation, CompilerAnnotations, SEMICOLON).zeroOrMore(Import).zeroOrMore(CompilerAnnotations, Declaration);
 
     static {
         deferredInit();
