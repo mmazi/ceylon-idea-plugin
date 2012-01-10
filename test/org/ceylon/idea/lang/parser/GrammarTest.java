@@ -473,15 +473,6 @@ public class GrammarTest {
     }
 
     @Test
-    @Ignore
-    public void testElse() {
-        // Else: "else" (Block | IfElse)
-        Rule rule = Grammar.Else;
-
-        // TODO: Implement
-    }
-
-    @Test
     public void testEntryParamPair() {
         // EntryParamPair: SimpleParam "->" SimpleParam
         Rule rule = Grammar.EntryParamPair;
@@ -678,21 +669,21 @@ public class GrammarTest {
     }
 
     @Test
-    @Ignore
     public void testIf() {
         // If: "if" "(" Condition ")" Block
         Rule rule = Grammar.If;
 
-        // TODO: Implement
+        valid(rule, IF_CLAUSE, LPAREN, STRING_LITERAL, RPAREN, LBRACE, RBRACE); //TODO: Get rid of string literal
     }
 
     @Test
-    @Ignore
     public void testIfElse() {
         // IfElse: If Else?
         Rule rule = Grammar.IfElse;
 
-        // TODO: Implement
+        valid(rule, IF_CLAUSE, LPAREN, THIS, RPAREN, LBRACE, RBRACE);
+        valid(rule, IF_CLAUSE, LPAREN, THIS, RPAREN, LBRACE, RBRACE, ELSE_CLAUSE, LBRACE, RBRACE);
+        valid(rule, IF_CLAUSE, LPAREN, THIS, RPAREN, LBRACE, RBRACE, ELSE_CLAUSE, IF_CLAUSE, LPAREN, THIS, RPAREN, LBRACE, RBRACE);
     }
 
     @Test

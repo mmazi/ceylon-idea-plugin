@@ -49,8 +49,17 @@ public class Grammar {
 
     /**
      * {@code UnionType:  IntersectionType ("|" IntersectionType)* }
+     *
+     * @see #deferredInit()
      */
     public static final ComplexRule UnionType = rule("UnionType");
+
+    /**
+     * {@code IfElse:  If Else?	 }
+     *
+     * @see #deferredInit()
+     */
+    public static final ComplexRule IfElse = rule("IfElse");
 
     /**
      * {@code TypeName:  UIdentifier }
@@ -375,7 +384,7 @@ public class Grammar {
     /**
      * {@code BooleanCondition:  Expression }
      */
-    public static final Rule BooleanCondition = new NotImplementedRule("BooleanCondition");
+    public static final Rule BooleanCondition = rule("BooleanCondition").one(Expression);
 
     /**
      * {@code Break:  "break" }
@@ -453,11 +462,6 @@ public class Grammar {
     public static final Rule ConditionalTypes = new NotImplementedRule("ConditionalTypes");
 
     /**
-     * {@code Condition:  BooleanCondition | IsCondition | ExistsOrNonemptyCondition | SatisfiesCondition	 }
-     */
-    public static final Rule Condition = new NotImplementedRule("Condition");
-
-    /**
      * {@code Conditions:  "if" "(" Condition ("&&" Condition)* ")"	 }
      */
     public static final Rule Conditions = new NotImplementedRule("Conditions");
@@ -523,11 +527,6 @@ public class Grammar {
     public static final Rule Directive = new NotImplementedRule("Directive");
 
     /**
-     * {@code Else:  "else" (Block | IfElse)	 }
-     */
-    public static final Rule Else = new NotImplementedRule("Else");
-
-    /**
      * {@code EntryVariablePair:  Variable "->" Variable	 }
      */
     public static final Rule EntryVariablePair = new NotImplementedRule("EntryVariablePair");
@@ -535,7 +534,7 @@ public class Grammar {
     /**
      * {@code ExistsOrNonemptyCondition:  ("exists" | "nonempty") (Variable Specifier | MemberName)	 }
      */
-    public static final Rule ExistsOrNonemptyCondition = new NotImplementedRule("ExistsOrNonemptyCondition");
+    public static final Rule ExistsOrNonemptyCondition = new DummyRule("ExistsOrNonemptyCondition");
 
     /**
      * {@code Exponent:  ("E"|"e") ("+"|"-")? Digits	 }
@@ -560,7 +559,7 @@ public class Grammar {
     /**
      * {@code ForFail:  For Fail?	 }
      */
-    public static final Rule ForFail = new NotImplementedRule("ForFail");
+    public static final Rule ForFail = new DummyRule("ForFail");
 
     /**
      * {@code For:  "for" "(" ForIterator ")" Block	 }
@@ -588,14 +587,29 @@ public class Grammar {
     public static final Rule FunctionMeta = new NotImplementedRule("FunctionMeta");
 
     /**
-     * {@code IfElse:  If Else?	 }
+     * {@code IsCondition:  "is" (TypedVariable Specifier | UnionType MemberName)	 }
      */
-    public static final Rule IfElse = new NotImplementedRule("IfElse");
+    public static final Rule IsCondition = new DummyRule("IsCondition");
+
+    /**
+     * {@code SatisfiesCondition:  "satisfies" Type Type	 }
+     */
+    public static final Rule SatisfiesCondition = new DummyRule("SatisfiesCondition");
+
+    /**
+     * {@code Condition:  BooleanCondition | IsCondition | ExistsOrNonemptyCondition | SatisfiesCondition	 }
+     */
+    public static final Rule Condition = any(BooleanCondition, IsCondition, ExistsOrNonemptyCondition, SatisfiesCondition);
 
     /**
      * {@code If:  "if" "(" Condition ")" Block	 }
      */
-    public static final Rule If = new NotImplementedRule("If");
+    public static final Rule If = rule("If").sequence(IF_CLAUSE, LPAREN, Condition, RPAREN, Block);
+
+    /**
+     * {@code Else:  "else" (Block | IfElse)	 }
+     */
+    public static final Rule Else = rule("Else").one(ELSE_CLAUSE).any(Block, IfElse);
 
     /**
      * {@code IncrementOrDecrement:  "--" | "++" ; }
@@ -631,11 +645,6 @@ public class Grammar {
      * {@code Introduction:  "adapt" Type SatisfiedTypes TypeConstraints? ";"	 }
      */
     public static final Rule Introduction = new NotImplementedRule("Introduction");
-
-    /**
-     * {@code IsCondition:  "is" (TypedVariable Specifier | UnionType MemberName)	 }
-     */
-    public static final Rule IsCondition = new NotImplementedRule("IsCondition");
 
     /**
      * {@code IteratorVariable:  Variable | CallableVariable | EntryVariablePair	 }
@@ -687,11 +696,11 @@ public class Grammar {
      */
     public static final Rule Receiver = new NotImplementedRule("Receiver");
 
+
     /**
      * {@code Resource:  MemberName | InitializerReference Arguments | Variable Specifier	 }
      */
     public static final Rule Resource = new NotImplementedRule("Resource");
-
 
     /**
      * {@code Retry:  "retry"	 }
@@ -707,11 +716,6 @@ public class Grammar {
      * {@code SatisfiedTypes:  "satisfies" Type ("&" Type)*	 }
      */
     public static final Rule SatisfiedTypes = new NotImplementedRule("SatisfiedTypes");
-
-    /**
-     * {@code SatisfiesCondition:  "satisfies" Type Type	 }
-     */
-    public static final Rule SatisfiesCondition = new NotImplementedRule("SatisfiesCondition");
 
     /**
      * {@code SequencedTypeParam:  TypeName "..."	 }
@@ -731,7 +735,7 @@ public class Grammar {
     /**
      * {@code SwitchCaseElse:  Switch ( Cases | "{" Cases "}" )	 }
      */
-    public static final Rule SwitchCaseElse = new NotImplementedRule("SwitchCaseElse");
+    public static final Rule SwitchCaseElse = new DummyRule("SwitchCaseElse");
 
     /**
      * {@code Switch:  "switch" "(" Expression ")"	 }
@@ -751,7 +755,7 @@ public class Grammar {
     /**
      * {@code TryCatchFinally:  Try Catch* Finally?	 }
      */
-    public static final Rule TryCatchFinally = new NotImplementedRule("TryCatchFinally");
+    public static final Rule TryCatchFinally = new DummyRule("TryCatchFinally");
 
     /**
      * {@code Try:  "try" ("(" Resource ")")? Block	 }
@@ -821,7 +825,7 @@ public class Grammar {
     /**
      * {@code While:  LoopCondition Block	 }
      */
-    public static final Rule While = new NotImplementedRule("While");
+    public static final Rule While = new DummyRule("While");
 
     /**
      * {@code ExpressionStatement:  ( Assignment | IncrementOrDecrement | Invocation ) ";"	 }
@@ -841,7 +845,7 @@ public class Grammar {
     /**
      * {@code ControlStructure:  IfElse | SwitchCaseElse | While | ForFail | TryCatchFinally	 }
      */
-    public static final Rule ControlStructure = new DummyRule("ControlStructure");
+    public static final Rule ControlStructure = any(IfElse, SwitchCaseElse, While, ForFail, TryCatchFinally);
 
     /**
      * {@code Statement:  ExpressionStatement | Specification | DirectiveStatement | ControlStructure	 }
@@ -886,7 +890,7 @@ public class Grammar {
     /**
      * {@code Declaration:  Method | Attribute | TypeDeclaration }
      */
-    public static final Rule Declaration = any(Method, Attribute, TypeDeclaration);
+    public static final Rule Declaration = rule("Declaration").any(Method, Attribute, TypeDeclaration);
 
     /**
      * {@code CompilationUnit : (CompilerAnnotation+ ";")? import* (CompilerAnnotations Declaration)* EOF }
@@ -904,7 +908,7 @@ public class Grammar {
         Param.zeroOrMore(Annotation).any(SimpleParam, CallableParam, EntryParamPair);
         Annotation.one(MemberName).zeroOrAny(Arguments, oneOrMore(Literal));
         UnionType.one(IntersectionType).zeroOrMore(UNION_OP, IntersectionType);
-
+        IfElse.one(If).zeroOrOne(Else);
     }
 
 }
