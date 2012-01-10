@@ -70,7 +70,7 @@ public class Grammar {
     /**
      * {@code TypeArguments:  "<" (UnionType ",")* (UnionType | SequencedType) ">" }
      */
-    public static final Rule TypeArguments = rule("TypeArguments").one(SMALLER_OP).zeroOrMore(UnionType, COMMA).any(UnionType, SequencedType).one(LARGER_OP);
+    public static final Rule TypeArguments = rule("TypeArguments").one(SMALLER_OP).zeroOrMore(UnionType, COMMA).any(SequencedType, UnionType).one(LARGER_OP);
 
     /**
      * {@code TypeNameWithArguments:  TypeName TypeArguments?	 }

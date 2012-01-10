@@ -1375,12 +1375,14 @@ public class GrammarTest {
     }
 
     @Test
-    @Ignore
     public void testTypeArguments() {
         // TypeArguments: "<" (UnionType ",")* (UnionType | SequencedType) ">"
         Rule rule = Grammar.TypeArguments;
 
-        // TODO: Implement
+        valid(rule, SMALLER_OP, UIDENTIFIER, LARGER_OP);
+        valid(rule, SMALLER_OP, UIDENTIFIER, COMMA, UIDENTIFIER, LARGER_OP);
+        valid(rule, SMALLER_OP, UIDENTIFIER, ELLIPSIS, LARGER_OP);
+        valid(rule, SMALLER_OP, UIDENTIFIER, UNION_OP, UIDENTIFIER, COMMA, UIDENTIFIER, ELLIPSIS, LARGER_OP);
     }
 
     @Test
@@ -1447,21 +1449,13 @@ public class GrammarTest {
     }
 
     @Test
-    @Ignore
-    public void testTypeName() {
-        // TypeName: UIdentifier
-        Rule rule = Grammar.TypeName;
-
-        // TODO: Implement
-    }
-
-    @Test
-    @Ignore
     public void testTypeNameWithArguments() {
         // TypeNameWithArguments: TypeName TypeArguments?
         Rule rule = Grammar.TypeNameWithArguments;
 
-        // TODO: Implement
+        valid(rule, UIDENTIFIER);
+        valid(rule, UIDENTIFIER, SMALLER_OP, UIDENTIFIER, LARGER_OP);
+        valid(rule, UIDENTIFIER, SMALLER_OP, UIDENTIFIER, ELLIPSIS, LARGER_OP);
     }
 
     @Test
