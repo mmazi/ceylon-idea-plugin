@@ -2,13 +2,12 @@ package org.ceylon.idea.lang.parser;
 
 import com.intellij.psi.tree.IElementType;
 import com.intellij.psi.tree.IFileElementType;
-import com.intellij.psi.tree.ILightStubFileElementType;
 import org.ceylon.idea.Ceylon;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 
 public final class CeylonAstNode extends IElementType {
-    public static final IFileElementType FILE = new ILightStubFileElementType(Ceylon.LANGUAGE);
+    public static final IFileElementType FILE = new IFileElementType(Ceylon.LANGUAGE);
 
     public static final CeylonAstNode ABSTRACTED_TYPE = new CeylonAstNode("AbstractedType");
     public static final CeylonAstNode ADAPTED_TYPES = new CeylonAstNode("AdaptedTypes");
