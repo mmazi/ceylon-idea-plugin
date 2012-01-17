@@ -26,9 +26,13 @@ class AnyRule implements Rule {
     @Override
     public boolean parseOptional(PsiBuilder builder) {
         for (Rule rule : rules) {
+            PsiBuilder.Marker marker = builder.mark();
             boolean parsed = rule.parseOptional(builder);
             if (parsed) {
+                marker.drop();
                 return true;
+            } else {
+                marker.rollbackTo();
             }
         }
 

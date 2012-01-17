@@ -547,9 +547,14 @@ public class Grammar {
     public static final Rule EntryVariablePair = new NotImplementedRule("EntryVariablePair");
 
     /**
+     * {@code Variable:  UnionType? MemberName	 }
+     */
+    public static final Rule Variable = rule("Variable").zeroOrOne(UnionType).one(MemberName);
+
+    /**
      * {@code ExistsOrNonemptyCondition:  ("exists" | "nonempty") (Variable Specifier | MemberName)	 }
      */
-    public static final Rule ExistsOrNonemptyCondition = new DummyRule("ExistsOrNonemptyCondition");
+    public static final Rule ExistsOrNonemptyCondition = rule("ExistsOrNonemptyCondition").any(EXISTS, NONEMPTY).any(sequence(Variable, Specifier), MemberName);
 
     /**
      * {@code Exponent:  ("E"|"e") ("+"|"-")? Digits	 }
@@ -691,11 +696,11 @@ public class Grammar {
      */
     public static final Rule ObjectHeader = new NotImplementedRule("ObjectHeader");
 
+
     /**
      * {@code ObjectInheritance:  ExtendedType? SatisfiedTypes?	 }
      */
     public static final Rule ObjectInheritance = new NotImplementedRule("ObjectInheritance");
-
 
     /**
      * {@code OuterReference:  (Receiver ".")? "outer"	 }
@@ -816,11 +821,6 @@ public class Grammar {
      * {@code ValueReference:  (Receiver ".")? MemberName	 }
      */
     public static final Rule ValueReference = new NotImplementedRule("ValueReference");
-
-    /**
-     * {@code Variable:  UnionType? MemberName	 }
-     */
-    public static final Rule Variable = new NotImplementedRule("Variable");
 
     /**
      * {@code While:  LoopCondition Block	 }

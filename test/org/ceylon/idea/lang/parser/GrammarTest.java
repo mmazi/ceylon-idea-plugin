@@ -499,12 +499,13 @@ public class GrammarTest {
     }
 
     @Test
-    @Ignore
     public void testExistsOrNonemptyCondition() {
         // ExistsOrNonemptyCondition: ("exists" | "nonempty") (Variable Specifier | MemberName)
         Rule rule = Grammar.ExistsOrNonemptyCondition;
 
-        // TODO: Implement
+        valid(rule, EXISTS, LIDENTIFIER);
+        valid(rule, NONEMPTY, LIDENTIFIER);
+        valid(rule, EXISTS, LIDENTIFIER, SPECIFY, STRING_LITERAL);
     }
 
     @Test
@@ -1508,12 +1509,13 @@ public class GrammarTest {
     }
 
     @Test
-    @Ignore
     public void testVariable() {
         // Variable: UnionType? MemberName
         Rule rule = Grammar.Variable;
 
-        // TODO: Implement
+        valid(rule, LIDENTIFIER);
+        valid(rule, UIDENTIFIER, LIDENTIFIER);
+        valid(rule, UIDENTIFIER, UNION_OP, UIDENTIFIER, LIDENTIFIER);
     }
 
     @Test
