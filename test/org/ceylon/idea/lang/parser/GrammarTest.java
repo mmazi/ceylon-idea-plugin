@@ -192,30 +192,34 @@ public class GrammarTest {
     }
 
     @Test
-    @Ignore
     public void testCase() {
         // Case: Expression ("," Expression)* | "is" UnionType | "satisfies" Type
         Rule rule = Grammar.Case;
 
-        // TODO: Implement
+        valid(rule, CHAR_LITERAL);
+        valid(rule, CHAR_LITERAL, COMMA, CHAR_LITERAL);
+        valid(rule, IS_OP, UIDENTIFIER);
+        valid(rule, IS_OP, UIDENTIFIER, UNION_OP, UIDENTIFIER);
+        valid(rule, SATISFIES, UIDENTIFIER);
+        valid(rule, SATISFIES, UIDENTIFIER, MEMBER_OP, UIDENTIFIER);
     }
 
     @Test
-    @Ignore
     public void testCaseItem() {
         // CaseItem: "case" "(" Case ")" Block
         Rule rule = Grammar.CaseItem;
 
-        // TODO: Implement
+        valid(rule, CASE_CLAUSE, LPAREN, CHAR_LITERAL, RPAREN, LBRACE, RBRACE);
     }
 
     @Test
-    @Ignore
     public void testCases() {
         // Cases: CaseItem+ DefaultCaseItem?
         Rule rule = Grammar.Cases;
 
-        // TODO: Implement
+        valid(rule, CASE_CLAUSE, LPAREN, CHAR_LITERAL, RPAREN, LBRACE, RBRACE);
+        valid(rule, CASE_CLAUSE, LPAREN, CHAR_LITERAL, RPAREN, LBRACE, RBRACE, CASE_CLAUSE, LPAREN, CHAR_LITERAL, RPAREN, LBRACE, RBRACE);
+        valid(rule, CASE_CLAUSE, LPAREN, CHAR_LITERAL, RPAREN, LBRACE, RBRACE, ELSE_CLAUSE, LBRACE, RBRACE);
     }
 
     @Test
@@ -682,8 +686,11 @@ public class GrammarTest {
         // IfElse: If Else?
         Rule rule = Grammar.IfElse;
 
+        // if (this) {}
         valid(rule, IF_CLAUSE, LPAREN, THIS, RPAREN, LBRACE, RBRACE);
+        // if (this) {} else {}
         valid(rule, IF_CLAUSE, LPAREN, THIS, RPAREN, LBRACE, RBRACE, ELSE_CLAUSE, LBRACE, RBRACE);
+        // if (this) {} else if (this) {}
         valid(rule, IF_CLAUSE, LPAREN, THIS, RPAREN, LBRACE, RBRACE, ELSE_CLAUSE, IF_CLAUSE, LPAREN, THIS, RPAREN, LBRACE, RBRACE);
     }
 
@@ -1292,21 +1299,21 @@ public class GrammarTest {
     }
 
     @Test
-    @Ignore
     public void testSwitch() {
         // Switch: "switch" "(" Expression ")"
         Rule rule = Grammar.Switch;
 
-        // TODO: Implement
+        valid(rule, SWITCH_CLAUSE, LPAREN, CHAR_LITERAL, RPAREN);
     }
 
     @Test
-    @Ignore
     public void testSwitchCaseElse() {
         // SwitchCaseElse: Switch ( Cases | "{" Cases "}" )
         Rule rule = Grammar.SwitchCaseElse;
 
-        // TODO: Implement
+        valid(rule, SWITCH_CLAUSE, LPAREN, CHAR_LITERAL, RPAREN, CASE_CLAUSE, LPAREN, CHAR_LITERAL, RPAREN, LBRACE, RBRACE);
+        valid(rule, SWITCH_CLAUSE, LPAREN, CHAR_LITERAL, RPAREN, CASE_CLAUSE, LPAREN, CHAR_LITERAL, RPAREN, LBRACE, RBRACE, ELSE_CLAUSE, LBRACE, RBRACE);
+        valid(rule, SWITCH_CLAUSE, LPAREN, CHAR_LITERAL, RPAREN, LBRACE, CASE_CLAUSE, LPAREN, CHAR_LITERAL, RPAREN, LBRACE, RBRACE, RBRACE);
     }
 
     @Test

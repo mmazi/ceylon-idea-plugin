@@ -462,21 +462,6 @@ public class Grammar {
     public static final Rule CallableVariable = new NotImplementedRule("CallableVariable");
 
     /**
-     * {@code Case:  Expression ("," Expression)* | "is" UnionType | "satisfies" Type	 }
-     */
-    public static final Rule Case = new NotImplementedRule("Case");
-
-    /**
-     * {@code CaseItem:  "case" "(" Case ")" Block	 }
-     */
-    public static final Rule CaseItem = new NotImplementedRule("CaseItem");
-
-    /**
-     * {@code Cases:  CaseItem+ DefaultCaseItem?	 }
-     */
-    public static final Rule Cases = new NotImplementedRule("Cases");
-
-    /**
      * {@code Catch:  "catch" "(" Variable ")" Block	 }
      */
     public static final Rule Catch = new NotImplementedRule("Catch");
@@ -484,7 +469,7 @@ public class Grammar {
     /**
      * {@code Class:  Annotation* ClassHeader (ClassBody | TypeSpecifier ";")	 }
      */
-    public static final Rule Class = new NotImplementedRule("Class");
+    public static final Rule Class = new DummyRule("Class");
 
     /**
      * {@code ClassBody:  "{" (Declaration | Statement)* "}"	 }
@@ -520,11 +505,6 @@ public class Grammar {
      * {@code DateLiteral:   "'"  Digit{1,2} "/" Digit{1,2} "/" Digit{4}  "'"	 }
      */
     public static final Rule DateLiteral = new NotImplementedRule("DateLiteral");
-
-    /**
-     * {@code DefaultCaseItem:  "else" Block	 }
-     */
-    public static final Rule DefaultCaseItem = new NotImplementedRule("DefaultCaseItem");
 
     /**
      * {@code Digit:  "0".."9"	 }
@@ -674,7 +654,7 @@ public class Grammar {
     /**
      * {@code Interface:  Annotation* InterfaceHeader (InterfaceBody | TypeSpecifier ";")	 }
      */
-    public static final Rule Interface = new NotImplementedRule("Interface");
+    public static final Rule Interface = new DummyRule("Interface");
 
     /**
      * {@code InterfaceBody:  "{" Declaration* "}"	 }
@@ -762,14 +742,34 @@ public class Grammar {
     public static final Rule Subtype = new NotImplementedRule("Subtype");
 
     /**
-     * {@code SwitchCaseElse:  Switch ( Cases | "{" Cases "}" )	 }
-     */
-    public static final Rule SwitchCaseElse = new DummyRule("SwitchCaseElse");
-
-    /**
      * {@code Switch:  "switch" "(" Expression ")"	 }
      */
-    public static final Rule Switch = new NotImplementedRule("Switch");
+    public static final Rule Switch = rule("Switch").sequence(SWITCH_CLAUSE, LPAREN, Expression, RPAREN);
+
+    /**
+     * {@code Case:  Expression ("," Expression)* | "is" UnionType | "satisfies" Type	 }
+     */
+    public static final Rule Case = rule("Case").any(sequence(IS_OP, UnionType), sequence(SATISFIES, Type), sequence(Expression, zeroOrMore(COMMA, Expression)));
+
+    /**
+     * {@code CaseItem:  "case" "(" Case ")" Block	 }
+     */
+    public static final Rule CaseItem = rule("CaseItem").sequence(CASE_CLAUSE, LPAREN, Case, RPAREN, Block);
+
+    /**
+     * {@code DefaultCaseItem:  "else" Block	 }
+     */
+    public static final Rule DefaultCaseItem = rule("DefaultCaseItem").sequence(ELSE_CLAUSE, Block);
+
+    /**
+     * {@code Cases:  CaseItem+ DefaultCaseItem?	 }
+     */
+    public static final Rule Cases = rule("Cases").oneOrMore(CaseItem).zeroOrOne(DefaultCaseItem);
+
+    /**
+     * {@code SwitchCaseElse:  Switch ( Cases | "{" Cases "}" )	 }
+     */
+    public static final Rule SwitchCaseElse = rule("SwitchCaseElse").one(Switch).any(Cases, sequence(LBRACE, Cases, RBRACE));
 
     /**
      * {@code Throw:  "throw" Expression?	 }
@@ -876,7 +876,7 @@ public class Grammar {
     /**
      * {@code TypeDeclaration:  Class | Object | Interface	 }
      */
-    public static final Rule TypeDeclaration = new DummyRule("TypeDeclaration");
+    public static final Rule TypeDeclaration = rule("TypeDeclaration").any(Class, Object, Interface);
 
     /**
      * {@code Declaration:  Method | Attribute | TypeDeclaration }
