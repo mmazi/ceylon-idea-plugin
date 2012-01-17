@@ -221,9 +221,24 @@ public class Grammar {
     public static final Rule Meta = new DummyRule("Meta");
 
     /**
+     * {@code CallableReference:  MethodReference | InitializerReference	 }
+     */
+    public static final Rule CallableReference = new DummyRule("CallableReference");
+
+    /**
+     * {@code Receiver:  Primary	 }
+     */
+    public static final Rule Receiver = new DummyRule("Receiver");
+
+    /**
+     * {@code ValueReference:  (Receiver ".")? MemberName	 }
+     */
+    public static final Rule ValueReference = rule("ValueReference").zeroOrOne(Receiver, MEMBER_OP).one(MemberName);
+
+    /**
      * {@code MemberReference:  CallableReference | ValueReference	 }
      */
-    public static final Rule MemberReference = new DummyRule("MemberReference");
+    public static final Rule MemberReference = rule("MemberReference").any(CallableReference, ValueReference);
 
     /**
      * {@code Invocation:  Primary Arguments | SequenceInstantiation	 }
@@ -405,11 +420,6 @@ public class Grammar {
      * {@code Break:  "break" }
      */
     public static final Rule Break = new NotImplementedRule("Break");
-
-    /**
-     * {@code CallableReference:  MethodReference | InitializerReference	 }
-     */
-    public static final Rule CallableReference = new NotImplementedRule("CallableReference");
 
     /**
      * {@code CallableVariable:  (UnionType | "void")? MemberName Params+	 }
@@ -686,6 +696,7 @@ public class Grammar {
      */
     public static final Rule MethodMeta = new NotImplementedRule("MethodMeta");
 
+
     /**
      * {@code MethodReference:  (Receiver ".")? MemberName TypeArguments?	 }
      */
@@ -695,7 +706,6 @@ public class Grammar {
      * {@code ObjectHeader:  "object" MemberName ObjectInheritance	 }
      */
     public static final Rule ObjectHeader = new NotImplementedRule("ObjectHeader");
-
 
     /**
      * {@code ObjectInheritance:  ExtendedType? SatisfiedTypes?	 }
@@ -711,11 +721,6 @@ public class Grammar {
      * {@code "ParenDimension:  "(" Dimension ")"	 }
      */
     public static final Rule ParenDimension = new NotImplementedRule("ParenDimension");
-
-    /**
-     * {@code Receiver:  Primary	 }
-     */
-    public static final Rule Receiver = new NotImplementedRule("Receiver");
 
     /**
      * {@code Resource:  MemberName | InitializerReference Arguments | Variable Specifier	 }
@@ -816,11 +821,6 @@ public class Grammar {
      * {@code ValueMeta:  MemberName TypeArguments?	 }
      */
     public static final Rule ValueMeta = new NotImplementedRule("ValueMeta");
-
-    /**
-     * {@code ValueReference:  (Receiver ".")? MemberName	 }
-     */
-    public static final Rule ValueReference = new NotImplementedRule("ValueReference");
 
     /**
      * {@code While:  LoopCondition Block	 }

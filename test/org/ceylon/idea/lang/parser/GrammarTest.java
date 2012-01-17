@@ -674,7 +674,8 @@ public class GrammarTest {
         // If: "if" "(" Condition ")" Block
         Rule rule = Grammar.If;
 
-        valid(rule, IF_CLAUSE, LPAREN, STRING_LITERAL, RPAREN, LBRACE, RBRACE); //TODO: Get rid of string literal
+        valid(rule, IF_CLAUSE, LPAREN, STRING_LITERAL, RPAREN, LBRACE, RBRACE);
+        valid(rule, IF_CLAUSE, LPAREN, LIDENTIFIER, RPAREN, LBRACE, RBRACE);
     }
 
     @Test
