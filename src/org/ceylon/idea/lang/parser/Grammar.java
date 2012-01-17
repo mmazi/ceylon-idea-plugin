@@ -462,11 +462,6 @@ public class Grammar {
     public static final Rule CallableVariable = rule("CallableVariable").zeroOrAny(UnionType, VOID_MODIFIER).one(MemberName).oneOrMore(Params);
 
     /**
-     * {@code Catch:  "catch" "(" Variable ")" Block	 }
-     */
-    public static final Rule Catch = new NotImplementedRule("Catch");
-
-    /**
      * {@code Class:  Annotation* ClassHeader (ClassBody | TypeSpecifier ";")	 }
      */
     public static final Rule Class = new DummyRule("Class");
@@ -584,7 +579,7 @@ public class Grammar {
     /**
      * {@code Finally:  "finally" Block	 }
      */
-    public static final Rule Finally = new NotImplementedRule("Finally");
+    public static final Rule Finally = rule("Finally").sequence(FINALLY_CLAUSE, Block);
 
     /**
      * {@code IteratorVariable:  Variable | CallableVariable | EntryVariablePair	 }
@@ -719,7 +714,7 @@ public class Grammar {
     /**
      * {@code Resource:  MemberName | InitializerReference Arguments | Variable Specifier	 }
      */
-    public static final Rule Resource = new NotImplementedRule("Resource");
+    public static final Rule Resource = rule("Resource").any(sequence(InitializerReference, Arguments), sequence(Variable, Specifier), MemberName);
 
     /**
      * {@code Retry:  "retry"	 }
@@ -782,14 +777,19 @@ public class Grammar {
     public static final Rule TimeLiteral = new NotImplementedRule("TimeLiteral");
 
     /**
-     * {@code TryCatchFinally:  Try Catch* Finally?	 }
-     */
-    public static final Rule TryCatchFinally = new DummyRule("TryCatchFinally");
-
-    /**
      * {@code Try:  "try" ("(" Resource ")")? Block	 }
      */
-    public static final Rule Try = new NotImplementedRule("Try");
+    public static final Rule Try = rule("Try").one(TRY_CLAUSE).zeroOrOne(LPAREN, Resource, RPAREN).one(Block);
+
+    /**
+     * {@code Catch:  "catch" "(" Variable ")" Block	 }
+     */
+    public static final Rule Catch = rule("Catch").sequence(CATCH_CLAUSE, LPAREN, Variable, RPAREN, Block);
+
+    /**
+     * {@code TryCatchFinally:  Try Catch* Finally?	 }
+     */
+    public static final Rule TryCatchFinally = rule("TryCatchFinally").one(Try).zeroOrMore(Catch).zeroOrOne(Finally);
 
     /**
      * {@code TypeArgument:  UnionType | Dimension	 }
