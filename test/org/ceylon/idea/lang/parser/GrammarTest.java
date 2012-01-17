@@ -891,12 +891,12 @@ public class GrammarTest {
     }
 
     @Test
-    @Ignore
     public void testLoopCondition() {
         // LoopCondition: "while" "(" Condition ")"
         Rule rule = Grammar.LoopCondition;
 
-        // TODO: Implement
+        valid(rule, WHILE_CLAUSE, LPAREN, CHAR_LITERAL, RPAREN);
+        valid(rule, WHILE_CLAUSE, LPAREN, LIDENTIFIER, RPAREN);
     }
 
     @Test
@@ -1545,12 +1545,11 @@ public class GrammarTest {
     }
 
     @Test
-    @Ignore
     public void testWhile() {
         // While: LoopCondition Block
         Rule rule = Grammar.While;
 
-        // TODO: Implement
+        valid(rule, WHILE_CLAUSE, LPAREN, LIDENTIFIER, RPAREN, LBRACE, RBRACE);
     }
 
     private void valid(Rule rule, CeylonToken... tokens) {

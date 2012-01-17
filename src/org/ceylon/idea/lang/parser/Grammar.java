@@ -684,7 +684,7 @@ public class Grammar {
     /**
      * {@code LoopCondition:  "while" "(" Condition ")"	 }
      */
-    public static final Rule LoopCondition = new NotImplementedRule("LoopCondition");
+    public static final Rule LoopCondition = rule("LoopCondition").sequence(WHILE_CLAUSE, LPAREN, Condition, RPAREN);
 
     /**
      * {@code Magnitude:  "k" | "M" | "G" | "T" | "P"	 }
@@ -819,7 +819,7 @@ public class Grammar {
     /**
      * {@code While:  LoopCondition Block	 }
      */
-    public static final Rule While = new DummyRule("While");
+    public static final Rule While = rule("While").sequence(LoopCondition, Block);
 
     /**
      * {@code ExpressionStatement:  ( Assignment | IncrementOrDecrement | Invocation ) ";"	 }
