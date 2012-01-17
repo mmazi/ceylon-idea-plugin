@@ -183,12 +183,14 @@ public class GrammarTest {
     }
 
     @Test
-    @Ignore
     public void testCallableVariable() {
         // CallableVariable: (UnionType | "void")? MemberName Params+
         Rule rule = Grammar.CallableVariable;
 
-        // TODO: Implement
+        valid(rule, LIDENTIFIER, LPAREN, RPAREN);
+        valid(rule, UIDENTIFIER, LIDENTIFIER, LPAREN, RPAREN);
+        valid(rule, UIDENTIFIER, UNION_OP, UIDENTIFIER, LIDENTIFIER, LPAREN, RPAREN);
+        valid(rule, VOID_MODIFIER, LIDENTIFIER, LPAREN, RPAREN);
     }
 
     @Test
@@ -548,12 +550,11 @@ public class GrammarTest {
     }
 
     @Test
-    @Ignore
     public void testFail() {
         // Fail: "else" Block
         Rule rule = Grammar.Fail;
 
-        // TODO: Implement
+        valid(rule, ELSE_CLAUSE, LBRACE, RBRACE);
     }
 
     @Test
@@ -575,30 +576,28 @@ public class GrammarTest {
     }
 
     @Test
-    @Ignore
     public void testFor() {
         // For: "for" "(" ForIterator ")" Block
         Rule rule = Grammar.For;
 
-        // TODO: Implement
+        valid(rule, FOR_CLAUSE, LPAREN, LIDENTIFIER, IN_OP, LIDENTIFIER, RPAREN, LBRACE, RBRACE);
     }
 
     @Test
-    @Ignore
     public void testForFail() {
         // ForFail: For Fail?
         Rule rule = Grammar.ForFail;
 
-        // TODO: Implement
+        valid(rule, FOR_CLAUSE, LPAREN, LIDENTIFIER, IN_OP, LIDENTIFIER, RPAREN, LBRACE, RBRACE);
+        valid(rule, FOR_CLAUSE, LPAREN, LIDENTIFIER, IN_OP, LIDENTIFIER, RPAREN, LBRACE, RBRACE, ELSE_CLAUSE, LBRACE, RBRACE);
     }
 
     @Test
-    @Ignore
     public void testForIterator() {
         // ForIterator: IteratorVariable "in" Expression
         Rule rule = Grammar.ForIterator;
 
-        // TODO: Implement
+        valid(rule, LIDENTIFIER, IN_OP, CHAR_LITERAL);
     }
 
     @Test
@@ -871,12 +870,14 @@ public class GrammarTest {
     }
 
     @Test
-    @Ignore
     public void testIteratorVariable() {
         // IteratorVariable: Variable | CallableVariable | EntryVariablePair
         Rule rule = Grammar.IteratorVariable;
 
-        // TODO: Implement
+        valid(rule, LIDENTIFIER);
+        valid(rule, UIDENTIFIER, LIDENTIFIER);
+        valid(rule, VOID_MODIFIER, LIDENTIFIER, LPAREN, RPAREN);
+        valid(rule, LIDENTIFIER, ENTRY_OP, LIDENTIFIER);
     }
 
     @Test

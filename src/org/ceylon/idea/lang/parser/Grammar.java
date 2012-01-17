@@ -459,7 +459,7 @@ public class Grammar {
     /**
      * {@code CallableVariable:  (UnionType | "void")? MemberName Params+	 }
      */
-    public static final Rule CallableVariable = new NotImplementedRule("CallableVariable");
+    public static final Rule CallableVariable = rule("CallableVariable").zeroOrAny(UnionType, VOID_MODIFIER).one(MemberName).oneOrMore(Params);
 
     /**
      * {@code Catch:  "catch" "(" Variable ")" Block	 }
@@ -552,14 +552,14 @@ public class Grammar {
     public static final Rule Directive = new NotImplementedRule("Directive");
 
     /**
-     * {@code EntryVariablePair:  Variable "->" Variable	 }
-     */
-    public static final Rule EntryVariablePair = new NotImplementedRule("EntryVariablePair");
-
-    /**
      * {@code Variable:  UnionType? MemberName	 }
      */
     public static final Rule Variable = rule("Variable").zeroOrOne(UnionType).one(MemberName);
+
+    /**
+     * {@code EntryVariablePair:  Variable "->" Variable	 }
+     */
+    public static final Rule EntryVariablePair = rule("EntryVariablePair").sequence(Variable, ENTRY_OP, Variable);
 
     /**
      * {@code ExistsOrNonemptyCondition:  ("exists" | "nonempty") (Variable Specifier | MemberName)	 }
@@ -579,7 +579,7 @@ public class Grammar {
     /**
      * {@code Fail:  "else" Block	 }
      */
-    public static final Rule Fail = new NotImplementedRule("Fail");
+    public static final Rule Fail = rule("Fail").sequence(ELSE_CLAUSE, Block);
 
     /**
      * {@code Finally:  "finally" Block	 }
@@ -587,19 +587,24 @@ public class Grammar {
     public static final Rule Finally = new NotImplementedRule("Finally");
 
     /**
-     * {@code ForFail:  For Fail?	 }
+     * {@code IteratorVariable:  Variable | CallableVariable | EntryVariablePair	 }
      */
-    public static final Rule ForFail = new DummyRule("ForFail");
-
-    /**
-     * {@code For:  "for" "(" ForIterator ")" Block	 }
-     */
-    public static final Rule For = new NotImplementedRule("For");
+    public static final Rule IteratorVariable = rule("IteratorVariable").any(CallableVariable, EntryVariablePair, Variable);
 
     /**
      * {@code ForIterator:  IteratorVariable "in" Expression	 }
      */
-    public static final Rule ForIterator = new NotImplementedRule("ForIterator");
+    public static final Rule ForIterator = rule("ForIterator").sequence(IteratorVariable, IN_OP, Expression);
+
+    /**
+     * {@code For:  "for" "(" ForIterator ")" Block	 }
+     */
+    public static final Rule For = rule("For").sequence(FOR_CLAUSE, LPAREN, ForIterator, RPAREN, Block);
+
+    /**
+     * {@code ForFail:  For Fail?	 }
+     */
+    public static final Rule ForFail = rule("ForFail").one(For).zeroOrOne(Fail);
 
     /**
      * {@code FractionalDigits:  Digit+ | (Digit{3} "_")+ Digit{1..3}	 }
@@ -675,11 +680,6 @@ public class Grammar {
      * {@code Introduction:  "adapt" Type SatisfiedTypes TypeConstraints? ";"	 }
      */
     public static final Rule Introduction = new NotImplementedRule("Introduction");
-
-    /**
-     * {@code IteratorVariable:  Variable | CallableVariable | EntryVariablePair	 }
-     */
-    public static final Rule IteratorVariable = new NotImplementedRule("IteratorVariable");
 
     /**
      * {@code LoopCondition:  "while" "(" Condition ")"	 }
