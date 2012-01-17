@@ -221,14 +221,24 @@ public class Grammar {
     public static final Rule Meta = new DummyRule("Meta");
 
     /**
-     * {@code CallableReference:  MethodReference | InitializerReference	 }
-     */
-    public static final Rule CallableReference = new DummyRule("CallableReference");
-
-    /**
      * {@code Receiver:  Primary	 }
      */
     public static final Rule Receiver = new DummyRule("Receiver");
+
+    /**
+     * {@code MethodReference:  (Receiver ".")? MemberName TypeArguments?	 }
+     */
+    public static final Rule MethodReference = rule("MethodReference").zeroOrOne(Receiver, MEMBER_OP).one(MemberName).zeroOrOne(TypeArguments);
+
+    /**
+     * {@code InitializerReference:  (Receiver ".")? TypeName TypeArguments?	 }
+     */
+    public static final Rule InitializerReference = rule("InitializerReference").zeroOrOne(Receiver, MEMBER_OP).one(TypeName).zeroOrOne(TypeArguments);
+
+    /**
+     * {@code CallableReference:  MethodReference | InitializerReference	 }
+     */
+    public static final Rule CallableReference = any(MethodReference, InitializerReference);
 
     /**
      * {@code ValueReference:  (Receiver ".")? MemberName	 }
@@ -352,14 +362,44 @@ public class Grammar {
     public static final Rule TypeParams = rule("TypeParams").one(SMALLER_OP).zeroOrMore(TypeParam, COMMA).any(SequencedTypeParam, TypeParam).one(LARGER_OP);
 
     /**
+     * {@code CaseType:  MemberName | Type	 }
+     */
+    public static final Rule CaseType = rule("CaseType").any(MemberName, Type);
+
+    /**
+     * {@code CaseTypes:  "of" CaseType ("|" CaseType)*	 }
+     */
+    public static final Rule CaseTypes = rule("CaseTypes").sequence(CASE_TYPES, CaseType).zeroOrMore(UNION_OP, CaseType);
+
+    /**
      * {@code "Metatypes:  "is" Type ("&" Type)*	 }
      */
-    public static final Rule Metatypes = new DummyRule("Metatypes");
+    public static final Rule Metatypes = rule("Metatypes").sequence(IS_OP, Type).zeroOrMore(INTERSECTION_OP, Type);
+
+    /**
+     * {@code SatisfiedTypes:  "satisfies" Type ("&" Type)*	 }
+     */
+    public static final Rule SatisfiedTypes = rule("SatisfiedTypes").sequence(SATISFIES, Type).zeroOrMore(INTERSECTION_OP, Type);
+
+    /**
+     * {@code AbstractedType:  "abstracts" Type	 }
+     */
+    public static final Rule AbstractedType = rule("AbstractedType").sequence(ABSTRACTED_TYPE, Type);
+
+    /**
+     * {@code TypeConstraintInheritance:  CaseTypes? Metatypes? SatisfiedTypes? AbstractedType?	 }
+     */
+    public static final Rule TypeConstraintInheritance = rule("TypeConstraintInheritance").zeroOrOne(CaseTypes).zeroOrOne(Metatypes).zeroOrOne(SatisfiedTypes).zeroOrOne(AbstractedType);
+
+    /**
+     * {@code TypeConstraint:  "given" TypeName TypeParams? Params? TypeConstraintInheritance	 }
+     */
+    public static final Rule TypeConstraint = rule("TypeConstraint").sequence(TYPE_CONSTRAINT, TypeName).zeroOrOne(TypeParams).zeroOrOne(Params).one(TypeConstraintInheritance);
 
     /**
      * {@code TypeConstraints:  TypeConstraint+	 }
      */
-    public static final Rule TypeConstraints = new DummyRule("TypeConstraints");
+    public static final Rule TypeConstraints = rule("TypeConstraints").oneOrMore(TypeConstraint);
 
     /**
      * {@code MethodHeader:  (UnionType | "function" | "void") MemberName TypeParams? Params+ Metatypes? TypeConstraints?	 }
@@ -392,14 +432,9 @@ public class Grammar {
     public static final Rule AttributeSetter = rule("AttributeSetter").sequence(ASSIGN, MemberName, Block);
 
     /**
-     * {@code AbstractedType:  "abstracts" Type	 }
-     */
-    public static final Rule AbstractedType = new NotImplementedRule("AbstractedType");
-
-    /**
      * {@code AdaptedTypes:  "adapts" Type ("&" Type)*	 }
      */
-    public static final Rule AdaptedTypes = new NotImplementedRule("AdaptedTypes");
+    public static final Rule AdaptedTypes = rule("AdaptedTypes").sequence(ADAPTED_TYPES, Type).zeroOrMore(INTERSECTION_OP, Type);
 
     /**
      * {@code Assignment:  ":=" | ".=" | "+=" | "-=" | "*=" | "/=" | "%=" | "&=" | "|=" | "^="| "~=" | "&&=" | "||=" ;	 }
@@ -440,16 +475,6 @@ public class Grammar {
      * {@code Cases:  CaseItem+ DefaultCaseItem?	 }
      */
     public static final Rule Cases = new NotImplementedRule("Cases");
-
-    /**
-     * {@code CaseType:  MemberName | Type	 }
-     */
-    public static final Rule CaseType = new NotImplementedRule("CaseType");
-
-    /**
-     * {@code CaseTypes:  "of" CaseType ("|" CaseType)*	 }
-     */
-    public static final Rule CaseTypes = new NotImplementedRule("CaseTypes");
 
     /**
      * {@code Catch:  "catch" "(" Variable ")" Block	 }
@@ -647,11 +672,6 @@ public class Grammar {
     public static final Rule IncrementOrDecrement = new NotImplementedRule("IncrementOrDecrement");
 
     /**
-     * {@code InitializerReference:  (Receiver ".")? TypeName TypeArguments?	 }
-     */
-    public static final Rule InitializerReference = new NotImplementedRule("InitializerReference");
-
-    /**
      * {@code Interface:  Annotation* InterfaceHeader (InterfaceBody | TypeSpecifier ";")	 }
      */
     public static final Rule Interface = new NotImplementedRule("Interface");
@@ -676,6 +696,7 @@ public class Grammar {
      */
     public static final Rule Introduction = new NotImplementedRule("Introduction");
 
+
     /**
      * {@code IteratorVariable:  Variable | CallableVariable | EntryVariablePair	 }
      */
@@ -695,12 +716,6 @@ public class Grammar {
      * {@code MethodMeta:  Type "." MemberName TypeArguments?	 }
      */
     public static final Rule MethodMeta = new NotImplementedRule("MethodMeta");
-
-
-    /**
-     * {@code MethodReference:  (Receiver ".")? MemberName TypeArguments?	 }
-     */
-    public static final Rule MethodReference = new NotImplementedRule("MethodReference");
 
     /**
      * {@code ObjectHeader:  "object" MemberName ObjectInheritance	 }
@@ -736,11 +751,6 @@ public class Grammar {
      * {@code Return:  "return" Expression?	 }
      */
     public static final Rule Return = new NotImplementedRule("Return");
-
-    /**
-     * {@code SatisfiedTypes:  "satisfies" Type ("&" Type)*	 }
-     */
-    public static final Rule SatisfiedTypes = new NotImplementedRule("SatisfiedTypes");
 
     /**
      * {@code SequenceInstantiation:  "{" Sequence? "}" ;	 }
@@ -786,16 +796,6 @@ public class Grammar {
      * {@code TypeArgument:  UnionType | Dimension	 }
      */
     public static final Rule TypeArgument = new NotImplementedRule("TypeArgument");
-
-    /**
-     * {@code TypeConstraint:  "given" TypeName TypeParams? Params? TypeConstraintInheritance	 }
-     */
-    public static final Rule TypeConstraint = new NotImplementedRule("TypeConstraint");
-
-    /**
-     * {@code TypeConstraintInheritance:  CaseTypes? Metatypes? SatisfiedTypes? AbstractedType?	 }
-     */
-    public static final Rule TypeConstraintInheritance = new NotImplementedRule("TypeConstraintInheritance");
 
     /**
      * {@code TypedQuotedLiteral:  TypeName QuotedLiteral	 }

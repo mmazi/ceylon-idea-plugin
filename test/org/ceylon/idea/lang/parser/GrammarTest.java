@@ -27,21 +27,23 @@ public class GrammarTest {
     }
 
     @Test
-    @Ignore
     public void testAbstractedType() {
         // AbstractedType: "abstracts" Type
         Rule rule = Grammar.AbstractedType;
 
-        // TODO: Implement
+        valid(rule, ABSTRACTED_TYPE, UIDENTIFIER);
+        valid(rule, ABSTRACTED_TYPE, UIDENTIFIER, MEMBER_OP, UIDENTIFIER);
     }
 
     @Test
-    @Ignore
     public void testAdaptedTypes() {
         // AdaptedTypes: "adapts" Type ("&" Type)*
         Rule rule = Grammar.AdaptedTypes;
 
-        // TODO: Implement
+        valid(rule, ADAPTED_TYPES, UIDENTIFIER);
+        valid(rule, ADAPTED_TYPES, UIDENTIFIER, INTERSECTION_OP, UIDENTIFIER);
+        valid(rule, ADAPTED_TYPES, UIDENTIFIER, INTERSECTION_OP, UIDENTIFIER, INTERSECTION_OP, UIDENTIFIER);
+        valid(rule, ADAPTED_TYPES, UIDENTIFIER, MEMBER_OP, UIDENTIFIER, INTERSECTION_OP, UIDENTIFIER);
     }
 
     @Test
@@ -170,12 +172,14 @@ public class GrammarTest {
     }
 
     @Test
-    @Ignore
     public void testCallableReference() {
         // CallableReference: MethodReference | InitializerReference
         Rule rule = Grammar.CallableReference;
 
-        // TODO: Implement
+        valid(rule, LIDENTIFIER);
+        valid(rule, LIDENTIFIER, SMALLER_OP, UIDENTIFIER, CeylonToken.LARGER_OP);
+        valid(rule, UIDENTIFIER);
+        valid(rule, UIDENTIFIER, SMALLER_OP, UIDENTIFIER, CeylonToken.LARGER_OP);
     }
 
     @Test
@@ -215,21 +219,24 @@ public class GrammarTest {
     }
 
     @Test
-    @Ignore
     public void testCaseType() {
         // CaseType: MemberName | Type
         Rule rule = Grammar.CaseType;
 
-        // TODO: Implement
+        valid(rule, LIDENTIFIER);
+        valid(rule, UIDENTIFIER);
     }
 
     @Test
-    @Ignore
     public void testCaseTypes() {
         // CaseTypes: "of" CaseType ("|" CaseType)*
         Rule rule = Grammar.CaseTypes;
 
-        // TODO: Implement
+        valid(rule, CASE_TYPES, UIDENTIFIER);
+        valid(rule, CASE_TYPES, UIDENTIFIER, UNION_OP, UIDENTIFIER);
+        valid(rule, CASE_TYPES, UIDENTIFIER, UNION_OP, LIDENTIFIER);
+        valid(rule, CASE_TYPES, LIDENTIFIER, UNION_OP, UIDENTIFIER);
+        valid(rule, CASE_TYPES, LIDENTIFIER, UNION_OP, UIDENTIFIER, MEMBER_OP, UIDENTIFIER);
     }
 
     @Test
@@ -773,12 +780,13 @@ public class GrammarTest {
     }
 
     @Test
-    @Ignore
     public void testInitializerReference() {
         // InitializerReference: (Receiver ".")? TypeName TypeArguments?
         Rule rule = Grammar.InitializerReference;
 
-        // TODO: Implement
+        valid(rule, UIDENTIFIER);
+        valid(rule, UIDENTIFIER, SMALLER_OP, UIDENTIFIER, CeylonToken.LARGER_OP);
+        // TODO: Receiver
     }
 
     @Test
@@ -928,12 +936,13 @@ public class GrammarTest {
     }
 
     @Test
-    @Ignore
     public void testMetatypes() {
         // Metatypes: "is" Type ("&" Type)*
         Rule rule = Grammar.Metatypes;
 
-        // TODO: Implement
+        valid(rule, IS_OP, UIDENTIFIER);
+        valid(rule, IS_OP, UIDENTIFIER, INTERSECTION_OP, UIDENTIFIER);
+        valid(rule, IS_OP, UIDENTIFIER, INTERSECTION_OP, UIDENTIFIER, MEMBER_OP, UIDENTIFIER);
     }
 
     @Test
@@ -979,12 +988,13 @@ public class GrammarTest {
     }
 
     @Test
-    @Ignore
     public void testMethodReference() {
         // MethodReference: (Receiver ".")? MemberName TypeArguments?
         Rule rule = Grammar.MethodReference;
 
-        // TODO: Implement
+        valid(rule, LIDENTIFIER);
+        valid(rule, LIDENTIFIER, SMALLER_OP, UIDENTIFIER, CeylonToken.LARGER_OP);
+        // TODO Receiver
     }
 
     @Test
@@ -1145,12 +1155,13 @@ public class GrammarTest {
     }
 
     @Test
-    @Ignore
     public void testSatisfiedTypes() {
         // SatisfiedTypes: "satisfies" Type ("&" Type)*
         Rule rule = Grammar.SatisfiedTypes;
 
-        // TODO: Implement
+        valid(rule, SATISFIES, UIDENTIFIER);
+        valid(rule, SATISFIES, UIDENTIFIER, INTERSECTION_OP, UIDENTIFIER);
+        valid(rule, SATISFIES, UIDENTIFIER, SMALLER_OP, UIDENTIFIER, LARGER_OP, INTERSECTION_OP, UIDENTIFIER);
     }
 
     @Test
@@ -1388,12 +1399,16 @@ public class GrammarTest {
     }
 
     @Test
-    @Ignore
     public void testTypeConstraintInheritance() {
         // TypeConstraintInheritance: CaseTypes? Metatypes? SatisfiedTypes? AbstractedType?
         Rule rule = Grammar.TypeConstraintInheritance;
 
-        // TODO: Implement
+        valid(rule);
+        valid(rule, CASE_TYPES, UIDENTIFIER);
+        valid(rule, IS_OP, UIDENTIFIER);
+        valid(rule, SATISFIES, UIDENTIFIER);
+        valid(rule, ABSTRACTED_TYPE, UIDENTIFIER);
+        valid(rule, CASE_TYPES, UIDENTIFIER, IS_OP, UIDENTIFIER, SATISFIES, UIDENTIFIER, ABSTRACTED_TYPE, UIDENTIFIER);
     }
 
     @Test
@@ -1520,12 +1535,12 @@ public class GrammarTest {
     }
 
     @Test
-    @Ignore
     public void testVariance() {
         // Variance: "out" | "in"
         Rule rule = Grammar.Variance;
 
-        // TODO: Implement
+        valid(rule, OUT);
+        valid(rule, IN_OP);
     }
 
     @Test
