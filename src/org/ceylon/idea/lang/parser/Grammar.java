@@ -642,14 +642,19 @@ public class Grammar {
     public static final Rule FunctionMeta = new NotImplementedRule("FunctionMeta");
 
     /**
+     * {@code TypedVariable:  UnionType MemberName	 }
+     */
+    public static final Rule TypedVariable = rule("TypedVariable").sequence(UnionType, MemberName);
+
+    /**
      * {@code IsCondition:  "is" (TypedVariable Specifier | UnionType MemberName)	 }
      */
-    public static final Rule IsCondition = new DummyRule("IsCondition");
+    public static final Rule IsCondition = rule("IsCondition").one(IS_OP).any(sequence(TypedVariable, Specifier), sequence(UnionType, MemberName));
 
     /**
      * {@code SatisfiesCondition:  "satisfies" Type Type	 }
      */
-    public static final Rule SatisfiesCondition = new DummyRule("SatisfiesCondition");
+    public static final Rule SatisfiesCondition = rule("SatisfiesCondition").sequence(SATISFIES, Type, Type);
 
     /**
      * {@code Condition:  BooleanCondition | IsCondition | ExistsOrNonemptyCondition | SatisfiesCondition	 }
@@ -695,7 +700,6 @@ public class Grammar {
      * {@code Introduction:  "adapt" Type SatisfiedTypes TypeConstraints? ";"	 }
      */
     public static final Rule Introduction = new NotImplementedRule("Introduction");
-
 
     /**
      * {@code IteratorVariable:  Variable | CallableVariable | EntryVariablePair	 }
@@ -801,11 +805,6 @@ public class Grammar {
      * {@code TypedQuotedLiteral:  TypeName QuotedLiteral	 }
      */
     public static final Rule TypedQuotedLiteral = new NotImplementedRule("TypedQuotedLiteral");
-
-    /**
-     * {@code TypedVariable:  UnionType MemberName	 }
-     */
-    public static final Rule TypedVariable = new NotImplementedRule("TypedVariable");
 
     /**
      * {@code TypeMeta:  Type	 }

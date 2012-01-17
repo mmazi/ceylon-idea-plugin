@@ -177,9 +177,9 @@ public class GrammarTest {
         Rule rule = Grammar.CallableReference;
 
         valid(rule, LIDENTIFIER);
-        valid(rule, LIDENTIFIER, SMALLER_OP, UIDENTIFIER, CeylonToken.LARGER_OP);
+        valid(rule, LIDENTIFIER, SMALLER_OP, UIDENTIFIER, LARGER_OP);
         valid(rule, UIDENTIFIER);
-        valid(rule, UIDENTIFIER, SMALLER_OP, UIDENTIFIER, CeylonToken.LARGER_OP);
+        valid(rule, UIDENTIFIER, SMALLER_OP, UIDENTIFIER, LARGER_OP);
     }
 
     @Test
@@ -309,21 +309,22 @@ public class GrammarTest {
     }
 
     @Test
-    @Ignore
     public void testCompilerAnnotation() {
         // CompilerAnnotation : "@" AnnotationName ("[" StringLiteral "]")?
         Rule rule = Grammar.CompilerAnnotation;
 
-        // TODO: Implement
+        valid(rule, COMPILER_ANNOTATION, LIDENTIFIER);
+        valid(rule, COMPILER_ANNOTATION, LIDENTIFIER, INDEX_OP, STRING_LITERAL, RBRACKET);
     }
 
     @Test
-    @Ignore
     public void testCompilerAnnotations() {
         // CompilerAnnotations: CompilerAnnotation*
         Rule rule = Grammar.CompilerAnnotations;
 
-        // TODO: Implement
+        valid(rule);
+        valid(rule, COMPILER_ANNOTATION, LIDENTIFIER, COMPILER_ANNOTATION, LIDENTIFIER);
+        valid(rule, COMPILER_ANNOTATION, LIDENTIFIER, INDEX_OP, STRING_LITERAL, RBRACKET, COMPILER_ANNOTATION, LIDENTIFIER);
     }
 
     @Test
@@ -785,7 +786,7 @@ public class GrammarTest {
         Rule rule = Grammar.InitializerReference;
 
         valid(rule, UIDENTIFIER);
-        valid(rule, UIDENTIFIER, SMALLER_OP, UIDENTIFIER, CeylonToken.LARGER_OP);
+        valid(rule, UIDENTIFIER, SMALLER_OP, UIDENTIFIER, LARGER_OP);
         // TODO: Receiver
     }
 
@@ -862,12 +863,13 @@ public class GrammarTest {
     }
 
     @Test
-    @Ignore
     public void testIsCondition() {
         // IsCondition: "is" (TypedVariable Specifier | UnionType MemberName)
         Rule rule = Grammar.IsCondition;
 
-        // TODO: Implement
+        valid(rule, IS_OP, UIDENTIFIER, LIDENTIFIER, SPECIFY, STRING_LITERAL);
+        valid(rule, IS_OP, UIDENTIFIER, LIDENTIFIER);
+        valid(rule, IS_OP, UIDENTIFIER, UNION_OP, UIDENTIFIER, LIDENTIFIER);
     }
 
     @Test
@@ -993,7 +995,7 @@ public class GrammarTest {
         Rule rule = Grammar.MethodReference;
 
         valid(rule, LIDENTIFIER);
-        valid(rule, LIDENTIFIER, SMALLER_OP, UIDENTIFIER, CeylonToken.LARGER_OP);
+        valid(rule, LIDENTIFIER, SMALLER_OP, UIDENTIFIER, LARGER_OP);
         // TODO Receiver
     }
 
@@ -1165,21 +1167,22 @@ public class GrammarTest {
     }
 
     @Test
-    @Ignore
     public void testSatisfiesCondition() {
         // SatisfiesCondition: "satisfies" Type Type
         Rule rule = Grammar.SatisfiesCondition;
 
-        // TODO: Implement
+        valid(rule, SATISFIES, UIDENTIFIER, UIDENTIFIER);
+        valid(rule, SATISFIES, UIDENTIFIER, MEMBER_OP, UIDENTIFIER, UIDENTIFIER);
     }
 
     @Test
-    @Ignore
     public void testSelfReference() {
         // SelfReference: "this" | "super" | "outer"
         Rule rule = Grammar.SelfReference;
 
-        // TODO: Implement
+        valid(rule, THIS);
+        valid(rule, SUPER);
+        valid(rule, OUTER);
     }
 
     @Test
@@ -1197,7 +1200,7 @@ public class GrammarTest {
         Rule rule = Grammar.SequencedParam;
 
         valid(rule, UIDENTIFIER, ELLIPSIS, LIDENTIFIER);
-        valid(rule, UIDENTIFIER, CeylonToken.UNION_OP, UIDENTIFIER, ELLIPSIS, LIDENTIFIER);
+        valid(rule, UIDENTIFIER, UNION_OP, UIDENTIFIER, ELLIPSIS, LIDENTIFIER);
     }
 
     @Test
@@ -1439,12 +1442,12 @@ public class GrammarTest {
     }
 
     @Test
-    @Ignore
     public void testTypedVariable() {
         // TypedVariable: UnionType MemberName
         Rule rule = Grammar.TypedVariable;
 
-        // TODO: Implement
+        valid(rule, UIDENTIFIER, LIDENTIFIER);
+        valid(rule, UIDENTIFIER, UNION_OP, UIDENTIFIER, LIDENTIFIER);
     }
 
     @Test
