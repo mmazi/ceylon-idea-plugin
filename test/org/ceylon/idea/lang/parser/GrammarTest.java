@@ -1370,12 +1370,14 @@ public class GrammarTest {
     }
 
     @Test
-    @Ignore
     public void testTypeConstraint() {
         // TypeConstraint: "given" TypeName TypeParams? Params? TypeConstraintInheritance
         Rule rule = Grammar.TypeConstraint;
 
-        // TODO: Implement
+        valid(rule, TYPE_CONSTRAINT, UIDENTIFIER);
+        valid(rule, TYPE_CONSTRAINT, UIDENTIFIER, SMALLER_OP, UIDENTIFIER, LARGER_OP);
+        valid(rule, TYPE_CONSTRAINT, UIDENTIFIER, LPAREN, UIDENTIFIER, ELLIPSIS, LIDENTIFIER, RPAREN);
+        valid(rule, TYPE_CONSTRAINT, UIDENTIFIER, CASE_TYPES, UIDENTIFIER);
     }
 
     @Test
@@ -1392,12 +1394,14 @@ public class GrammarTest {
     }
 
     @Test
-    @Ignore
     public void testTypeConstraints() {
         // TypeConstraints: TypeConstraint+
         Rule rule = Grammar.TypeConstraints;
 
-        // TODO: Implement
+        valid(rule, TYPE_CONSTRAINT, UIDENTIFIER);
+        valid(rule, TYPE_CONSTRAINT, UIDENTIFIER, TYPE_CONSTRAINT, UIDENTIFIER);
+
+        invalid(rule);
     }
 
     @Test

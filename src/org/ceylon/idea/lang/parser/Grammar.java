@@ -439,7 +439,8 @@ public class Grammar {
     /**
      * {@code Assignment:  ":=" | ".=" | "+=" | "-=" | "*=" | "/=" | "%=" | "&=" | "|=" | "^="| "~=" | "&&=" | "||=" ;	 }
      */
-    public static final Rule Assignment = new NotImplementedRule("Assignment");
+    //ASSIGN_OP, APPLY_OP, ADD_ASSIGN_OP, SUBTRACT_ASSIGN_OP, MULTIPLY_ASSIGN_OP, DIVIDE_ASSIGN_OP, REMAINDER_ASSIGN_OP, INTERSECT_ASSIGN_OP, UNION_ASSIGN_OP, XOR_ASSIGN_OP, COMPLEMENT_ASSIGN_OP, AND_ASSIGN_OP, OR_ASSIGN_OP
+    public static final Rule Assignment = new DummyRule("Assignment");
 
     /**
      * {@code AttributeMeta:  Type "." MemberName	 }
@@ -634,7 +635,7 @@ public class Grammar {
     /**
      * {@code IncrementOrDecrement:  "--" | "++" ; }
      */
-    public static final Rule IncrementOrDecrement = new NotImplementedRule("IncrementOrDecrement");
+    public static final Rule IncrementOrDecrement = new DummyRule("IncrementOrDecrement");
 
     /**
      * {@code Interface:  Annotation* InterfaceHeader (InterfaceBody | TypeSpecifier ";")	 }
@@ -814,7 +815,7 @@ public class Grammar {
     /**
      * {@code ExpressionStatement:  ( Assignment | IncrementOrDecrement | Invocation ) ";"	 }
      */
-    public static final Rule ExpressionStatement = new DummyRule("ExpressionStatement");
+    public static final Rule ExpressionStatement = rule("ExpressionStatement").any(Assignment, IncrementOrDecrement, Invocation).one(SEMICOLON);
 
     /**
      * {@code Specification:  MemberName Specifier ";"	 }
