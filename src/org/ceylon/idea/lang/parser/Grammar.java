@@ -216,9 +216,34 @@ public class Grammar {
     public static final Rule Atom = any(Literal, StringTemplate, SelfReference, ParExpression);
 
     /**
+     * {@code TypeMeta:  Type	 }
+     */
+    public static final Rule TypeMeta = rule("TypeMeta").one(Type);
+
+    /**
+     * {@code MethodMeta:  Type "." MemberName TypeArguments?	 }
+     */
+    public static final Rule MethodMeta = rule("MethodMeta").sequence(Type, MEMBER_OP, MemberName).zeroOrOne(TypeArguments);
+
+    /**
+     * {@code AttributeMeta:  Type "." MemberName	 }
+     */
+    public static final Rule AttributeMeta = rule("AttributeMeta").sequence(Type, MEMBER_OP, MemberName);
+
+    /**
+     * {@code FunctionMeta:  MemberName TypeArguments?	 }
+     */
+    public static final Rule FunctionMeta = rule("FunctionMeta").one(MemberName).zeroOrOne(TypeArguments);
+
+    /**
+     * {@code ValueMeta:  MemberName TypeArguments?	 }
+     */
+    public static final Rule ValueMeta = rule("ValueMeta").one(MemberName).zeroOrOne(TypeArguments);
+
+    /**
      * {@code Meta:  TypeMeta | MethodMeta | AttributeMeta | FunctionMeta | ValueMeta	 }
      */
-    public static final Rule Meta = new DummyRule("Meta");
+    public static final Rule Meta = any(TypeMeta, MethodMeta, AttributeMeta, FunctionMeta, ValueMeta);
 
     /**
      * {@code Receiver:  Primary	 }
@@ -443,11 +468,6 @@ public class Grammar {
     public static final Rule Assignment = new DummyRule("Assignment");
 
     /**
-     * {@code AttributeMeta:  Type "." MemberName	 }
-     */
-    public static final Rule AttributeMeta = new NotImplementedRule("AttributeMeta");
-
-    /**
      * {@code BooleanCondition:  Expression }
      */
     public static final Rule BooleanCondition = rule("BooleanCondition").one(Expression);
@@ -598,11 +618,6 @@ public class Grammar {
     public static final Rule FractionalMagnitude = new NotImplementedRule("FractionalMagnitude");
 
     /**
-     * {@code FunctionMeta:  MemberName TypeArguments?	 }
-     */
-    public static final Rule FunctionMeta = new NotImplementedRule("FunctionMeta");
-
-    /**
      * {@code TypedVariable:  UnionType MemberName	 }
      */
     public static final Rule TypedVariable = rule("TypedVariable").sequence(UnionType, MemberName);
@@ -671,11 +686,6 @@ public class Grammar {
      * {@code Magnitude:  "k" | "M" | "G" | "T" | "P"	 }
      */
     public static final Rule Magnitude = new NotImplementedRule("Magnitude");
-
-    /**
-     * {@code MethodMeta:  Type "." MemberName TypeArguments?	 }
-     */
-    public static final Rule MethodMeta = new NotImplementedRule("MethodMeta");
 
     /**
      * {@code ObjectHeader:  "object" MemberName ObjectInheritance	 }
@@ -793,19 +803,9 @@ public class Grammar {
     public static final Rule TypedQuotedLiteral = new NotImplementedRule("TypedQuotedLiteral");
 
     /**
-     * {@code TypeMeta:  Type	 }
-     */
-    public static final Rule TypeMeta = new NotImplementedRule("TypeMeta");
-
-    /**
      * {@code TypeSpecifier:  "=" Type	 }
      */
     public static final Rule TypeSpecifier = new NotImplementedRule("TypeSpecifier");
-
-    /**
-     * {@code ValueMeta:  MemberName TypeArguments?	 }
-     */
-    public static final Rule ValueMeta = new NotImplementedRule("ValueMeta");
 
     /**
      * {@code While:  LoopCondition Block	 }

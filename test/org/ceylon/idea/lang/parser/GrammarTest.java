@@ -637,12 +637,12 @@ public class GrammarTest {
     }
 
     @Test
-    @Ignore
     public void testFunctionMeta() {
         // FunctionMeta: MemberName TypeArguments?
         Rule rule = Grammar.FunctionMeta;
 
-        // TODO: Implement
+        valid(rule, LIDENTIFIER);
+        valid(rule, LIDENTIFIER, SMALLER_OP, UIDENTIFIER, LARGER_OP);
     }
 
     @Test
@@ -902,15 +902,6 @@ public class GrammarTest {
     }
 
     @Test
-    @Ignore
-    public void testMeta() {
-        // Meta: TypeMeta | MethodMeta | AttributeMeta | FunctionMeta | ValueMeta
-        Rule rule = Grammar.Meta;
-
-        // TODO: Implement
-    }
-
-    @Test
     public void testMetatypes() {
         // Metatypes: "is" Type ("&" Type)*
         Rule rule = Grammar.Metatypes;
@@ -954,12 +945,12 @@ public class GrammarTest {
     }
 
     @Test
-    @Ignore
     public void testMethodMeta() {
         // MethodMeta: Type "." MemberName TypeArguments?
         Rule rule = Grammar.MethodMeta;
 
-        // TODO: Implement
+        valid(rule, UIDENTIFIER, MEMBER_OP, LIDENTIFIER);
+        valid(rule, UIDENTIFIER, MEMBER_OP, LIDENTIFIER, SMALLER_OP, UIDENTIFIER, LARGER_OP);
     }
 
     @Test
@@ -1432,12 +1423,11 @@ public class GrammarTest {
     }
 
     @Test
-    @Ignore
     public void testTypeMeta() {
         // TypeMeta: Type
         Rule rule = Grammar.TypeMeta;
 
-        // TODO: Implement
+        valid(rule, UIDENTIFIER);
     }
 
     @Test
@@ -1491,12 +1481,12 @@ public class GrammarTest {
     }
 
     @Test
-    @Ignore
     public void testValueMeta() {
         // ValueMeta: MemberName TypeArguments?
         Rule rule = Grammar.ValueMeta;
 
-        // TODO: Implement
+        valid(rule, LIDENTIFIER);
+        valid(rule, LIDENTIFIER, SMALLER_OP, UIDENTIFIER, LARGER_OP);
     }
 
     @Test
