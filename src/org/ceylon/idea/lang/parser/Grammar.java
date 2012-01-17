@@ -317,9 +317,24 @@ public class Grammar {
     public static final Rule Arguments = rule("Arguments").any(sequence(PositionalArguments, zeroOrOne(FunctionalArguments)), NamedArguments);
 
     /**
+     * {@code Variance:  "out" | "in"	 }
+     */
+    public static final Rule Variance = rule("Variance").any(OUT, IN_OP);
+
+    /**
+     * {@code TypeParam:  Variance? TypeName	 }
+     */
+    public static final Rule TypeParam = rule("TypeParam").zeroOrOne(Variance).one(TypeName);
+
+    /**
+     * {@code SequencedTypeParam:  TypeName "..."	 }
+     */
+    public static final Rule SequencedTypeParam = rule("SequencedTypeParam").sequence(TypeName, ELLIPSIS);
+
+    /**
      * {@code TypeParams:  "<" (TypeParam ",")* (TypeParam | SequencedTypeParam) ">"	 }
      */
-    public static final Rule TypeParams = new DummyRule("TypeParams");
+    public static final Rule TypeParams = rule("TypeParams").one(SMALLER_OP).zeroOrMore(TypeParam, COMMA).any(SequencedTypeParam, TypeParam).one(LARGER_OP);
 
     /**
      * {@code "Metatypes:  "is" Type ("&" Type)*	 }
@@ -681,6 +696,7 @@ public class Grammar {
      */
     public static final Rule ObjectInheritance = new NotImplementedRule("ObjectInheritance");
 
+
     /**
      * {@code OuterReference:  (Receiver ".")? "outer"	 }
      */
@@ -695,7 +711,6 @@ public class Grammar {
      * {@code Receiver:  Primary	 }
      */
     public static final Rule Receiver = new NotImplementedRule("Receiver");
-
 
     /**
      * {@code Resource:  MemberName | InitializerReference Arguments | Variable Specifier	 }
@@ -716,11 +731,6 @@ public class Grammar {
      * {@code SatisfiedTypes:  "satisfies" Type ("&" Type)*	 }
      */
     public static final Rule SatisfiedTypes = new NotImplementedRule("SatisfiedTypes");
-
-    /**
-     * {@code SequencedTypeParam:  TypeName "..."	 }
-     */
-    public static final Rule SequencedTypeParam = rule("SequencedTypeParam").sequence(TypeName, ELLIPSIS);
 
     /**
      * {@code SequenceInstantiation:  "{" Sequence? "}" ;	 }
@@ -793,11 +803,6 @@ public class Grammar {
     public static final Rule TypeMeta = new NotImplementedRule("TypeMeta");
 
     /**
-     * {@code TypeParam:  Variance? TypeName	 }
-     */
-    public static final Rule TypeParam = new NotImplementedRule("TypeParam");
-
-    /**
      * {@code TypeSpecifier:  "=" Type	 }
      */
     public static final Rule TypeSpecifier = new NotImplementedRule("TypeSpecifier");
@@ -816,11 +821,6 @@ public class Grammar {
      * {@code Variable:  UnionType? MemberName	 }
      */
     public static final Rule Variable = new NotImplementedRule("Variable");
-
-    /**
-     * {@code Variance:  "out" | "in"	 }
-     */
-    public static final Rule Variance = new NotImplementedRule("Variance");
 
     /**
      * {@code While:  LoopCondition Block	 }

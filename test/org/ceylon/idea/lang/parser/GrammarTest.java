@@ -1450,21 +1450,25 @@ public class GrammarTest {
     }
 
     @Test
-    @Ignore
     public void testTypeParam() {
         // TypeParam: Variance? TypeName
         Rule rule = Grammar.TypeParam;
 
-        // TODO: Implement
+        valid(rule, UIDENTIFIER);
+        valid(rule, IN_OP, UIDENTIFIER);
+        valid(rule, OUT, UIDENTIFIER);
     }
 
     @Test
-    @Ignore
     public void testTypeParams() {
         // TypeParams: "<" (TypeParam ",")* (TypeParam | SequencedTypeParam) ">"
         Rule rule = Grammar.TypeParams;
 
-        // TODO: Implement
+        valid(rule, SMALLER_OP, UIDENTIFIER, LARGER_OP);
+        valid(rule, SMALLER_OP, IN_OP, UIDENTIFIER, LARGER_OP);
+        valid(rule, SMALLER_OP, UIDENTIFIER, COMMA, UIDENTIFIER, LARGER_OP);
+        valid(rule, SMALLER_OP, UIDENTIFIER, ELLIPSIS, LARGER_OP);
+        valid(rule, SMALLER_OP, UIDENTIFIER, COMMA, UIDENTIFIER, ELLIPSIS, LARGER_OP);
     }
 
     @Test
