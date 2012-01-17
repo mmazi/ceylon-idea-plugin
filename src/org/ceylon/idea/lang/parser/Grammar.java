@@ -502,11 +502,6 @@ public class Grammar {
     public static final Rule ClassInheritance = new NotImplementedRule("ClassInheritance");
 
     /**
-     * {@code ConcreteType:  "this" "is"	 }
-     */
-    public static final Rule ConcreteType = new NotImplementedRule("ConcreteType");
-
-    /**
      * {@code ConditionalTypes:  SatisfiedTypes Conditions	 }
      */
     public static final Rule ConditionalTypes = new NotImplementedRule("ConditionalTypes");
@@ -866,9 +861,6 @@ public class Grammar {
      * {@code Import:  "import" FullPackageName "{" ImportElements? "}" }
      */
     public static final Rule Import = rule("Import").sequence(IMPORT, FullPackageName).one(LBRACE).zeroOrOne(ImportElements).one(RBRACE);
-
-    // ====================================
-
 
     /**
      * {@code Method:  Annotation* MethodHeader (Block | NamedArguments | Specifier? ";")	 }

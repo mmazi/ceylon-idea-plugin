@@ -329,15 +329,6 @@ public class GrammarTest {
 
     @Test
     @Ignore
-    public void testConcreteType() {
-        // ConcreteType: "this" "is"
-        Rule rule = Grammar.ConcreteType;
-
-        // TODO: Implement
-    }
-
-    @Test
-    @Ignore
     public void testCondition() {
         // Condition: BooleanCondition | IsCondition | ExistsOrNonemptyCondition | SatisfiesCondition
         Rule rule = Grammar.Condition;
