@@ -452,11 +452,6 @@ public class Grammar {
     public static final Rule BooleanCondition = rule("BooleanCondition").one(Expression);
 
     /**
-     * {@code Break:  "break" }
-     */
-    public static final Rule Break = new NotImplementedRule("Break");
-
-    /**
      * {@code CallableVariable:  (UnionType | "void")? MemberName Params+	 }
      */
     public static final Rule CallableVariable = rule("CallableVariable").zeroOrAny(UnionType, VOID_MODIFIER).one(MemberName).oneOrMore(Params);
@@ -490,11 +485,6 @@ public class Grammar {
      * {@code Conditions:  "if" "(" Condition ("&&" Condition)* ")"	 }
      */
     public static final Rule Conditions = new NotImplementedRule("Conditions");
-
-    /**
-     * {@code Continue:  "continue"	 }
-     */
-    public static final Rule Continue = new NotImplementedRule("Continue");
 
     /**
      * {@code DateLiteral:   "'"  Digit{1,2} "/" Digit{1,2} "/" Digit{4}  "'"	 }
@@ -540,11 +530,6 @@ public class Grammar {
      * {@code DimensionVariable:  TypeName | "#" MemberName	 }
      */
     public static final Rule DimensionVariable = new NotImplementedRule("DimensionVariable");
-
-    /**
-     * {@code Directive:  Return | Throw | Break | Continue	 }
-     */
-    public static final Rule Directive = new NotImplementedRule("Directive");
 
     /**
      * {@code Variable:  UnionType? MemberName	 }
@@ -724,7 +709,7 @@ public class Grammar {
     /**
      * {@code Return:  "return" Expression?	 }
      */
-    public static final Rule Return = new NotImplementedRule("Return");
+    public static final Rule Return = rule("Return").one(RETURN).zeroOrOne(Expression);
 
     /**
      * {@code SequenceInstantiation:  "{" Sequence? "}" ;	 }
@@ -769,7 +754,12 @@ public class Grammar {
     /**
      * {@code Throw:  "throw" Expression?	 }
      */
-    public static final Rule Throw = new NotImplementedRule("Throw");
+    public static final Rule Throw = rule("Throw").one(THROW).zeroOrOne(Expression);
+
+    /**
+     * {@code Directive:  Return | Throw | Break | Continue	 }
+     */
+    public static final Rule Directive = any(Return, Throw, BREAK, CONTINUE);
 
     /**
      * {@code TimeLiteral:   "'"  Digit{1,2} ":" Digit{2} ( ":" Digit{2} ( ":" Digit{3} )? )?  (" " "AM"|"PM")?  (" " Character{3,4})?  "'"	 }
@@ -834,7 +824,7 @@ public class Grammar {
     /**
      * {@code DirectiveStatement:  Directive ";"	 }
      */
-    public static final Rule DirectiveStatement = new DummyRule("DirectiveStatement");
+    public static final Rule DirectiveStatement = rule("DirectiveStatement").sequence(Directive, SEMICOLON);
 
     /**
      * {@code ControlStructure:  IfElse | SwitchCaseElse | While | ForFail | TryCatchFinally	 }

@@ -134,14 +134,13 @@ public class GrammarTest {
     }
 
     @Test
-    @Ignore
     public void testBlock() {
         // Block: "{" (Declaration | Statement)* "}"
         Rule rule = Grammar.Block;
 
         valid(rule, LBRACE, RBRACE);
         valid(rule, LBRACE, UIDENTIFIER, LIDENTIFIER, SEMICOLON, RBRACE);
-        // TODO: Statement
+        valid(rule, LBRACE, RETURN, SEMICOLON, RBRACE);
     }
 
     @Test
@@ -149,15 +148,6 @@ public class GrammarTest {
     public void testBooleanCondition() {
         // BooleanCondition: Expression
         Rule rule = Grammar.BooleanCondition;
-
-        // TODO: Implement
-    }
-
-    @Test
-    @Ignore
-    public void testBreak() {
-        // Break: "break"
-        Rule rule = Grammar.Break;
 
         // TODO: Implement
     }
@@ -246,12 +236,13 @@ public class GrammarTest {
     }
 
     @Test
-    @Ignore
     public void testCatch() {
         // Catch: "catch" "(" Variable ")" Block
         Rule rule = Grammar.Catch;
 
-        // TODO: Implement
+        valid(rule, CATCH_CLAUSE, LPAREN, LIDENTIFIER, RPAREN, LBRACE, RBRACE);
+        valid(rule, CATCH_CLAUSE, LPAREN, UIDENTIFIER, LIDENTIFIER, RPAREN, LBRACE, RBRACE);
+        valid(rule, CATCH_CLAUSE, LPAREN, UIDENTIFIER, UNION_OP, UIDENTIFIER, LIDENTIFIER, RPAREN, LBRACE, RBRACE);
     }
 
     @Test
@@ -362,15 +353,6 @@ public class GrammarTest {
 
     @Test
     @Ignore
-    public void testContinue() {
-        // Continue: "continue"
-        Rule rule = Grammar.Continue;
-
-        // TODO: Implement
-    }
-
-    @Test
-    @Ignore
     public void testControlStructure() {
         // ControlStructure: IfElse | SwitchCaseElse | While | ForFail | TryCatchFinally
         Rule rule = Grammar.ControlStructure;
@@ -460,21 +442,14 @@ public class GrammarTest {
     }
 
     @Test
-    @Ignore
-    public void testDirective() {
-        // Directive: Return | Throw | Break | Continue
-        Rule rule = Grammar.Directive;
-
-        // TODO: Implement
-    }
-
-    @Test
-    @Ignore
     public void testDirectiveStatement() {
         // DirectiveStatement: Directive ";"
         Rule rule = Grammar.DirectiveStatement;
 
-        // TODO: Implement
+        valid(rule, RETURN, SEMICOLON);
+        valid(rule, THROW, SEMICOLON);
+        valid(rule, BREAK, SEMICOLON);
+        valid(rule, CONTINUE, SEMICOLON);
     }
 
     @Test
@@ -558,12 +533,11 @@ public class GrammarTest {
     }
 
     @Test
-    @Ignore
     public void testFinally() {
         // Finally: "finally" Block
         Rule rule = Grammar.Finally;
 
-        // TODO: Implement
+        valid(rule, FINALLY_CLAUSE, LBRACE, RBRACE);
     }
 
     @Test
@@ -1129,12 +1103,13 @@ public class GrammarTest {
     }
 
     @Test
-    @Ignore
     public void testResource() {
         // Resource: MemberName | InitializerReference Arguments | Variable Specifier
         Rule rule = Grammar.Resource;
 
-        // TODO: Implement
+        valid(rule, LIDENTIFIER);
+        valid(rule, UIDENTIFIER, LBRACE, RBRACE);
+        valid(rule, LIDENTIFIER, SPECIFY, CHAR_LITERAL);
     }
 
     @Test
@@ -1147,12 +1122,12 @@ public class GrammarTest {
     }
 
     @Test
-    @Ignore
     public void testReturn() {
         // Return: "return" Expression?
         Rule rule = Grammar.Return;
 
-        // TODO: Implement
+        valid(rule, RETURN);
+        valid(rule, RETURN, CHAR_LITERAL);
     }
 
     @Test
@@ -1318,12 +1293,12 @@ public class GrammarTest {
     }
 
     @Test
-    @Ignore
     public void testThrow() {
         // Throw: "throw" Expression?
         Rule rule = Grammar.Throw;
 
-        // TODO: Implement
+        valid(rule, THROW);
+        valid(rule, THROW, CHAR_LITERAL);
     }
 
     @Test
@@ -1336,21 +1311,24 @@ public class GrammarTest {
     }
 
     @Test
-    @Ignore
     public void testTry() {
         // Try: "try" ("(" Resource ")")? Block
         Rule rule = Grammar.Try;
 
-        // TODO: Implement
+        valid(rule, TRY_CLAUSE, LBRACE, RBRACE);
+        valid(rule, TRY_CLAUSE, LPAREN, LIDENTIFIER, RPAREN, LBRACE, RBRACE);
     }
 
     @Test
-    @Ignore
     public void testTryCatchFinally() {
         // TryCatchFinally: Try Catch* Finally?
         Rule rule = Grammar.TryCatchFinally;
 
-        // TODO: Implement
+        valid(rule, TRY_CLAUSE, LBRACE, RBRACE);
+        valid(rule, TRY_CLAUSE, LBRACE, RBRACE, CATCH_CLAUSE, LPAREN, LIDENTIFIER, RPAREN, LBRACE, RBRACE);
+        valid(rule, TRY_CLAUSE, LBRACE, RBRACE, CATCH_CLAUSE, LPAREN, LIDENTIFIER, RPAREN, LBRACE, RBRACE, CATCH_CLAUSE, LPAREN, LIDENTIFIER, RPAREN, LBRACE, RBRACE);
+        valid(rule, TRY_CLAUSE, LBRACE, RBRACE, FINALLY_CLAUSE, LBRACE, RBRACE);
+        valid(rule, TRY_CLAUSE, LBRACE, RBRACE, CATCH_CLAUSE, LPAREN, LIDENTIFIER, RPAREN, LBRACE, RBRACE, FINALLY_CLAUSE, LBRACE, RBRACE);
     }
 
     @Test
