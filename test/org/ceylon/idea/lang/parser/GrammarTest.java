@@ -335,33 +335,6 @@ public class GrammarTest {
 
     @Test
     @Ignore
-    public void testConditionalTypes() {
-        // ConditionalTypes: SatisfiedTypes Conditions
-        Rule rule = Grammar.ConditionalTypes;
-
-        // TODO: Implement
-    }
-
-    @Test
-    @Ignore
-    public void testConditions() {
-        // Conditions: "if" "(" Condition ("&&" Condition)* ")"
-        Rule rule = Grammar.Conditions;
-
-        // TODO: Implement
-    }
-
-    @Test
-    @Ignore
-    public void testControlStructure() {
-        // ControlStructure: IfElse | SwitchCaseElse | While | ForFail | TryCatchFinally
-        Rule rule = Grammar.ControlStructure;
-
-        // TODO: Implement
-    }
-
-    @Test
-    @Ignore
     public void testDateLiteral() {
         // DateLiteral: "'" Digit{1,2} "/" Digit{1,2} "/" Digit{4} "'"
         Rule rule = Grammar.DateLiteral;
@@ -379,12 +352,11 @@ public class GrammarTest {
     }
 
     @Test
-    @Ignore
     public void testDefaultCaseItem() {
         // DefaultCaseItem: "else" Block
         Rule rule = Grammar.DefaultCaseItem;
 
-        // TODO: Implement
+        valid(rule, ELSE_CLAUSE, LBRACE, RBRACE);
     }
 
     @Test
@@ -395,51 +367,6 @@ public class GrammarTest {
         valid(rule, UIDENTIFIER, LIDENTIFIER, SPECIFY, STRING_LITERAL);
     }
 
-
-    @Test
-    @Ignore
-    public void testDimension() {
-        // Dimension: DimensionTerm ("+" DimensionTerm)*
-        Rule rule = Grammar.Dimension;
-
-        // TODO: Implement
-    }
-
-    @Test
-    @Ignore
-    public void testDimensionAtom() {
-        // DimensionAtom: DimensionConstant | DimensionVariable | ParenDimension
-        Rule rule = Grammar.DimensionAtom;
-
-        // TODO: Implement
-    }
-
-    @Test
-    @Ignore
-    public void testDimensionConstant() {
-        // DimensionConstant: "#" IntegerLiteral
-        Rule rule = Grammar.DimensionConstant;
-
-        // TODO: Implement
-    }
-
-    @Test
-    @Ignore
-    public void testDimensionTerm() {
-        // DimensionTerm: (DimensionConstant "*")* DimensionAtom
-        Rule rule = Grammar.DimensionTerm;
-
-        // TODO: Implement
-    }
-
-    @Test
-    @Ignore
-    public void testDimensionVariable() {
-        // DimensionVariable: TypeName | "#" MemberName
-        Rule rule = Grammar.DimensionVariable;
-
-        // TODO: Implement
-    }
 
     @Test
     public void testDirectiveStatement() {
@@ -924,12 +851,11 @@ public class GrammarTest {
     }
 
     @Test
-    @Ignore
     public void testMethodAttributeAlias() {
         // MethodAttributeAlias: MemberName "="
         Rule rule = Grammar.MethodAttributeAlias;
 
-        // TODO: Implement
+        valid(rule, LIDENTIFIER, SPECIFY);
     }
 
     @Test
@@ -1042,15 +968,6 @@ public class GrammarTest {
     public void testParams() {
         // Params: "(" Param ("," Param)* ("," DefaultParam)* ("," SequencedParam)? | DefaultParam ("," DefaultParam)* ("," SequencedParam)? | SequencedParam? ")"
         Rule rule = Grammar.Params;
-
-        // TODO: Implement
-    }
-
-    @Test
-    @Ignore
-    public void testParenDimension() {
-        // ParenDimension: "(" Dimension ")"
-        Rule rule = Grammar.ParenDimension;
 
         // TODO: Implement
     }
@@ -1336,15 +1253,6 @@ public class GrammarTest {
     public void testTypeAlias() {
         // TypeAlias: TypeName "="
         Rule rule = Grammar.TypeAlias;
-
-        // TODO: Implement
-    }
-
-    @Test
-    @Ignore
-    public void testTypeArgument() {
-        // TypeArgument: UnionType | Dimension
-        Rule rule = Grammar.TypeArgument;
 
         // TODO: Implement
     }

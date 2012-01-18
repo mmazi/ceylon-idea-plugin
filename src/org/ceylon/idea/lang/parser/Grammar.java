@@ -498,16 +498,6 @@ public class Grammar {
     public static final Rule ClassInheritance = new NotImplementedRule("ClassInheritance");
 
     /**
-     * {@code ConditionalTypes:  SatisfiedTypes Conditions	 }
-     */
-    public static final Rule ConditionalTypes = new NotImplementedRule("ConditionalTypes");
-
-    /**
-     * {@code Conditions:  "if" "(" Condition ("&&" Condition)* ")"	 }
-     */
-    public static final Rule Conditions = new NotImplementedRule("Conditions");
-
-    /**
      * {@code DateLiteral:   "'"  Digit{1,2} "/" Digit{1,2} "/" Digit{4}  "'"	 }
      */
     public static final Rule DateLiteral = new NotImplementedRule("DateLiteral");
@@ -526,31 +516,6 @@ public class Grammar {
      * {@code Digits:  Digit+ | Digit{1..3} ("_" Digit{3})+	 }
      */
     public static final Rule Digits = new NotImplementedRule("Digits");
-
-    /**
-     * {@code DimensionAtom:  DimensionConstant | DimensionVariable | "ParenDimension	 }
-     */
-    public static final Rule DimensionAtom = new NotImplementedRule("DimensionAtom");
-
-    /**
-     * {@code DimensionConstant:  "#" IntegerLiteral	 }
-     */
-    public static final Rule DimensionConstant = new NotImplementedRule("DimensionConstant");
-
-    /**
-     * {@code Dimension:  DimensionTerm ("+" DimensionTerm)*	 }
-     */
-    public static final Rule Dimension = new NotImplementedRule("Dimension");
-
-    /**
-     * {@code DimensionTerm:  (DimensionConstant "*")* DimensionAtom	 }
-     */
-    public static final Rule DimensionTerm = new NotImplementedRule("DimensionTerm");
-
-    /**
-     * {@code DimensionVariable:  TypeName | "#" MemberName	 }
-     */
-    public static final Rule DimensionVariable = new NotImplementedRule("DimensionVariable");
 
     /**
      * {@code Variable:  UnionType? MemberName	 }
@@ -703,11 +668,6 @@ public class Grammar {
     public static final Rule OuterReference = new NotImplementedRule("OuterReference");
 
     /**
-     * {@code "ParenDimension:  "(" Dimension ")"	 }
-     */
-    public static final Rule ParenDimension = new NotImplementedRule("ParenDimension");
-
-    /**
      * {@code Resource:  MemberName | InitializerReference Arguments | Variable Specifier	 }
      */
     public static final Rule Resource = rule("Resource").any(sequence(InitializerReference, Arguments), sequence(Variable, Specifier), MemberName);
@@ -791,11 +751,6 @@ public class Grammar {
      * {@code TryCatchFinally:  Try Catch* Finally?	 }
      */
     public static final Rule TryCatchFinally = rule("TryCatchFinally").one(Try).zeroOrMore(Catch).zeroOrOne(Finally);
-
-    /**
-     * {@code TypeArgument:  UnionType | Dimension	 }
-     */
-    public static final Rule TypeArgument = new NotImplementedRule("TypeArgument");
 
     /**
      * {@code TypedQuotedLiteral:  TypeName QuotedLiteral	 }
