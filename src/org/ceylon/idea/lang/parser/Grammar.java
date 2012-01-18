@@ -13,6 +13,11 @@ import static org.ceylon.idea.lang.parser.rule.Rules.*;
 public class Grammar {
 
     /**
+     * {@code Declaration:  Method | Attribute | TypeDeclaration }
+     */
+    public static final ComplexRule Declaration = rule("Declaration");
+
+    /**
      * {@code Block:  "{" (Declaration | Statement)* "}"	 }
      *
      * @see #deferredInit()
@@ -90,6 +95,11 @@ public class Grammar {
      * {@code Type:  TypeNameWithArguments ("." TypeNameWithArguments)*	 }
      */
     public static final Rule Type = rule("Type").one(TypeNameWithArguments).zeroOrMore(MEMBER_OP, TypeNameWithArguments);
+
+    /**
+     * {@code TypeSpecifier:  "=" Type	 }
+     */
+    public static final Rule TypeSpecifier = rule("TypeSpecifier").sequence(SPECIFY, Type);
 
     /**
      * {@code Abbreviation:  "?" | "[]"	 }
@@ -478,24 +488,19 @@ public class Grammar {
     public static final Rule CallableVariable = rule("CallableVariable").zeroOrAny(UnionType, VOID_MODIFIER).one(MemberName).oneOrMore(Params);
 
     /**
-     * {@code Class:  Annotation* ClassHeader (ClassBody | TypeSpecifier ";")	 }
+     * {@code ExtendedType:  "extends" ("super" ".")? Type PositionalArguments	 }
      */
-    public static final Rule Class = new DummyRule("Class");
-
-    /**
-     * {@code ClassBody:  "{" (Declaration | Statement)* "}"	 }
-     */
-    public static final Rule ClassBody = new NotImplementedRule("ClassBody");
-
-    /**
-     * {@code ClassHeader:  "class" TypeName TypeParams? Params ClassInheritance TypeConstraints?	 }
-     */
-    public static final Rule ClassHeader = new NotImplementedRule("ClassHeader");
+    public static final Rule ExtendedType = rule("ExtendedType").one(EXTENDS).zeroOrOne(SUPER, MEMBER_OP).sequence(Type, PositionalArguments);
 
     /**
      * {@code ClassInheritance:  CaseTypes? "Metatypes? ExtendedType? SatisfiedTypes?	 }
      */
-    public static final Rule ClassInheritance = new NotImplementedRule("ClassInheritance");
+    public static final Rule ClassInheritance = rule("ClassInheritance").zeroOrOne(CaseTypes).zeroOrOne(Metatypes).zeroOrOne(ExtendedType).zeroOrOne(SatisfiedTypes);
+
+    /**
+     * {@code ClassHeader:  "class" TypeName TypeParams? Params ClassInheritance TypeConstraints?	 }
+     */
+    public static final Rule ClassHeader = rule("ClassHeader").sequence(CLASS_DEFINITION, TypeName).zeroOrOne(TypeParams).sequence(Params, ClassInheritance).zeroOrOne(TypeConstraints);
 
     /**
      * {@code DateLiteral:   "'"  Digit{1,2} "/" Digit{1,2} "/" Digit{4}  "'"	 }
@@ -536,11 +541,6 @@ public class Grammar {
      * {@code Exponent:  ("E"|"e") ("+"|"-")? Digits	 }
      */
     public static final Rule Exponent = new NotImplementedRule("Exponent");
-
-    /**
-     * {@code ExtendedType:  "extends" ("super" ".")? Type PositionalArguments	 }
-     */
-    public static final Rule ExtendedType = new NotImplementedRule("ExtendedType");
 
     /**
      * {@code Fail:  "else" Block	 }
@@ -618,24 +618,24 @@ public class Grammar {
     public static final Rule IncrementOrDecrement = new DummyRule("IncrementOrDecrement");
 
     /**
-     * {@code Interface:  Annotation* InterfaceHeader (InterfaceBody | TypeSpecifier ";")	 }
-     */
-    public static final Rule Interface = new DummyRule("Interface");
-
-    /**
      * {@code InterfaceBody:  "{" Declaration* "}"	 }
      */
-    public static final Rule InterfaceBody = new NotImplementedRule("InterfaceBody");
-
-    /**
-     * {@code InterfaceHeader:  "interface" TypeName TypeParams? InterfaceInheritance TypeConstraints?	 }
-     */
-    public static final Rule InterfaceHeader = new NotImplementedRule("InterfaceHeader");
+    public static final Rule InterfaceBody = rule("InterfaceBody").one(LBRACE).zeroOrMore(Declaration).one(RBRACE);
 
     /**
      * {@code InterfaceInheritance:  CaseTypes? "Metatypes? AdaptedTypes? SatisfiedTypes?	 }
      */
-    public static final Rule InterfaceInheritance = new NotImplementedRule("InterfaceInheritance");
+    public static final Rule InterfaceInheritance = rule("InterfaceInheritance").zeroOrOne(CaseTypes).zeroOrOne(Metatypes).zeroOrOne(AdaptedTypes).zeroOrOne(SatisfiedTypes);
+
+    /**
+     * {@code InterfaceHeader:  "interface" TypeName TypeParams? InterfaceInheritance TypeConstraints?	 }
+     */
+    public static final Rule InterfaceHeader = rule("InterfaceHeader").sequence(INTERFACE_DEFINITION, TypeName).zeroOrOne(TypeParams).one(InterfaceInheritance).zeroOrOne(TypeConstraints);
+
+    /**
+     * {@code Interface:  Annotation* InterfaceHeader (InterfaceBody | TypeSpecifier ";")	 }
+     */
+    public static final Rule Interface = rule("Interface").zeroOrMore(Annotation).one(InterfaceHeader).any(InterfaceBody, sequence(TypeSpecifier, SEMICOLON));
 
     /**
      * {@code Introduction:  "adapt" Type SatisfiedTypes TypeConstraints? ";"	 }
@@ -753,16 +753,6 @@ public class Grammar {
     public static final Rule TryCatchFinally = rule("TryCatchFinally").one(Try).zeroOrMore(Catch).zeroOrOne(Finally);
 
     /**
-     * {@code TypedQuotedLiteral:  TypeName QuotedLiteral	 }
-     */
-    public static final Rule TypedQuotedLiteral = new NotImplementedRule("TypedQuotedLiteral");
-
-    /**
-     * {@code TypeSpecifier:  "=" Type	 }
-     */
-    public static final Rule TypeSpecifier = new NotImplementedRule("TypeSpecifier");
-
-    /**
      * {@code While:  LoopCondition Block	 }
      */
     public static final Rule While = rule("While").sequence(LoopCondition, Block);
@@ -797,7 +787,6 @@ public class Grammar {
      */
     public static final Rule CompilerAnnotation = rule("CompilerAnnotation").sequence(COMPILER_ANNOTATION, AnnotationName).zeroOrOne(INDEX_OP, STRING_LITERAL, RBRACKET);
 
-
     /**
      * {@code CompilerAnnotations: CompilerAnnotation* }
      */
@@ -808,11 +797,11 @@ public class Grammar {
      */
     public static final Rule Import = rule("Import").sequence(IMPORT, FullPackageName).one(LBRACE).zeroOrOne(ImportElements).one(RBRACE);
 
+
     /**
      * {@code Method:  Annotation* MethodHeader (Block | NamedArguments | Specifier? ";")	 }
      */
     public static final Rule Method = rule("Method").zeroOrOne(Annotation).one(MethodHeader).any(Block, NamedArguments, sequence(zeroOrOne(Specifier), SEMICOLON));
-
 
     /**
      * {@code Attribute:  Annotation* (SimpleAttribute | AttributeGetter | AttributeSetter)	 }
@@ -820,14 +809,20 @@ public class Grammar {
     public static final Rule Attribute = rule("Attribute").zeroOrMore(Annotation).any(SimpleAttribute, AttributeGetter, AttributeSetter);
 
     /**
+     * {@code ClassBody:  "{" (Declaration | Statement)* "}"	 }
+     */
+    public static final Rule ClassBody = rule("ClassBody").one(LBRACE).zeroOrAny(Declaration, Statement).one(RBRACE);
+
+
+    /**
+     * {@code Class:  Annotation* ClassHeader (ClassBody | TypeSpecifier ";")	 }
+     */
+    public static final Rule Class = rule("Class").zeroOrMore(Annotation).one(ClassHeader).any(ClassBody, sequence(TypeSpecifier, SEMICOLON));
+
+    /**
      * {@code TypeDeclaration:  Class | Object | Interface	 }
      */
     public static final Rule TypeDeclaration = rule("TypeDeclaration").any(Class, Object, Interface);
-
-    /**
-     * {@code Declaration:  Method | Attribute | TypeDeclaration }
-     */
-    public static final Rule Declaration = rule("Declaration").any(Method, Attribute, TypeDeclaration);
 
     /**
      * {@code CompilationUnit : (CompilerAnnotation+ ";")? import* (CompilerAnnotations Declaration)* EOF }
@@ -839,6 +834,7 @@ public class Grammar {
     }
 
     private static void deferredInit() {
+        Declaration.any(Method, Attribute, TypeDeclaration);
         Block.one(LBRACE).zeroOrAny(Declaration, Statement).one(RBRACE);
         Expression.any(Primary, OperatorExpression);
         NamedArguments.one(LBRACE).zeroOrMore(NamedArgument).zeroOrOne(Sequence).one(RBRACE);

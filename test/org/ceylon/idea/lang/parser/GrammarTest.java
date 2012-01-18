@@ -246,39 +246,48 @@ public class GrammarTest {
     }
 
     @Test
-    @Ignore
     public void testClass() {
         // Class: Annotation* ClassHeader (ClassBody | TypeSpecifier ";")
         Rule rule = Grammar.Class;
 
-        // TODO: Implement
+        valid(rule, CLASS_DEFINITION, UIDENTIFIER, LPAREN, RPAREN, LBRACE, RBRACE);
+        valid(rule, CLASS_DEFINITION, UIDENTIFIER, LPAREN, RPAREN, SPECIFY, UIDENTIFIER, SEMICOLON);
+        valid(rule, LIDENTIFIER, LIDENTIFIER, CLASS_DEFINITION, UIDENTIFIER, LPAREN, RPAREN, LBRACE, RBRACE);
     }
 
     @Test
-    @Ignore
     public void testClassBody() {
         // ClassBody: "{" (Declaration | Statement)* "}"
         Rule rule = Grammar.ClassBody;
 
-        // TODO: Implement
+        valid(rule, LBRACE, RBRACE);
+        valid(rule, LBRACE, UIDENTIFIER, LIDENTIFIER, SEMICOLON, RBRACE);
+        valid(rule, LBRACE, RETURN, SEMICOLON, RBRACE);
     }
 
     @Test
-    @Ignore
     public void testClassHeader() {
         // ClassHeader: "class" TypeName TypeParams? Params ClassInheritance TypeConstraints?
         Rule rule = Grammar.ClassHeader;
 
-        // TODO: Implement
+        valid(rule, CLASS_DEFINITION, UIDENTIFIER, LPAREN, RPAREN);
+        valid(rule, CLASS_DEFINITION, UIDENTIFIER, LPAREN, RPAREN, CASE_TYPES, UIDENTIFIER);
+        valid(rule, CLASS_DEFINITION, UIDENTIFIER, SMALLER_OP, UIDENTIFIER, LARGER_OP, LPAREN, RPAREN);
+        valid(rule, CLASS_DEFINITION, UIDENTIFIER, SMALLER_OP, UIDENTIFIER, COMMA, UIDENTIFIER, LARGER_OP, LPAREN, RPAREN);
+        valid(rule, CLASS_DEFINITION, UIDENTIFIER, LPAREN, RPAREN, TYPE_CONSTRAINT, UIDENTIFIER);
+        valid(rule, CLASS_DEFINITION, UIDENTIFIER, LPAREN, RPAREN, TYPE_CONSTRAINT, UIDENTIFIER, TYPE_CONSTRAINT, UIDENTIFIER);
     }
 
     @Test
-    @Ignore
     public void testClassInheritance() {
         // ClassInheritance: CaseTypes? Metatypes? ExtendedType? SatisfiedTypes?
         Rule rule = Grammar.ClassInheritance;
 
-        // TODO: Implement
+        valid(rule, CASE_TYPES, UIDENTIFIER);
+        valid(rule, IS_OP, UIDENTIFIER);
+        valid(rule, EXTENDS, UIDENTIFIER, LPAREN, RPAREN);
+        valid(rule, SATISFIES, UIDENTIFIER);
+        valid(rule, CASE_TYPES, UIDENTIFIER, IS_OP, UIDENTIFIER, EXTENDS, UIDENTIFIER, LPAREN, RPAREN, SATISFIES, UIDENTIFIER);
     }
 
     @Test
@@ -343,12 +352,13 @@ public class GrammarTest {
     }
 
     @Test
-    @Ignore
     public void testDeclaration() {
         // Declaration: Method | Attribute | TypeDeclaration
         Rule rule = Grammar.Declaration;
 
-        // TODO: Implement
+        valid(rule, VOID_MODIFIER, LIDENTIFIER, LPAREN, RPAREN, LBRACE, RBRACE);
+        valid(rule, VALUE_MODIFIER, LIDENTIFIER, SEMICOLON);
+        // TODO: TypeDeclaration
     }
 
     @Test
@@ -443,12 +453,11 @@ public class GrammarTest {
     }
 
     @Test
-    @Ignore
     public void testExtendedType() {
         // ExtendedType: "extends" ("super" ".")? Type PositionalArguments
         Rule rule = Grammar.ExtendedType;
 
-        // TODO: Implement
+        valid(rule, EXTENDS, UIDENTIFIER, LPAREN, RPAREN);
     }
 
     @Test
@@ -698,39 +707,51 @@ public class GrammarTest {
     }
 
     @Test
-    @Ignore
     public void testInterface() {
         // Interface: Annotation* InterfaceHeader (InterfaceBody | TypeSpecifier ";")
         Rule rule = Grammar.Interface;
 
-        // TODO: Implement
+        valid(rule, INTERFACE_DEFINITION, UIDENTIFIER, LBRACE, RBRACE);
+        valid(rule, INTERFACE_DEFINITION, UIDENTIFIER, SPECIFY, UIDENTIFIER, SEMICOLON);
+        valid(rule, LIDENTIFIER, LIDENTIFIER, INTERFACE_DEFINITION, UIDENTIFIER, LBRACE, RBRACE);
     }
 
     @Test
-    @Ignore
     public void testInterfaceBody() {
         // InterfaceBody: "{" Declaration* "}"
         Rule rule = Grammar.InterfaceBody;
 
-        // TODO: Implement
+        valid(rule, LBRACE, RBRACE);
+        valid(rule, LBRACE, UIDENTIFIER, LIDENTIFIER, SEMICOLON, VALUE_MODIFIER, LIDENTIFIER, SEMICOLON, RBRACE);
+
+        invalid(rule, LBRACE, RETURN, SEMICOLON, RBRACE);
     }
 
     @Test
-    @Ignore
     public void testInterfaceHeader() {
         // InterfaceHeader: "interface" TypeName TypeParams? InterfaceInheritance TypeConstraints?
         Rule rule = Grammar.InterfaceHeader;
 
-        // TODO: Implement
+        valid(rule, INTERFACE_DEFINITION, UIDENTIFIER);
+        valid(rule, INTERFACE_DEFINITION, UIDENTIFIER, ADAPTED_TYPES, UIDENTIFIER);
+        valid(rule, INTERFACE_DEFINITION, UIDENTIFIER, SMALLER_OP, UIDENTIFIER, LARGER_OP);
+        valid(rule, INTERFACE_DEFINITION, UIDENTIFIER, SMALLER_OP, UIDENTIFIER, COMMA, UIDENTIFIER, LARGER_OP);
+        valid(rule, INTERFACE_DEFINITION, UIDENTIFIER, TYPE_CONSTRAINT, UIDENTIFIER);
+        valid(rule, INTERFACE_DEFINITION, UIDENTIFIER, TYPE_CONSTRAINT, UIDENTIFIER, TYPE_CONSTRAINT, UIDENTIFIER);
+
     }
 
     @Test
-    @Ignore
     public void testInterfaceInheritance() {
         // InterfaceInheritance: CaseTypes? Metatypes? AdaptedTypes? SatisfiedTypes?
         Rule rule = Grammar.InterfaceInheritance;
 
-        // TODO: Implement
+        valid(rule, CASE_TYPES, UIDENTIFIER);
+        valid(rule, IS_OP, UIDENTIFIER);
+        valid(rule, ADAPTED_TYPES, UIDENTIFIER);
+        valid(rule, SATISFIES, UIDENTIFIER);
+        valid(rule, CASE_TYPES, UIDENTIFIER, IS_OP, UIDENTIFIER, ADAPTED_TYPES, UIDENTIFIER, SATISFIES, UIDENTIFIER);
+
     }
 
     @Test
@@ -1249,12 +1270,11 @@ public class GrammarTest {
     }
 
     @Test
-    @Ignore
     public void testTypeAlias() {
         // TypeAlias: TypeName "="
         Rule rule = Grammar.TypeAlias;
 
-        // TODO: Implement
+        valid(rule, UIDENTIFIER, SPECIFY);
     }
 
     @Test
@@ -1313,15 +1333,6 @@ public class GrammarTest {
     }
 
     @Test
-    @Ignore
-    public void testTypedQuotedLiteral() {
-        // TypedQuotedLiteral: TypeName QuotedLiteral
-        Rule rule = Grammar.TypedQuotedLiteral;
-
-        // TODO: Implement
-    }
-
-    @Test
     public void testTypedVariable() {
         // TypedVariable: UnionType MemberName
         Rule rule = Grammar.TypedVariable;
@@ -1371,12 +1382,11 @@ public class GrammarTest {
     }
 
     @Test
-    @Ignore
     public void testTypeSpecifier() {
         // TypeSpecifier: "=" Type
         Rule rule = Grammar.TypeSpecifier;
 
-        // TODO: Implement
+        valid(rule, SPECIFY, UIDENTIFIER);
     }
 
     @Test
