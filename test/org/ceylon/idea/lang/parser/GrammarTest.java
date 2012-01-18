@@ -88,12 +88,14 @@ public class GrammarTest {
     }
 
     @Test
-    @Ignore
     public void testAttribute() {
         // Attribute: Annotation* (SimpleAttribute | AttributeGetter | AttributeSetter)
         Rule rule = Grammar.Attribute;
 
-        // TODO: Implement
+        valid(rule, VALUE_MODIFIER, LIDENTIFIER, SEMICOLON);
+        valid(rule, VALUE_MODIFIER, LIDENTIFIER, LBRACE, RBRACE);
+        valid(rule, ASSIGN, LIDENTIFIER, LBRACE, RBRACE);
+        valid(rule, LIDENTIFIER, LIDENTIFIER, VALUE_MODIFIER, LIDENTIFIER, SEMICOLON);
     }
 
     @Test
