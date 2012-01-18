@@ -155,12 +155,12 @@ public class GrammarTest {
     }
 
     @Test
-    @Ignore
     public void testCallableParam() {
         // CallableParam: (UnionType | "void") MemberName Params+
         Rule rule = Grammar.CallableParam;
 
-        // TODO: Implement
+        valid(rule, UIDENTIFIER, LIDENTIFIER, LPAREN, RPAREN);
+        valid(rule, VOID_MODIFIER, LIDENTIFIER, LPAREN, RPAREN, LPAREN, RPAREN);
     }
 
     @Test
@@ -626,12 +626,15 @@ public class GrammarTest {
     }
 
     @Test
-    @Ignore
     public void testImportElement() {
         // ImportElement: ImportTypeElement | ImportMethodAttributeElement
         Rule rule = Grammar.ImportElement;
 
-        // TODO: Implement
+        valid(rule, UIDENTIFIER);
+        valid(rule, LIDENTIFIER);
+        valid(rule, UIDENTIFIER, SPECIFY, UIDENTIFIER);
+        valid(rule, LIDENTIFIER, SPECIFY, LIDENTIFIER);
+
     }
 
     @Test
@@ -656,21 +659,21 @@ public class GrammarTest {
     }
 
     @Test
-    @Ignore
     public void testImportMethodAttributeElement() {
         // ImportMethodAttributeElement: MethodAttributeAlias? MemberName
         Rule rule = Grammar.ImportMethodAttributeElement;
 
-        // TODO: Implement
+        valid(rule, LIDENTIFIER);
+        valid(rule, LIDENTIFIER, SPECIFY, LIDENTIFIER);
     }
 
     @Test
-    @Ignore
     public void testImportTypeElement() {
         // ImportTypeElement: TypeAlias? TypeName
         Rule rule = Grammar.ImportTypeElement;
 
-        // TODO: Implement
+        valid(rule, UIDENTIFIER);
+        valid(rule, UIDENTIFIER, SPECIFY, UIDENTIFIER);
     }
 
     @Test
@@ -762,15 +765,6 @@ public class GrammarTest {
     public void testIntersectionType() {
         // IntersectionType: EntryType ("&" EntryType)*
         Rule rule = Grammar.IntersectionType;
-
-        // TODO: Implement
-    }
-
-    @Test
-    @Ignore
-    public void testIntroduction() {
-        // Introduction: "adapt" Type SatisfiedTypes TypeConstraints? ";"
-        Rule rule = Grammar.Introduction;
 
         // TODO: Implement
     }
@@ -933,12 +927,12 @@ public class GrammarTest {
     }
 
     @Test
-    @Ignore
     public void testObject() {
         // Object: Annotation* ObjectHeader ClassBody
         Rule rule = Grammar.Object;
 
-        // TODO: Implement
+        valid(rule, OBJECT_DEFINITION, LIDENTIFIER, LBRACE, RBRACE);
+        valid(rule, LIDENTIFIER, LIDENTIFIER, OBJECT_DEFINITION, LIDENTIFIER, LBRACE, RBRACE);
     }
 
     @Test
@@ -968,15 +962,6 @@ public class GrammarTest {
         // OperatorExpression: ????? }
         // TODO: Check out language spec
         Rule rule = Grammar.OperatorExpression;
-
-        // TODO: Implement
-    }
-
-    @Test
-    @Ignore
-    public void testOuterReference() {
-        // OuterReference: (Receiver ".")? "outer"
-        Rule rule = Grammar.OuterReference;
 
         // TODO: Implement
     }
@@ -1045,15 +1030,6 @@ public class GrammarTest {
         valid(rule, LIDENTIFIER);
         valid(rule, UIDENTIFIER, LBRACE, RBRACE);
         valid(rule, LIDENTIFIER, SPECIFY, CHAR_LITERAL);
-    }
-
-    @Test
-    @Ignore
-    public void testRetry() {
-        // Retry: "retry"
-        Rule rule = Grammar.Retry;
-
-        // TODO: Implement
     }
 
     @Test
@@ -1129,12 +1105,13 @@ public class GrammarTest {
     }
 
     @Test
-    @Ignore
     public void testSequenceInstantiation() {
         // SequenceInstantiation: "{" Sequence? "}" ;
         Rule rule = Grammar.SequenceInstantiation;
 
-        // TODO: Implement
+        valid(rule, LBRACE, RBRACE);
+        valid(rule, LBRACE, LIDENTIFIER, ELLIPSIS, RBRACE);
+        valid(rule, LBRACE, CHAR_LITERAL, COMMA, CHAR_LITERAL, RBRACE);
     }
 
     @Test
@@ -1201,15 +1178,6 @@ public class GrammarTest {
     }
 
     @Test
-    @Ignore
-    public void testSubtype() {
-        // Subtype: "subtype" | MemberName "." "subtype"
-        Rule rule = Grammar.Subtype;
-
-        // TODO: Implement
-    }
-
-    @Test
     public void testSwitch() {
         // Switch: "switch" "(" Expression ")"
         Rule rule = Grammar.Switch;
@@ -1267,12 +1235,14 @@ public class GrammarTest {
     }
 
     @Test
-    @Ignore
     public void testType() {
         // Type: TypeNameWithArguments ("." TypeNameWithArguments)*
         Rule rule = Grammar.Type;
 
-        // TODO: Implement
+        valid(rule, UIDENTIFIER);
+        valid(rule, UIDENTIFIER, SMALLER_OP, UIDENTIFIER, LARGER_OP);
+        valid(rule, UIDENTIFIER, MEMBER_OP, UIDENTIFIER, SMALLER_OP, UIDENTIFIER, LARGER_OP);
+        valid(rule, UIDENTIFIER, SMALLER_OP, UIDENTIFIER, LARGER_OP, MEMBER_OP, UIDENTIFIER);
     }
 
     @Test
@@ -1330,12 +1300,13 @@ public class GrammarTest {
     }
 
     @Test
-    @Ignore
     public void testTypeDeclaration() {
         // TypeDeclaration: Class | Object | Interface
         Rule rule = Grammar.TypeDeclaration;
 
-        // TODO: Implement
+        valid(rule, CLASS_DEFINITION, UIDENTIFIER, LPAREN, RPAREN, LBRACE, RBRACE);
+        valid(rule, OBJECT_DEFINITION, LIDENTIFIER, LBRACE, RBRACE);
+        valid(rule, INTERFACE_DEFINITION, UIDENTIFIER, LBRACE, RBRACE);
     }
 
     @Test

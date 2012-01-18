@@ -628,11 +628,6 @@ public class Grammar {
     public static final Rule Interface = rule("Interface").zeroOrMore(Annotation).one(InterfaceHeader).any(InterfaceBody, sequence(TypeSpecifier, SEMICOLON));
 
     /**
-     * {@code Introduction:  "adapt" Type SatisfiedTypes TypeConstraints? ";"	 }
-     */
-    public static final Rule Introduction = new NotImplementedRule("Introduction");
-
-    /**
      * {@code LoopCondition:  "while" "(" Condition ")"	 }
      */
     public static final Rule LoopCondition = rule("LoopCondition").sequence(WHILE_CLAUSE, LPAREN, Condition, RPAREN);
@@ -652,20 +647,11 @@ public class Grammar {
      */
     public static final Rule ObjectHeader = rule("ObjectHeader").sequence(OBJECT_DEFINITION, MemberName, ObjectInheritance);
 
-    /**
-     * {@code OuterReference:  (Receiver ".")? "outer"	 }
-     */
-    public static final Rule OuterReference = new NotImplementedRule("OuterReference");
 
     /**
      * {@code Resource:  MemberName | InitializerReference Arguments | Variable Specifier	 }
      */
     public static final Rule Resource = rule("Resource").any(sequence(InitializerReference, Arguments), sequence(Variable, Specifier), MemberName);
-
-    /**
-     * {@code Retry:  "retry"	 }
-     */
-    public static final Rule Retry = new NotImplementedRule("Retry");
 
     /**
      * {@code Return:  "return" Expression?	 }
@@ -675,12 +661,7 @@ public class Grammar {
     /**
      * {@code SequenceInstantiation:  "{" Sequence? "}" ;	 }
      */
-    public static final Rule SequenceInstantiation = new NotImplementedRule("SequenceInstantiation");
-
-    /**
-     * {@code Subtype:  "subtype" | MemberName "." "subtype"	 }
-     */
-    public static final Rule Subtype = new NotImplementedRule("Subtype");
+    public static final Rule SequenceInstantiation = rule("SequenceInstantiation").one(LBRACE).zeroOrOne(Sequence).one(RBRACE);
 
     /**
      * {@code Switch:  "switch" "(" Expression ")"	 }
