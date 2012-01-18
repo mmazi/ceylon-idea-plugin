@@ -293,7 +293,7 @@ public class Grammar {
     /**
      * {@code Primary:  Atom | Meta | MemberReference | Invocation	 }
      */
-    public static final Rule Primary = any(Atom, Meta, MemberReference, Invocation);
+    public static final Rule Primary = any(Atom, MemberReference, Invocation, Meta);
 
     /**
      * {@code Specifier:  "=" Expression	 }
@@ -360,16 +360,6 @@ public class Grammar {
      * {@code FunctionalArguments:  (MemberName FunctionalBody)+	 }
      */
     public static final Rule FunctionalArguments = rule("FunctionalArguments").sequence(MemberName, FunctionalBody);
-
-    /**
-     * {@code Object:  Annotation* ObjectHeader ClassBody	 }
-     */
-    public static final Rule Object = new DummyRule("Object");
-
-    /**
-     * {@code NamedArgument:  SpecifiedNamedArgument | LocalNamedArgument | FunctionalNamedArgument | Object	 }
-     */
-    public static final Rule NamedArgument = any(SpecifiedNamedArgument, LocalNamedArgument, FunctionalNamedArgument, Object);
 
     /**
      * {@code Arguments:  PositionalArguments FunctionalArguments? | NamedArguments }
@@ -653,14 +643,14 @@ public class Grammar {
     public static final Rule Magnitude = new NotImplementedRule("Magnitude");
 
     /**
-     * {@code ObjectHeader:  "object" MemberName ObjectInheritance	 }
-     */
-    public static final Rule ObjectHeader = new NotImplementedRule("ObjectHeader");
-
-    /**
      * {@code ObjectInheritance:  ExtendedType? SatisfiedTypes?	 }
      */
-    public static final Rule ObjectInheritance = new NotImplementedRule("ObjectInheritance");
+    public static final Rule ObjectInheritance = rule("ObjectInheritance").zeroOrOne(ExtendedType).zeroOrOne(SatisfiedTypes);
+
+    /**
+     * {@code ObjectHeader:  "object" MemberName ObjectInheritance	 }
+     */
+    public static final Rule ObjectHeader = rule("ObjectHeader").sequence(OBJECT_DEFINITION, MemberName, ObjectInheritance);
 
     /**
      * {@code OuterReference:  (Receiver ".")? "outer"	 }
@@ -797,11 +787,11 @@ public class Grammar {
      */
     public static final Rule Import = rule("Import").sequence(IMPORT, FullPackageName).one(LBRACE).zeroOrOne(ImportElements).one(RBRACE);
 
-
     /**
      * {@code Method:  Annotation* MethodHeader (Block | NamedArguments | Specifier? ";")	 }
      */
     public static final Rule Method = rule("Method").zeroOrOne(Annotation).one(MethodHeader).any(Block, NamedArguments, sequence(zeroOrOne(Specifier), SEMICOLON));
+
 
     /**
      * {@code Attribute:  Annotation* (SimpleAttribute | AttributeGetter | AttributeSetter)	 }
@@ -813,6 +803,10 @@ public class Grammar {
      */
     public static final Rule ClassBody = rule("ClassBody").one(LBRACE).zeroOrAny(Declaration, Statement).one(RBRACE);
 
+    /**
+     * {@code Object:  Annotation* ObjectHeader ClassBody	 }
+     */
+    public static final Rule Object = rule("Object").zeroOrMore(Annotation).sequence(ObjectHeader, ClassBody);
 
     /**
      * {@code Class:  Annotation* ClassHeader (ClassBody | TypeSpecifier ";")	 }
@@ -828,6 +822,12 @@ public class Grammar {
      * {@code CompilationUnit : (CompilerAnnotation+ ";")? import* (CompilerAnnotations Declaration)* EOF }
      */
     public static final Rule CompilationUnit = rule("CompilationUnit").zeroOrOne(CompilerAnnotation, CompilerAnnotations, SEMICOLON).zeroOrMore(Import).zeroOrMore(CompilerAnnotations, Declaration);
+
+    /**
+     * {@code NamedArgument:  SpecifiedNamedArgument | LocalNamedArgument | FunctionalNamedArgument | Object	 }
+     */
+    public static final Rule NamedArgument = any(SpecifiedNamedArgument, LocalNamedArgument, FunctionalNamedArgument, Object);
+
 
     static {
         deferredInit();

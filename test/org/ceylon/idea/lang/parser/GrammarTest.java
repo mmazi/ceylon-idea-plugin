@@ -458,6 +458,7 @@ public class GrammarTest {
         Rule rule = Grammar.ExtendedType;
 
         valid(rule, EXTENDS, UIDENTIFIER, LPAREN, RPAREN);
+        // TODO: more tests
     }
 
     @Test
@@ -939,21 +940,24 @@ public class GrammarTest {
     }
 
     @Test
-    @Ignore
     public void testObjectHeader() {
         // ObjectHeader: "object" MemberName ObjectInheritance
         Rule rule = Grammar.ObjectHeader;
 
-        // TODO: Implement
+        valid(rule, OBJECT_DEFINITION, LIDENTIFIER);
+        valid(rule, OBJECT_DEFINITION, LIDENTIFIER, EXTENDS, UIDENTIFIER, LPAREN, RPAREN);
+        valid(rule, OBJECT_DEFINITION, LIDENTIFIER, SATISFIES, UIDENTIFIER);
     }
 
     @Test
-    @Ignore
     public void testObjectInheritance() {
         // ObjectInheritance: ExtendedType? SatisfiedTypes?
         Rule rule = Grammar.ObjectInheritance;
 
-        // TODO: Implement
+        valid(rule);
+        valid(rule, EXTENDS, UIDENTIFIER, LPAREN, RPAREN);
+        valid(rule, SATISFIES, UIDENTIFIER);
+        valid(rule, EXTENDS, UIDENTIFIER, LPAREN, RPAREN, SATISFIES, UIDENTIFIER);
     }
 
     @Test
