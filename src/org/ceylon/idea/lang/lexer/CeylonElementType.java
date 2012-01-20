@@ -24,6 +24,7 @@ public class CeylonElementType extends IElementType {
     public static final TokenSet WHITE_SPACE_SET = TokenSet.create(WS.getElementType());
     public static final TokenSet COMMENT_SET = TokenSet.create(MULTI_COMMENT.getElementType());
     public static final TokenSet STRING_LITERAL_SET = TokenSet.create(STRING_LITERAL.getElementType());
+    public static final TokenSet NUMBER_SET = TokenSet.create(NATURAL_LITERAL.getElementType(), FLOAT_LITERAL.getElementType());
 
 
     private final int type;

@@ -22,6 +22,7 @@ public class CeylonSyntaxHighlighter extends SyntaxHighlighterBase {
         attributes.put(CeylonToken.BAD_CHARACTER.getElementType(), HighlighterColors.BAD_CHARACTER);
         fillMap(attributes, CeylonElementType.STRING_LITERAL_SET, SyntaxHighlighterColors.STRING);
         fillMap(attributes, CeylonElementType.KEYWORD_SET, SyntaxHighlighterColors.KEYWORD);
+        fillMap(attributes, CeylonElementType.NUMBER_SET, SyntaxHighlighterColors.NUMBER);
     }
 
     @NotNull
