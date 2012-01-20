@@ -9,14 +9,11 @@ HOW TO SETUP DEVELOPMENT ENVIRONMENT
    Add new Intellij IDEA plugin SDK with name "IDEA SDK"
    Double check that you have named both SDKs correctly
 
-3. Generate sources using ant script:
-   > ant jflex
-
-4. Remove unused plugins to minimize IDEA sturtup time:
+3. [Optional] Remove unused plugins to minimize IDEA sturtup time:
    Run plugin using "ceylon-idea-plugin" configuration. New instance of IDEA will start.
    File > Settings > IDE Settings > Plugins
    Uncheck all plugins except "ceylon-idea-plugin"
 
-5. [Optional] Install "PsiViewer" plugin
+4. [Optional] Install "PsiViewer" plugin
    
 See also: http://confluence.jetbrains.net/display/IDEADEV/Getting+Started+with+Plugin+Development

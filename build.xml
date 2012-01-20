@@ -1,31 +1,139 @@
-<!--
- This build file is used to create the lexer's Java source code.
- Whenever you change ceylon.flex you have to run this build script.
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="ceylon-idea-plugin" default="all" basedir=".">
 
- We're using the patched jflex library provided by JetBrains.
--->
-<project name="Ceylon IDEA plugin" default="jflex">
+    <property file="build.properties"/>
 
-    <property name="generated.src" value="gensrc/"/>
-    <property name="lexer.log" value="jflex.log"/>
-    <property name="lexer.source" value="src/org/ceylon/idea/lang/lexer/ceylon.flex"/>
-    <property name="lexer.skeleton" value="lib/idea-flex.skeleton"/>
-    <property name="jflex.jar" value="lib/JFlex.jar"/>
+    <!--
+    <property name="idea.home" location="/opt/idea-IC-111.167"/>
+    -->
+    <fail unless="idea.home">
+        idea.home is not defined
+    </fail>
+
+
+    <property name="javac.home" value="${java.home}/.."/>
+
+    <property name="build.dir" location="build"/>
+    <property name="build.classes" location="${build.dir}/classes"/>
+    <property name="src.dir" location="src"/>
+    <property name="dist.dir" value="${basedir}/dist"/>
+    <property name="lib.dir" location="lib"/>
+    <property name="junit.jar" location="${idea.home}/lib/junit.jar"/>
+
+    <property name="test.src.dir" location="test"/>
+    <property name="test.dir" location="${build.dir}/test"/>
+    <property name="test.classes.dir" location="${test.dir}/classes"/>
+    <property name="test.reports.dir" location="${test.dir}/reports"/>
+
+    <property name="build.dist.dir" value="${build.dir}/dist"/>
+
+    <patternset id="compiler.resources">
+        <include name="**/?*.png"/>
+    </patternset>
+
+    <path id="library.idea.classpath">
+        <fileset dir="${idea.home}/lib/">
+            <include name="**/*.jar"/>
+        </fileset>
+        <fileset dir="${javac.home}/lib" includes="tools.jar"/>
+    </path>
+
+    <path id="compile.classpath">
+        <pathelement location="${build.classes}"/>
+        <path refid="library.idea.classpath"/>
+        <pathelement location="${lib.dir}/antlr-3.4-complete.jar"/>
+        <pathelement location="${lib.dir}/com.redhat.ceylon.typechecker-0.1.jar"/>
+    </path>
+
+    <path id="test.classpath">
+        <path refid="compile.classpath"/>
+        <pathelement location="${test.classes.dir}"/>
+        <pathelement location="${junit.jar}"/>
+        <pathelement location="${lib.dir}/mockito-all-1.9.0.jar"/>
+    </path>
+
+    <path id="junit.task.classpath">
+        <fileset dir="${lib.dir}">
+            <include name="ant-junit.jar"/>
+        </fileset>
+    </path>
+
 
     <target name="clean">
-        <delete dir="${generated.src}"/>
-        <delete file="${lexer.log}"/>
+        <delete dir="${build.dir}"/>
     </target>
 
-    <target name="jflex" description="Generate lexer from ceylon.flex, using idea flex skeleton and patched JFlex">
-        <java jar="${jflex.jar}" output="${lexer.log}" fork="true">
-            <arg value="--charat"/>
-            <!-- <arg value="- -nomin"/>-->
-            <arg value="-skel"/>
-            <arg value="${lexer.skeleton}"/>
-            <arg value="-d"/>
-            <arg value="${generated.src}org/ceylon/idea/lang/lexer/"/>
-            <arg value="${lexer.source}"/>
-        </java>
+
+    <target name="compile" description="Compile production classes">
+        <mkdir dir="${build.classes}"/>
+
+        <javac destdir="${build.classes}" fork="true">
+            <classpath refid="compile.classpath"/>
+            <src path="${src.dir}"/>
+        </javac>
+
+        <copy todir="${build.classes}">
+            <fileset dir="${src.dir}">
+                <patternset refid="compiler.resources"/>
+                <type type="file"/>
+            </fileset>
+        </copy>
+
+        <copy todir="${build.classes}/META-INF">
+            <fileset dir="META-INF"/>
+        </copy>
     </target>
+
+
+    <target name="test" depends="compile" description="run tests">
+        <mkdir dir="${test.dir}"/>
+        <mkdir dir="${test.reports.dir}"/>
+        <mkdir dir="${test.classes.dir}"/>
+
+        <javac srcdir="${test.src.dir}" destdir="${test.classes.dir}" debug="true">
+            <classpath refid="test.classpath"/>
+        </javac>
+
+        <junit printsummary="yes" fork="yes" errorProperty="test.failed" failureProperty="test.failed">
+            <!--<sysproperty key="idea.ceylon.testdata-path" value="${basedir}/"/>-->
+            <classpath refid="test.classpath"/>
+            <formatter type="plain"/>
+            <formatter type="brief" usefile="false"/>
+
+            <batchtest fork="yes" todir="${test.reports.dir}">
+                <fileset dir="${test.classes.dir}">
+                    <include name="**/*Test.class"/>
+                </fileset>
+            </batchtest>
+
+        </junit>
+
+        <fail if="test.failed">
+            Unit tests failed. Check log or reports for details
+        </fail>
+    </target>
+
+
+    <target name="dist" depends="compile" description="Build plugin archive">
+        <property name="plugin.dir" location="${build.dist.dir}/ceylon-idea-plugin"/>
+        <mkdir dir="${plugin.dir}"/>
+        <mkdir dir="${plugin.dir}/lib"/>
+
+        <jar destfile="${plugin.dir}/lib/ceylon-idea-plugin.jar" duplicate="preserve">
+            <zipfileset dir="${build.classes}"/>
+        </jar>
+        <copy file="${lib.dir}/antlr-3.4-complete.jar" todir="${plugin.dir}/lib/"/>
+        <copy file="${lib.dir}/com.redhat.ceylon.typechecker-0.1.jar" todir="${plugin.dir}/lib/"/>
+
+        <delete dir="${dist.dir}"/>
+        <mkdir dir="${dist.dir}"/>
+
+        <zip destfile="${dist.dir}/ceylon-idea-plugin.zip">
+            <fileset dir="${build.dist.dir}"/>
+        </zip>
+    </target>
+
+
+    <target name="all" depends="clean, test, dist"/>
+
 </project>

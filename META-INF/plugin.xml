@@ -1,8 +1,8 @@
 <idea-plugin version="2">
     <name>Ceylon IDEA plugin</name>
-    <description>short description of the plugin</description>
+    <description>Ceylon programming language support</description>
     <version>1.0</version>
-    <vendor>YourCompany</vendor>
+    <vendor>Andrey Ponomarev</vendor>
     <idea-version since-build="8000"/>
 
     <application-components>
