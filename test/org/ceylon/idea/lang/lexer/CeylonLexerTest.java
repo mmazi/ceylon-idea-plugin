@@ -1,5 +1,6 @@
 package org.ceylon.idea.lang.lexer;
 
+import com.intellij.lexer.Lexer;
 import com.intellij.psi.tree.IElementType;
 import org.junit.Assert;
 import org.junit.Test;
@@ -9,7 +10,7 @@ import static org.ceylon.idea.lang.lexer.CeylonToken.*;
 
 public class CeylonLexerTest {
 
-    private CeylonLexer lexer = new CeylonLexer();
+    private Lexer lexer = new CeylonLexerAdapter();
 
     @Test
     public void testComments() {
@@ -39,7 +40,7 @@ public class CeylonLexerTest {
         testTokenization("[", INDEX_OP);
         testTokenization("]", RBRACKET);
         testTokenization("[]", ARRAY);
-        testTokenization("[].", SPREAD_OP);
+        testTokenization("[].", ARRAY, MEMBER_OP);
         testTokenization("[\"str\"]", INDEX_OP, STRING_LITERAL, RBRACKET);
     }
 
@@ -84,13 +85,13 @@ public class CeylonLexerTest {
     }
 
 
-    private void testTokenization(String code, IElementType... expectedTokens) {
+    private void testTokenization(String code, CeylonToken... expectedTokens) {
         lexer.start(code);
 
         int i = 1;
-        for (IElementType expectedToken : expectedTokens) {
+        for (CeylonToken expectedToken : expectedTokens) {
             IElementType tokenType = lexer.getTokenType();
-            Assert.assertEquals("Wrong match at #" + i, expectedToken, tokenType);
+            Assert.assertEquals("Wrong match at #" + i, expectedToken.getElementType(), tokenType);
             lexer.advance();
             i++;
         }

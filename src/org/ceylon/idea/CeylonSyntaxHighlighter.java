@@ -6,7 +6,8 @@ import com.intellij.openapi.editor.SyntaxHighlighterColors;
 import com.intellij.openapi.editor.colors.TextAttributesKey;
 import com.intellij.openapi.fileTypes.SyntaxHighlighterBase;
 import com.intellij.psi.tree.IElementType;
-import org.ceylon.idea.lang.lexer.CeylonLexer;
+import org.ceylon.idea.lang.lexer.CeylonElementType;
+import org.ceylon.idea.lang.lexer.CeylonLexerAdapter;
 import org.ceylon.idea.lang.lexer.CeylonToken;
 import org.jetbrains.annotations.NotNull;
 
@@ -17,16 +18,16 @@ public class CeylonSyntaxHighlighter extends SyntaxHighlighterBase {
     private static final Map<IElementType, TextAttributesKey> attributes = new HashMap<IElementType, TextAttributesKey>();
 
     static {
-        attributes.put(CeylonToken.MULTI_COMMENT, SyntaxHighlighterColors.JAVA_BLOCK_COMMENT);
-        attributes.put(CeylonToken.STRING_LITERAL, SyntaxHighlighterColors.STRING);
-        attributes.put(CeylonToken.BAD_CHARACTER, HighlighterColors.BAD_CHARACTER);
-        fillMap(attributes, CeylonToken.KEYWORD_SET, SyntaxHighlighterColors.KEYWORD);
+        attributes.put(CeylonToken.MULTI_COMMENT.getElementType(), SyntaxHighlighterColors.JAVA_BLOCK_COMMENT);
+        attributes.put(CeylonToken.BAD_CHARACTER.getElementType(), HighlighterColors.BAD_CHARACTER);
+        fillMap(attributes, CeylonElementType.STRING_LITERAL_SET, SyntaxHighlighterColors.STRING);
+        fillMap(attributes, CeylonElementType.KEYWORD_SET, SyntaxHighlighterColors.KEYWORD);
     }
 
     @NotNull
     @Override
     public Lexer getHighlightingLexer() {
-        return new CeylonLexer();
+        return new CeylonLexerAdapter();
     }
 
     @NotNull

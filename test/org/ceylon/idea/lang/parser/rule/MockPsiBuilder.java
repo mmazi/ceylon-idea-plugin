@@ -6,15 +6,16 @@ import com.intellij.openapi.util.Key;
 import com.intellij.psi.tree.IElementType;
 import com.intellij.psi.tree.TokenSet;
 import com.intellij.util.diff.FlyweightCapableTreeStructure;
+import org.ceylon.idea.lang.lexer.CeylonToken;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public class MockPsiBuilder implements PsiBuilder {
     private int position = 0;
-    private IElementType[] tokens = {};
+    private CeylonToken[] tokens = {};
     private IElementType node;
 
-    public void setTokens(IElementType... tokens) {
+    public void setTokens(CeylonToken... tokens) {
         this.tokens = tokens;
         position = 0;
     }
@@ -40,6 +41,10 @@ public class MockPsiBuilder implements PsiBuilder {
 
     @Override
     public IElementType getTokenType() {
+        return eof() ? null : tokens[position].getElementType();
+    }
+
+    public CeylonToken getToken() {
         return eof() ? null : tokens[position];
     }
 
@@ -60,7 +65,7 @@ public class MockPsiBuilder implements PsiBuilder {
 
     @Override
     public IElementType lookAhead(int i) {
-        return tokens[position + i];
+        return tokens[position + i].getElementType();
     }
 
     @Override

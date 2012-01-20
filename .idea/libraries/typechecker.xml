@@ -1,0 +1,10 @@
+<component name="libraryTable">
+  <library name="typechecker">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/lib/antlr-3.4-complete.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/com.redhat.ceylon.typechecker-0.1.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

@@ -36,10 +36,10 @@ public class ParserEngineTest {
         Rule rule = zeroOrOne(SEMICOLON);
 
         valid(rule, COMMA, IMPORT);
-        assertEquals(COMMA, builder.getTokenType());
+        assertEquals(COMMA, builder.getToken());
 
         valid(rule, SEMICOLON, IMPORT);
-        assertEquals(IMPORT, builder.getTokenType());
+        assertEquals(IMPORT, builder.getToken());
     }
 
     @Test
@@ -56,13 +56,13 @@ public class ParserEngineTest {
         Rule rule = zeroOrMore(SEMICOLON);
 
         valid(rule, COMMA, IMPORT);
-        assertEquals(COMMA, builder.getTokenType());
+        assertEquals(COMMA, builder.getToken());
 
         valid(rule, SEMICOLON, IMPORT);
-        assertEquals(IMPORT, builder.getTokenType());
+        assertEquals(IMPORT, builder.getToken());
 
         valid(rule, SEMICOLON, SEMICOLON, IMPORT);
-        assertEquals(IMPORT, builder.getTokenType());
+        assertEquals(IMPORT, builder.getToken());
     }
 
     @Test
@@ -78,13 +78,13 @@ public class ParserEngineTest {
         Rule rule = zeroOrOne(LBRACE, RBRACE);
 
         valid(rule, SEMICOLON);
-        assertEquals(SEMICOLON, builder.getTokenType());
+        assertEquals(SEMICOLON, builder.getToken());
 
         valid(rule, LBRACE, RBRACE, SEMICOLON);
-        assertEquals(SEMICOLON, builder.getTokenType());
+        assertEquals(SEMICOLON, builder.getToken());
 
         valid(rule, LBRACE, RBRACE, LBRACE, RBRACE, SEMICOLON);
-        assertEquals(LBRACE, builder.getTokenType());
+        assertEquals(LBRACE, builder.getToken());
     }
 
     @Test
@@ -92,13 +92,13 @@ public class ParserEngineTest {
         Rule rule = zeroOrMore(LBRACE, RBRACE);
 
         valid(rule, SEMICOLON);
-        assertEquals(SEMICOLON, builder.getTokenType());
+        assertEquals(SEMICOLON, builder.getToken());
 
         valid(rule, LBRACE, RBRACE, SEMICOLON);
-        assertEquals(SEMICOLON, builder.getTokenType());
+        assertEquals(SEMICOLON, builder.getToken());
 
         valid(rule, LBRACE, RBRACE, LBRACE, RBRACE, SEMICOLON);
-        assertEquals(SEMICOLON, builder.getTokenType());
+        assertEquals(SEMICOLON, builder.getToken());
     }
 
 

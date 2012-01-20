@@ -95,9 +95,9 @@ public abstract class ParserUtils {
         PsiBuilder.Marker rb = builder.mark();
         builder.advanceLexer();
         int i = 1;
-        while (!builder.eof() && i < elems.length && (builder.getTokenType() == CeylonToken.WS || elems[i].equals(builder.getTokenType()))) {
+        while (!builder.eof() && i < elems.length && (CeylonToken.WS.getElementType().equals(builder.getTokenType()) || elems[i].equals(builder.getTokenType()))) {
 
-            if (builder.getTokenType() != CeylonToken.WS) {
+            if (!CeylonToken.WS.getElementType().equals(builder.getTokenType())) {
                 i++;
             }
 
@@ -253,7 +253,7 @@ public abstract class ParserUtils {
      * TODO: check if it really needed
      */
     public static void skipNLS(PsiBuilder builder) {
-        while (builder.getTokenType() == CeylonToken.WS) {
+        while (CeylonToken.WS.getElementType().equals(builder.getTokenType())) {
             builder.advanceLexer();
         }
     }

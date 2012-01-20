@@ -10,8 +10,8 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.tree.IFileElementType;
 import com.intellij.psi.tree.TokenSet;
-import org.ceylon.idea.lang.lexer.CeylonLexer;
-import org.ceylon.idea.lang.lexer.CeylonToken;
+import org.ceylon.idea.lang.lexer.CeylonElementType;
+import org.ceylon.idea.lang.lexer.CeylonLexerAdapter;
 import org.ceylon.idea.lang.psi.CeylonFile;
 import org.ceylon.idea.lang.psi.CeylonPsiCreator;
 import org.jetbrains.annotations.NotNull;
@@ -20,7 +20,7 @@ public class CeylonParserDefinition implements ParserDefinition {
     @NotNull
     @Override
     public Lexer createLexer(Project project) {
-        return new CeylonLexer();
+        return new CeylonLexerAdapter();
     }
 
     @Override
@@ -36,19 +36,19 @@ public class CeylonParserDefinition implements ParserDefinition {
     @NotNull
     @Override
     public TokenSet getWhitespaceTokens() {
-        return CeylonToken.WHITE_SPACE_SET;
+        return CeylonElementType.WHITE_SPACE_SET;
     }
 
     @NotNull
     @Override
     public TokenSet getCommentTokens() {
-        return CeylonToken.COMMENT_SET;
+        return CeylonElementType.COMMENT_SET;
     }
 
     @NotNull
     @Override
     public TokenSet getStringLiteralElements() {
-        return CeylonToken.STRING_LITERAL_SET;
+        return CeylonElementType.STRING_LITERAL_SET;
     }
 
     @NotNull
