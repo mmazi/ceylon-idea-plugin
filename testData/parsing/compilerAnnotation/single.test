@@ -1,0 +1,9 @@
+@annotation;
+-----
+FILE(0,12)
+  ASTWrapperPsiElement(CompilationUnit)(0,12)
+    ASTWrapperPsiElement(CompilerAnnotation)(0,11)
+      PsiElement(COMPILER_ANNOTATION)('@')(0,1)
+      ASTWrapperPsiElement(AnnotationName)(1,11)
+        PsiElement(LIDENTIFIER)('annotation')(1,11)
+    PsiElement(SEMICOLON)(';')(11,12)

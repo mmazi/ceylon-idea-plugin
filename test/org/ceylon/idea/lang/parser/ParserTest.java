@@ -32,6 +32,10 @@ public class ParserTest extends CeylonTestCase {
         doTest();
     }
 
+    public void testCompilerAnnotation$single() {
+        doTest();
+    }
+
     public void testCompilerAnnotation$stringInBrackets() {
         doTest();
     }
