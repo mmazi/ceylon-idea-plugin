@@ -22,5 +22,7 @@
         <syntaxHighlighter key="Ceylon" implementationClass="org.ceylon.idea.CeylonSyntaxHighlighter"/>
         <lang.parserDefinition language="Ceylon"
                                implementationClass="org.ceylon.idea.lang.parser.CeylonParserDefinition"/>
+        <lang.psiStructureViewFactory language="Ceylon"
+                                      implementationClass="org.ceylon.idea.lang.structure.CeylonStructureViewFactory"/>
     </extensions>
 </idea-plugin>
