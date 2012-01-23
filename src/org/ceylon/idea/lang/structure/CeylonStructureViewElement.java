@@ -7,35 +7,40 @@ import com.intellij.pom.Navigatable;
 import com.intellij.psi.PsiElement;
 
 public class CeylonStructureViewElement implements StructureViewTreeElement {
-    final protected PsiElement myElement;
+    final protected PsiElement psiElement;
 
-    protected CeylonStructureViewElement(PsiElement myElement) {
-        this.myElement = myElement;
+    protected CeylonStructureViewElement(PsiElement psiElement) {
+        this.psiElement = psiElement;
     }
 
     public Object getValue() {
-        return myElement.isValid() ? myElement : null;
+        return psiElement.isValid() ? psiElement : null;
     }
 
     public void navigate(boolean b) {
-        ((Navigatable) myElement).navigate(b);
+        ((Navigatable) psiElement).navigate(b);
     }
 
     public boolean canNavigate() {
-        return ((Navigatable) myElement).canNavigate();
+        return ((Navigatable) psiElement).canNavigate();
     }
 
     public boolean canNavigateToSource() {
-        return ((Navigatable) myElement).canNavigateToSource();
+        return ((Navigatable) psiElement).canNavigateToSource();
     }
 
     @Override
     public ItemPresentation getPresentation() {
-        return new CeylonItemPresentation(myElement);
+        return new CeylonItemPresentation(psiElement);
     }
 
     @Override
     public TreeElement[] getChildren() {
-        return new TreeElement[0];
+        PsiElement[] psiChildren = psiElement.getChildren();
+        TreeElement[] result = new TreeElement[psiChildren.length];
+        for (int i = 0; i < psiChildren.length; i++) {
+            result[i] = new CeylonStructureViewElement(psiChildren[i]);
+        }
+        return result;
     }
 }

@@ -104,7 +104,7 @@ public class ParserEngineTest {
 
     @Test
     public void testComplex() {
-        Rule rule = new ComplexRule("rule").one(COMMA).oneOrMore(SEMICOLON);
+        Rule rule = rule("rule").one(COMMA).oneOrMore(SEMICOLON);
 
         valid(rule, COMMA, SEMICOLON);
         valid(rule, COMMA, SEMICOLON, SEMICOLON);
@@ -115,7 +115,7 @@ public class ParserEngineTest {
 
     @Test
     public void testComplexSequence() {
-        Rule rule = new ComplexRule("rule").one(sequence(COMMA, SEMICOLON));
+        Rule rule = rule("rule").one(sequence(COMMA, SEMICOLON));
 
         valid(rule, COMMA, SEMICOLON);
         valid(rule, COMMA, SEMICOLON, LBRACE);

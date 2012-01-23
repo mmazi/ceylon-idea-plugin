@@ -2,22 +2,22 @@ package org.ceylon.idea.lang.parser.rule;
 
 import com.google.common.base.Preconditions;
 import com.intellij.lang.PsiBuilder;
-import org.ceylon.idea.lang.parser.CeylonAstNode;
+import com.intellij.psi.tree.IElementType;
 
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
 public class ComplexRule implements Rule {
-    private final String name;
+    private final IElementType elementType;
     private final List<Rule> rules = new LinkedList<Rule>();
 
-    ComplexRule(String name) {
-        this.name = name;
+    public ComplexRule(IElementType elementType) {
+        this.elementType = elementType;
     }
 
     public boolean parseRequired(PsiBuilder builder) {
-        Preconditions.checkState(!rules.isEmpty(), "No rules defined for " + name);
+        Preconditions.checkState(!rules.isEmpty(), "No rules defined for " + elementType);
 
         PsiBuilder.Marker marker = builder.mark();
 
@@ -28,13 +28,13 @@ public class ComplexRule implements Rule {
                 return false;
             }
         }
-        marker.done(new CeylonAstNode(name));
+        marker.done(elementType);
         return true;
     }
 
     @Override
     public boolean parseOptional(PsiBuilder builder) {
-        Preconditions.checkState(!rules.isEmpty(), "No rules defined for " + name);
+        Preconditions.checkState(!rules.isEmpty(), "No rules defined for " + elementType);
 
         PsiBuilder.Marker marker = builder.mark();
         for (Rule rule : rules) {
@@ -44,7 +44,7 @@ public class ComplexRule implements Rule {
                 return false;
             }
         }
-        marker.done(new CeylonAstNode(name));
+        marker.done(elementType);
         return true;
     }
 
@@ -101,6 +101,6 @@ public class ComplexRule implements Rule {
     }
 
     public String toString() {
-        return name;
+        return elementType.toString();
     }
 }

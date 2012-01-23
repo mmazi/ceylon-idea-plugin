@@ -8,15 +8,15 @@ import org.jetbrains.annotations.Nullable;
 import javax.swing.*;
 
 public class CeylonItemPresentation implements ItemPresentation {
-    private final PsiElement myElement;
+    private final PsiElement psiElement;
 
-    public CeylonItemPresentation(PsiElement myElement) {
-        this.myElement = myElement;
+    public CeylonItemPresentation(PsiElement psiElement) {
+        this.psiElement = psiElement;
     }
 
     @Override
     public String getPresentableText() {
-        return myElement.toString();
+        return psiElement.toString();
     }
 
     @Nullable
@@ -26,6 +26,6 @@ public class CeylonItemPresentation implements ItemPresentation {
 
     @Nullable
     public Icon getIcon(boolean open) {
-        return myElement.getIcon(open ? Iconable.ICON_FLAG_OPEN : Iconable.ICON_FLAG_OPEN);
+        return psiElement.getIcon(open ? Iconable.ICON_FLAG_OPEN : Iconable.ICON_FLAG_OPEN);
     }
 }

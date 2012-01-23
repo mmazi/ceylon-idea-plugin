@@ -15,7 +15,7 @@ public class Grammar {
     /**
      * {@code Declaration:  Method | Attribute | TypeDeclaration }
      */
-    public static final ComplexRule Declaration = rule("Declaration");
+    public static final ComplexRule Declaration = rule(CeylonElementTypes.Declaration);
 
     /**
      * {@code Block:  "{" (Declaration | Statement)* "}"	 }
@@ -771,7 +771,7 @@ public class Grammar {
     /**
      * {@code Method:  Annotation* MethodHeader (Block | NamedArguments | Specifier? ";")	 }
      */
-    public static final Rule Method = rule("Method").zeroOrOne(Annotation).one(MethodHeader).any(Block, NamedArguments, sequence(zeroOrOne(Specifier), SEMICOLON));
+    public static final Rule Method = rule(CeylonElementTypes.Method).zeroOrOne(Annotation).one(MethodHeader).any(Block, NamedArguments, sequence(zeroOrOne(Specifier), SEMICOLON));
 
 
     /**
@@ -802,7 +802,7 @@ public class Grammar {
     /**
      * {@code CompilationUnit : (CompilerAnnotation+ ";")? import* (CompilerAnnotations Declaration)* EOF }
      */
-    public static final Rule CompilationUnit = rule("CompilationUnit").zeroOrOne(CompilerAnnotation, CompilerAnnotations, SEMICOLON).zeroOrMore(Import).zeroOrMore(CompilerAnnotations, Declaration);
+    public static final Rule CompilationUnit = rule(CeylonElementTypes.CompilationUnit).zeroOrOne(CompilerAnnotation, CompilerAnnotations, SEMICOLON).zeroOrMore(Import).zeroOrMore(CompilerAnnotations, Declaration);
 
     /**
      * {@code NamedArgument:  SpecifiedNamedArgument | LocalNamedArgument | FunctionalNamedArgument | Object	 }

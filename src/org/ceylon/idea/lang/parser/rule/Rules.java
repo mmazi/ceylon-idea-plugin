@@ -1,8 +1,15 @@
 package org.ceylon.idea.lang.parser.rule;
 
+import com.intellij.psi.tree.IElementType;
+import org.ceylon.idea.Ceylon;
+
 public class Rules {
     public static ComplexRule rule(String name) {
-        return new ComplexRule(name);
+        return new ComplexRule(new IElementType(name, Ceylon.LANGUAGE));
+    }
+
+    public static ComplexRule rule(IElementType elementType) {
+        return new ComplexRule(elementType);
     }
 
     public static Rule any(Rule first, Rule second, Rule... rest) {
