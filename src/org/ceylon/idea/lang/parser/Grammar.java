@@ -84,7 +84,8 @@ public class Grammar {
     /**
      * {@code TypeArguments:  "<" (UnionType ",")* (UnionType | SequencedType) ">" }
      */
-    public static final Rule TypeArguments = rule("TypeArguments").one(SMALLER_OP).zeroOrMore(UnionType, COMMA).any(SequencedType, UnionType).one(LARGER_OP);
+    public static final Rule TypeArguments = rule("TypeArguments").one(SMALLER_OP).zeroOrMore(UnionType, COMMA).any(SequencedType,
+            UnionType).one(LARGER_OP);
 
     /**
      * {@code TypeNameWithArguments:  TypeName TypeArguments?	 }
@@ -154,7 +155,8 @@ public class Grammar {
     /**
      * {@code ImportMethodAttributeElement:  MethodAttributeAlias? MemberName }
      */
-    public static final Rule ImportMethodAttributeElement = rule("ImportMethodAttributeElement").zeroOrOne(MethodAttributeAlias).one(MemberName);
+    public static final Rule ImportMethodAttributeElement = rule("ImportMethodAttributeElement").zeroOrOne(MethodAttributeAlias).one
+            (MemberName);
 
     /**
      * {@code ImportElement:  ImportTypeElement | ImportMethodAttributeElement }
@@ -164,10 +166,8 @@ public class Grammar {
     /**
      * {@code ImportElements:  ImportElement ("," ImportElement)* ("," ImportWildcard)? | ImportWildcard }
      */
-    public static final Rule ImportElements = rule("ImportElements")
-            .any(
-                    sequence(ImportElement, zeroOrMore(COMMA, ImportElement), zeroOrOne(COMMA, ImportWildcard)),
-                    ImportWildcard);
+    public static final Rule ImportElements = rule("ImportElements").any(sequence(ImportElement, zeroOrMore(COMMA, ImportElement),
+            zeroOrOne(COMMA, ImportWildcard)), ImportWildcard);
 
     /**
      * {@code Sequence:  Expression ("," Expression)* | Expression "..."	 }
@@ -178,12 +178,8 @@ public class Grammar {
     /**
      * {@code PositionalArguments:  "(" Expression ("," Expression)* ("," Sequence)? | Sequence? ")" }
      */
-    public static final Rule PositionalArguments = rule("PositionalArguments")
-            .one(LPAREN)
-            .any(
-                    sequence(Expression, zeroOrMore(COMMA, Expression), zeroOrOne(COMMA, Sequence)),
-                    zeroOrOne(Sequence))
-            .one(RPAREN);
+    public static final Rule PositionalArguments = rule("PositionalArguments").one(LPAREN).any(sequence(Expression, zeroOrMore(COMMA,
+            Expression), zeroOrOne(COMMA, Sequence)), zeroOrOne(Sequence)).one(RPAREN);
 
     /**
      * {@code OperatorExpression:  ????? } // TODO: Check out language spec
@@ -263,12 +259,14 @@ public class Grammar {
     /**
      * {@code MethodReference:  (Receiver ".")? MemberName TypeArguments?	 }
      */
-    public static final Rule MethodReference = rule("MethodReference").zeroOrOne(Receiver, MEMBER_OP).one(MemberName).zeroOrOne(TypeArguments);
+    public static final Rule MethodReference = rule("MethodReference").zeroOrOne(Receiver,
+            MEMBER_OP).one(MemberName).zeroOrOne(TypeArguments);
 
     /**
      * {@code InitializerReference:  (Receiver ".")? TypeName TypeArguments?	 }
      */
-    public static final Rule InitializerReference = rule("InitializerReference").zeroOrOne(Receiver, MEMBER_OP).one(TypeName).zeroOrOne(TypeArguments);
+    public static final Rule InitializerReference = rule("InitializerReference").zeroOrOne(Receiver,
+            MEMBER_OP).one(TypeName).zeroOrOne(TypeArguments);
 
     /**
      * {@code CallableReference:  MethodReference | InitializerReference	 }
@@ -308,7 +306,8 @@ public class Grammar {
     /**
      * {@code LocalNamedArgument:  (UnionType | "value") MemberName (Block | NamedArguments)	 }
      */
-    public static final Rule LocalNamedArgument = rule("LocalNamedArgument").any(UnionType, VALUE_MODIFIER).one(MemberName).any(Block, NamedArguments);
+    public static final Rule LocalNamedArgument = rule("LocalNamedArgument").any(UnionType, VALUE_MODIFIER).one(MemberName).any(Block,
+            NamedArguments);
 
     /**
      * {@code SimpleParam:  UnionType MemberName	 }
@@ -331,15 +330,12 @@ public class Grammar {
     public static final Rule SequencedParam = rule("SequencedParam").zeroOrMore(Annotation).sequence(UnionType, ELLIPSIS, MemberName);
 
     /**
-     * {@code Params:   "(" Param ("," Param)* ("," DefaultParam)* ("," SequencedParam)? |  DefaultParam ("," DefaultParam)* ("," SequencedParam)? |  SequencedParam? ")"	 }
+     * {@code Params:   "(" Param ("," Param)* ("," DefaultParam)* ("," SequencedParam)? |  DefaultParam ("," DefaultParam)* (",
+     * " SequencedParam)? |  SequencedParam? ")"	 }
      */
-    public static final Rule Params = rule("Params")
-            .one(LPAREN)
-            .any(
-                    sequence(Param, zeroOrMore(COMMA, Param), zeroOrMore(COMMA, DefaultParam), zeroOrOne(COMMA, SequencedParam)),
-                    sequence(DefaultParam, zeroOrMore(COMMA, DefaultParam), zeroOrOne(COMMA, SequencedParam)),
-                    zeroOrOne(SequencedParam))
-            .one(RPAREN);
+    public static final Rule Params = rule("Params").one(LPAREN).any(sequence(Param, zeroOrMore(COMMA, Param), zeroOrMore(COMMA,
+            DefaultParam), zeroOrOne(COMMA, SequencedParam)), sequence(DefaultParam, zeroOrMore(COMMA, DefaultParam), zeroOrOne(COMMA,
+            SequencedParam)), zeroOrOne(SequencedParam)).one(RPAREN);
 
     /**
      * {@code CallableParam:  (UnionType | "void") MemberName Params+	 }
@@ -349,7 +345,8 @@ public class Grammar {
     /**
      * {@code FunctionalNamedArgument:  (UnionType | "function" | "void") MemberName Params+ (Block | NamedArguments)	 }
      */
-    public static final Rule FunctionalNamedArgument = rule("FunctionalNamedArgument").any(UnionType, FUNCTION_MODIFIER, VOID_MODIFIER).one(MemberName).oneOrMore(Params).any(Block, NamedArguments);
+    public static final Rule FunctionalNamedArgument = rule("FunctionalNamedArgument").any(UnionType, FUNCTION_MODIFIER,
+            VOID_MODIFIER).one(MemberName).oneOrMore(Params).any(Block, NamedArguments);
 
     /**
      * {@code FunctionalBody:  Params? ( Block | "(" Expression ")" )	 }
@@ -364,7 +361,8 @@ public class Grammar {
     /**
      * {@code Arguments:  PositionalArguments FunctionalArguments? | NamedArguments }
      */
-    public static final Rule Arguments = rule("Arguments").any(sequence(PositionalArguments, zeroOrOne(FunctionalArguments)), NamedArguments);
+    public static final Rule Arguments = rule("Arguments").any(sequence(PositionalArguments, zeroOrOne(FunctionalArguments)),
+            NamedArguments);
 
     /**
      * {@code Variance:  "out" | "in"	 }
@@ -384,7 +382,8 @@ public class Grammar {
     /**
      * {@code TypeParams:  "<" (TypeParam ",")* (TypeParam | SequencedTypeParam) ">"	 }
      */
-    public static final Rule TypeParams = rule("TypeParams").one(SMALLER_OP).zeroOrMore(TypeParam, COMMA).any(SequencedTypeParam, TypeParam).one(LARGER_OP);
+    public static final Rule TypeParams = rule("TypeParams").one(SMALLER_OP).zeroOrMore(TypeParam, COMMA).any(SequencedTypeParam,
+            TypeParam).one(LARGER_OP);
 
     /**
      * {@code CaseType:  MemberName | Type	 }
@@ -414,12 +413,14 @@ public class Grammar {
     /**
      * {@code TypeConstraintInheritance:  CaseTypes? Metatypes? SatisfiedTypes? AbstractedType?	 }
      */
-    public static final Rule TypeConstraintInheritance = rule("TypeConstraintInheritance").zeroOrOne(CaseTypes).zeroOrOne(Metatypes).zeroOrOne(SatisfiedTypes).zeroOrOne(AbstractedType);
+    public static final Rule TypeConstraintInheritance = rule("TypeConstraintInheritance").zeroOrOne(CaseTypes).zeroOrOne(Metatypes)
+            .zeroOrOne(SatisfiedTypes).zeroOrOne(AbstractedType);
 
     /**
      * {@code TypeConstraint:  "given" TypeName TypeParams? Params? TypeConstraintInheritance	 }
      */
-    public static final Rule TypeConstraint = rule("TypeConstraint").sequence(TYPE_CONSTRAINT, TypeName).zeroOrOne(TypeParams).zeroOrOne(Params).one(TypeConstraintInheritance);
+    public static final Rule TypeConstraint = rule("TypeConstraint").sequence(TYPE_CONSTRAINT, TypeName).zeroOrOne(TypeParams).zeroOrOne
+            (Params).one(TypeConstraintInheritance);
 
     /**
      * {@code TypeConstraints:  TypeConstraint+	 }
@@ -429,7 +430,8 @@ public class Grammar {
     /**
      * {@code MethodHeader:  (UnionType | "function" | "void") MemberName TypeParams? Params+ Metatypes? TypeConstraints?	 }
      */
-    public static final Rule MethodHeader = rule("MethodHeader").any(UnionType, FUNCTION_MODIFIER, VOID_MODIFIER).one(MemberName).zeroOrOne(TypeParams).oneOrMore(Params).zeroOrMore(Metatypes).zeroOrMore(TypeConstraints);
+    public static final Rule MethodHeader = rule("MethodHeader").any(UnionType, FUNCTION_MODIFIER,
+            VOID_MODIFIER).one(MemberName).zeroOrOne(TypeParams).oneOrMore(Params).zeroOrMore(Metatypes).zeroOrMore(TypeConstraints);
 
     /**
      * {@code AttributeHeader:  (UnionType | "value") MemberName	 }
@@ -444,7 +446,8 @@ public class Grammar {
     /**
      * {@code SimpleAttribute:  AttributeHeader ( (Specifier | Initializer)? ";" | NamedArguments )	 }
      */
-    public static final Rule SimpleAttribute = rule("SimpleAttribute").one(AttributeHeader).any(sequence(zeroOrAny(Specifier, Initializer), SEMICOLON), NamedArguments);
+    public static final Rule SimpleAttribute = rule("SimpleAttribute").one(AttributeHeader).any(sequence(zeroOrAny(Specifier,
+            Initializer), SEMICOLON), NamedArguments);
 
     /**
      * {@code AttributeGetter:  AttributeHeader Block	 }
@@ -464,8 +467,9 @@ public class Grammar {
     /**
      * {@code Assignment:  ":=" | ".=" | "+=" | "-=" | "*=" | "/=" | "%=" | "&=" | "|=" | "^="| "~=" | "&&=" | "||=" ;	 }
      */
-    //ASSIGN_OP, APPLY_OP, ADD_ASSIGN_OP, SUBTRACT_ASSIGN_OP, MULTIPLY_ASSIGN_OP, DIVIDE_ASSIGN_OP, REMAINDER_ASSIGN_OP, INTERSECT_ASSIGN_OP, UNION_ASSIGN_OP, XOR_ASSIGN_OP, COMPLEMENT_ASSIGN_OP, AND_ASSIGN_OP, OR_ASSIGN_OP
-    public static final Rule Assignment = new DummyRule("Assignment");
+    public static final Rule Assignment = rule("Assignment").any(ASSIGN_OP, APPLY_OP, ADD_ASSIGN_OP, SUBTRACT_ASSIGN_OP,
+            MULTIPLY_ASSIGN_OP, DIVIDE_ASSIGN_OP, REMAINDER_ASSIGN_OP, INTERSECT_ASSIGN_OP, UNION_ASSIGN_OP, XOR_ASSIGN_OP,
+            COMPLEMENT_ASSIGN_OP, AND_ASSIGN_OP, OR_ASSIGN_OP);
 
     /**
      * {@code BooleanCondition:  Expression }
@@ -475,22 +479,26 @@ public class Grammar {
     /**
      * {@code CallableVariable:  (UnionType | "void")? MemberName Params+	 }
      */
-    public static final Rule CallableVariable = rule("CallableVariable").zeroOrAny(UnionType, VOID_MODIFIER).one(MemberName).oneOrMore(Params);
+    public static final Rule CallableVariable = rule("CallableVariable").zeroOrAny(UnionType, VOID_MODIFIER).one(MemberName).oneOrMore
+            (Params);
 
     /**
      * {@code ExtendedType:  "extends" ("super" ".")? Type PositionalArguments	 }
      */
-    public static final Rule ExtendedType = rule("ExtendedType").one(EXTENDS).zeroOrOne(SUPER, MEMBER_OP).sequence(Type, PositionalArguments);
+    public static final Rule ExtendedType = rule("ExtendedType").one(EXTENDS).zeroOrOne(SUPER, MEMBER_OP).sequence(Type,
+            PositionalArguments);
 
     /**
      * {@code ClassInheritance:  CaseTypes? "Metatypes? ExtendedType? SatisfiedTypes?	 }
      */
-    public static final Rule ClassInheritance = rule("ClassInheritance").zeroOrOne(CaseTypes).zeroOrOne(Metatypes).zeroOrOne(ExtendedType).zeroOrOne(SatisfiedTypes);
+    public static final Rule ClassInheritance = rule("ClassInheritance").zeroOrOne(CaseTypes).zeroOrOne(Metatypes).zeroOrOne
+            (ExtendedType).zeroOrOne(SatisfiedTypes);
 
     /**
      * {@code ClassHeader:  "class" TypeName TypeParams? Params ClassInheritance TypeConstraints?	 }
      */
-    public static final Rule ClassHeader = rule("ClassHeader").sequence(CLASS_DEFINITION, TypeName).zeroOrOne(TypeParams).sequence(Params, ClassInheritance).zeroOrOne(TypeConstraints);
+    public static final Rule ClassHeader = rule("ClassHeader").sequence(CLASS_DEFINITION, TypeName).zeroOrOne(TypeParams).sequence
+            (Params, ClassInheritance).zeroOrOne(TypeConstraints);
 
     /**
      * {@code DateLiteral:   "'"  Digit{1,2} "/" Digit{1,2} "/" Digit{4}  "'"	 }
@@ -525,7 +533,8 @@ public class Grammar {
     /**
      * {@code ExistsOrNonemptyCondition:  ("exists" | "nonempty") (Variable Specifier | MemberName)	 }
      */
-    public static final Rule ExistsOrNonemptyCondition = rule("ExistsOrNonemptyCondition").any(EXISTS, NONEMPTY).any(sequence(Variable, Specifier), MemberName);
+    public static final Rule ExistsOrNonemptyCondition = rule("ExistsOrNonemptyCondition").any(EXISTS, NONEMPTY).any(sequence(Variable,
+            Specifier), MemberName);
 
     /**
      * {@code Exponent:  ("E"|"e") ("+"|"-")? Digits	 }
@@ -580,7 +589,8 @@ public class Grammar {
     /**
      * {@code IsCondition:  "is" (TypedVariable Specifier | UnionType MemberName)	 }
      */
-    public static final Rule IsCondition = rule("IsCondition").one(IS_OP).any(sequence(TypedVariable, Specifier), sequence(UnionType, MemberName));
+    public static final Rule IsCondition = rule("IsCondition").one(IS_OP).any(sequence(TypedVariable, Specifier), sequence(UnionType,
+            MemberName));
 
     /**
      * {@code SatisfiesCondition:  "satisfies" Type Type	 }
@@ -605,7 +615,7 @@ public class Grammar {
     /**
      * {@code IncrementOrDecrement:  "--" | "++" ; }
      */
-    public static final Rule IncrementOrDecrement = new DummyRule("IncrementOrDecrement");
+    public static final Rule IncrementOrDecrement = rule("IncrementOrDecrement").any(INCREMENT_OP, DECREMENT_OP);
 
     /**
      * {@code InterfaceBody:  "{" Declaration* "}"	 }
@@ -615,17 +625,20 @@ public class Grammar {
     /**
      * {@code InterfaceInheritance:  CaseTypes? "Metatypes? AdaptedTypes? SatisfiedTypes?	 }
      */
-    public static final Rule InterfaceInheritance = rule("InterfaceInheritance").zeroOrOne(CaseTypes).zeroOrOne(Metatypes).zeroOrOne(AdaptedTypes).zeroOrOne(SatisfiedTypes);
+    public static final Rule InterfaceInheritance = rule("InterfaceInheritance").zeroOrOne(CaseTypes).zeroOrOne(Metatypes).zeroOrOne
+            (AdaptedTypes).zeroOrOne(SatisfiedTypes);
 
     /**
      * {@code InterfaceHeader:  "interface" TypeName TypeParams? InterfaceInheritance TypeConstraints?	 }
      */
-    public static final Rule InterfaceHeader = rule("InterfaceHeader").sequence(INTERFACE_DEFINITION, TypeName).zeroOrOne(TypeParams).one(InterfaceInheritance).zeroOrOne(TypeConstraints);
+    public static final Rule InterfaceHeader = rule("InterfaceHeader").sequence(INTERFACE_DEFINITION,
+            TypeName).zeroOrOne(TypeParams).one(InterfaceInheritance).zeroOrOne(TypeConstraints);
 
     /**
      * {@code Interface:  Annotation* InterfaceHeader (InterfaceBody | TypeSpecifier ";")	 }
      */
-    public static final Rule Interface = rule("Interface").zeroOrMore(Annotation).one(InterfaceHeader).any(InterfaceBody, sequence(TypeSpecifier, SEMICOLON));
+    public static final Rule Interface = rule("Interface").zeroOrMore(Annotation).one(InterfaceHeader).any(InterfaceBody,
+            sequence(TypeSpecifier, SEMICOLON));
 
     /**
      * {@code LoopCondition:  "while" "(" Condition ")"	 }
@@ -651,7 +664,8 @@ public class Grammar {
     /**
      * {@code Resource:  MemberName | InitializerReference Arguments | Variable Specifier	 }
      */
-    public static final Rule Resource = rule("Resource").any(sequence(InitializerReference, Arguments), sequence(Variable, Specifier), MemberName);
+    public static final Rule Resource = rule("Resource").any(sequence(InitializerReference, Arguments), sequence(Variable, Specifier),
+            MemberName);
 
     /**
      * {@code Return:  "return" Expression?	 }
@@ -671,7 +685,8 @@ public class Grammar {
     /**
      * {@code Case:  Expression ("," Expression)* | "is" UnionType | "satisfies" Type	 }
      */
-    public static final Rule Case = rule("Case").any(sequence(IS_OP, UnionType), sequence(SATISFIES, Type), sequence(Expression, zeroOrMore(COMMA, Expression)));
+    public static final Rule Case = rule("Case").any(sequence(IS_OP, UnionType), sequence(SATISFIES, Type), sequence(Expression,
+            zeroOrMore(COMMA, Expression)));
 
     /**
      * {@code CaseItem:  "case" "(" Case ")" Block	 }
@@ -704,7 +719,8 @@ public class Grammar {
     public static final Rule Directive = any(Return, Throw, BREAK, CONTINUE);
 
     /**
-     * {@code TimeLiteral:   "'"  Digit{1,2} ":" Digit{2} ( ":" Digit{2} ( ":" Digit{3} )? )?  (" " "AM"|"PM")?  (" " Character{3,4})?  "'"	 }
+     * {@code TimeLiteral:   "'"  Digit{1,2} ":" Digit{2} ( ":" Digit{2} ( ":" Digit{3} )? )?  (" " "AM"|"PM")?  (" " Character{3,
+     * 4})?  "'"	 }
      */
     public static final Rule TimeLiteral = new NotImplementedRule("TimeLiteral");
 
@@ -731,7 +747,8 @@ public class Grammar {
     /**
      * {@code ExpressionStatement:  ( Assignment | IncrementOrDecrement | Invocation ) ";"	 }
      */
-    public static final Rule ExpressionStatement = rule("ExpressionStatement").any(Assignment, IncrementOrDecrement, Invocation).one(SEMICOLON);
+    public static final Rule ExpressionStatement = rule("ExpressionStatement").any(Assignment, IncrementOrDecrement,
+            Invocation).one(SEMICOLON);
 
     /**
      * {@code Specification:  MemberName Specifier ";"	 }
@@ -756,7 +773,8 @@ public class Grammar {
     /**
      * {@code CompilerAnnotation : "@" AnnotationName ("[" StringLiteral "]")? }
      */
-    public static final Rule CompilerAnnotation = rule("CompilerAnnotation").sequence(COMPILER_ANNOTATION, AnnotationName).zeroOrOne(INDEX_OP, STRING_LITERAL, RBRACKET);
+    public static final Rule CompilerAnnotation = rule("CompilerAnnotation").sequence(COMPILER_ANNOTATION,
+            AnnotationName).zeroOrOne(INDEX_OP, STRING_LITERAL, RBRACKET);
 
     /**
      * {@code CompilerAnnotations: CompilerAnnotation* }
@@ -771,7 +789,8 @@ public class Grammar {
     /**
      * {@code Method:  Annotation* MethodHeader (Block | NamedArguments | Specifier? ";")	 }
      */
-    public static final Rule Method = rule(CeylonElementTypes.Method).zeroOrOne(Annotation).one(MethodHeader).any(Block, NamedArguments, sequence(zeroOrOne(Specifier), SEMICOLON));
+    public static final Rule Method = rule(CeylonElementTypes.Method).zeroOrOne(Annotation).one(MethodHeader).any(Block, NamedArguments,
+            sequence(zeroOrOne(Specifier), SEMICOLON));
 
 
     /**
@@ -792,7 +811,8 @@ public class Grammar {
     /**
      * {@code Class:  Annotation* ClassHeader (ClassBody | TypeSpecifier ";")	 }
      */
-    public static final Rule Class = rule("Class").zeroOrMore(Annotation).one(ClassHeader).any(ClassBody, sequence(TypeSpecifier, SEMICOLON));
+    public static final Rule Class = rule("Class").zeroOrMore(Annotation).one(ClassHeader).any(ClassBody, sequence(TypeSpecifier,
+            SEMICOLON));
 
     /**
      * {@code TypeDeclaration:  Class | Object | Interface	 }
@@ -802,7 +822,8 @@ public class Grammar {
     /**
      * {@code CompilationUnit : (CompilerAnnotation+ ";")? import* (CompilerAnnotations Declaration)* EOF }
      */
-    public static final Rule CompilationUnit = rule(CeylonElementTypes.CompilationUnit).zeroOrOne(CompilerAnnotation, CompilerAnnotations, SEMICOLON).zeroOrMore(Import).zeroOrMore(CompilerAnnotations, Declaration);
+    public static final Rule CompilationUnit = rule(CeylonElementTypes.CompilationUnit).zeroOrOne(CompilerAnnotation,
+            CompilerAnnotations, SEMICOLON).zeroOrMore(Import).zeroOrMore(CompilerAnnotations, Declaration);
 
     /**
      * {@code NamedArgument:  SpecifiedNamedArgument | LocalNamedArgument | FunctionalNamedArgument | Object	 }

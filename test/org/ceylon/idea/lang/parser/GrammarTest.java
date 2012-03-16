@@ -75,7 +75,7 @@ public class GrammarTest {
         // Assignment: ":=" | ".=" | "+=" | "-=" | "*=" | "/=" | "%=" | "&=" | "|=" | "^="| "~=" | "&&=" | "||=" ;
         Rule rule = Grammar.Assignment;
 
-        // TODO: Implement
+        valid(rule, ASSIGN_OP);
     }
 
     @Test
@@ -446,12 +446,25 @@ public class GrammarTest {
     }
 
     @Test
-    @Ignore
     public void testExpressionStatement() {
         // ExpressionStatement: ( Assignment | IncrementOrDecrement | Invocation ) ";"
         Rule rule = Grammar.ExpressionStatement;
 
-        // TODO: Implement
+        valid(rule, ASSIGN_OP, SEMICOLON);
+        valid(rule, APPLY_OP, SEMICOLON);
+        valid(rule, ADD_ASSIGN_OP, SEMICOLON);
+        valid(rule, SUBTRACT_ASSIGN_OP, SEMICOLON);
+        valid(rule, MULTIPLY_ASSIGN_OP, SEMICOLON);
+        valid(rule, DIVIDE_ASSIGN_OP, SEMICOLON);
+        valid(rule, REMAINDER_ASSIGN_OP, SEMICOLON);
+        valid(rule, INTERSECT_ASSIGN_OP, SEMICOLON);
+        valid(rule, UNION_ASSIGN_OP, SEMICOLON);
+        valid(rule, XOR_ASSIGN_OP, SEMICOLON);
+        valid(rule, COMPLEMENT_ASSIGN_OP, SEMICOLON);
+        valid(rule, AND_ASSIGN_OP, SEMICOLON);
+        valid(rule, OR_ASSIGN_OP, SEMICOLON);
+        valid(rule, INCREMENT_OP, SEMICOLON);
+        valid(rule, DECREMENT_OP, SEMICOLON);
     }
 
     @Test
@@ -572,7 +585,8 @@ public class GrammarTest {
         valid(rule, FUNCTION_MODIFIER, LIDENTIFIER, LPAREN, UIDENTIFIER, LIDENTIFIER, RPAREN, LBRACE, RBRACE);
 
         // void myfunc (String str) {str="text";}
-        valid(rule, VOID_MODIFIER, LIDENTIFIER, LPAREN, UIDENTIFIER, LIDENTIFIER, RPAREN, LBRACE, LIDENTIFIER, SPECIFY, STRING_LITERAL, SEMICOLON, RBRACE);
+        valid(rule, VOID_MODIFIER, LIDENTIFIER, LPAREN, UIDENTIFIER, LIDENTIFIER, RPAREN, LBRACE, LIDENTIFIER, SPECIFY, STRING_LITERAL,
+                SEMICOLON, RBRACE);
     }
 
     @Test
@@ -674,15 +688,6 @@ public class GrammarTest {
 
         valid(rule, UIDENTIFIER);
         valid(rule, UIDENTIFIER, SPECIFY, UIDENTIFIER);
-    }
-
-    @Test
-    @Ignore
-    public void testIncrementOrDecrement() {
-        // IncrementOrDecrement: "--" | "++" ;
-        Rule rule = Grammar.IncrementOrDecrement;
-
-        // TODO: Implement
     }
 
     @Test
@@ -807,7 +812,8 @@ public class GrammarTest {
         valid(rule, VALUE_MODIFIER, LIDENTIFIER, LBRACE, RBRACE);
         valid(rule, VALUE_MODIFIER, LIDENTIFIER, LBRACE, LIDENTIFIER, SPECIFY, STRING_LITERAL, SEMICOLON, RBRACE);
         valid(rule, VALUE_MODIFIER, LIDENTIFIER, LBRACE, LIDENTIFIER, SPECIFY, STRING_LITERAL, SEMICOLON, RBRACE);
-        valid(rule, UIDENTIFIER, INTERSECTION_OP, UIDENTIFIER, LIDENTIFIER, LBRACE, LIDENTIFIER, SPECIFY, STRING_LITERAL, SEMICOLON, RBRACE);
+        valid(rule, UIDENTIFIER, INTERSECTION_OP, UIDENTIFIER, LIDENTIFIER, LBRACE, LIDENTIFIER, SPECIFY, STRING_LITERAL, SEMICOLON,
+                RBRACE);
     }
 
     @Test
@@ -978,7 +984,8 @@ public class GrammarTest {
     @Test
     @Ignore
     public void testParams() {
-        // Params: "(" Param ("," Param)* ("," DefaultParam)* ("," SequencedParam)? | DefaultParam ("," DefaultParam)* ("," SequencedParam)? | SequencedParam? ")"
+        // Params: "(" Param ("," Param)* ("," DefaultParam)* ("," SequencedParam)? | DefaultParam ("," DefaultParam)* (",
+        // " SequencedParam)? | SequencedParam? ")"
         Rule rule = Grammar.Params;
 
         // TODO: Implement
@@ -1191,8 +1198,10 @@ public class GrammarTest {
         Rule rule = Grammar.SwitchCaseElse;
 
         valid(rule, SWITCH_CLAUSE, LPAREN, CHAR_LITERAL, RPAREN, CASE_CLAUSE, LPAREN, CHAR_LITERAL, RPAREN, LBRACE, RBRACE);
-        valid(rule, SWITCH_CLAUSE, LPAREN, CHAR_LITERAL, RPAREN, CASE_CLAUSE, LPAREN, CHAR_LITERAL, RPAREN, LBRACE, RBRACE, ELSE_CLAUSE, LBRACE, RBRACE);
-        valid(rule, SWITCH_CLAUSE, LPAREN, CHAR_LITERAL, RPAREN, LBRACE, CASE_CLAUSE, LPAREN, CHAR_LITERAL, RPAREN, LBRACE, RBRACE, RBRACE);
+        valid(rule, SWITCH_CLAUSE, LPAREN, CHAR_LITERAL, RPAREN, CASE_CLAUSE, LPAREN, CHAR_LITERAL, RPAREN, LBRACE, RBRACE, ELSE_CLAUSE,
+                LBRACE, RBRACE);
+        valid(rule, SWITCH_CLAUSE, LPAREN, CHAR_LITERAL, RPAREN, LBRACE, CASE_CLAUSE, LPAREN, CHAR_LITERAL, RPAREN, LBRACE, RBRACE,
+                RBRACE);
     }
 
     @Test
@@ -1229,7 +1238,8 @@ public class GrammarTest {
 
         valid(rule, TRY_CLAUSE, LBRACE, RBRACE);
         valid(rule, TRY_CLAUSE, LBRACE, RBRACE, CATCH_CLAUSE, LPAREN, LIDENTIFIER, RPAREN, LBRACE, RBRACE);
-        valid(rule, TRY_CLAUSE, LBRACE, RBRACE, CATCH_CLAUSE, LPAREN, LIDENTIFIER, RPAREN, LBRACE, RBRACE, CATCH_CLAUSE, LPAREN, LIDENTIFIER, RPAREN, LBRACE, RBRACE);
+        valid(rule, TRY_CLAUSE, LBRACE, RBRACE, CATCH_CLAUSE, LPAREN, LIDENTIFIER, RPAREN, LBRACE, RBRACE, CATCH_CLAUSE, LPAREN,
+                LIDENTIFIER, RPAREN, LBRACE, RBRACE);
         valid(rule, TRY_CLAUSE, LBRACE, RBRACE, FINALLY_CLAUSE, LBRACE, RBRACE);
         valid(rule, TRY_CLAUSE, LBRACE, RBRACE, CATCH_CLAUSE, LPAREN, LIDENTIFIER, RPAREN, LBRACE, RBRACE, FINALLY_CLAUSE, LBRACE, RBRACE);
     }
